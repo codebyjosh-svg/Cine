@@ -1,0 +1,34 @@
+.root {
+    -fx-background-color: #0f172a;
+    -fx-font-family: "Segoe UI";
+}
+.dashboard-card {
+    -fx-background-color: white;
+    -fx-background-radius: 18;
+    -fx-padding: 38;
+}
+.title {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0f172a;
+}
+.subtitle {
+    -fx-font-size: 16px;
+    -fx-text-fill: #64748b;
+}
+.user {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+.role {
+    -fx-font-size: 15px;
+    -fx-text-fill: #475569;
+}
+.logout-button {
+    -fx-pref-width: 180;
+    -fx-pref-height: 40;
+    -fx-background-radius: 8;
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
