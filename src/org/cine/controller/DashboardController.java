@@ -21,6 +21,11 @@ public class DashboardController {
     }
 
     @FXML
+    private void abrirUsuarios() throws IOException {
+        Principal.mostrarUsuarios();
+    }
+
+    @FXML
     private void cerrarSesion() throws IOException {
         Principal.cerrarSesion();
     }

@@ -1,5 +1,6 @@
 package org.cine.util;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,34 +8,53 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public final class Conexion {
-    private static Conexion instancia;
-    private final String url;
-    private final String user;
-    private final String password;
+    private static final Conexion INSTANCIA = new Conexion();
+    private final Properties propiedades = new Properties();
 
     private Conexion() {
-        Properties propiedades = new Properties();
         try (InputStream entrada = Conexion.class.getResourceAsStream("/db.properties")) {
-            if (entrada == null) {
-                throw new IllegalStateException("No se encontró db.properties.");
+            if (entrada != null) {
+                propiedades.load(entrada);
             }
-            propiedades.load(entrada);
-        } catch (Exception ex) {
-            throw new IllegalStateException("No se pudo cargar db.properties.", ex);
+        } catch (IOException ex) {
+            throw new IllegalStateException("No se pudo leer db.properties.", ex);
         }
-        url = propiedades.getProperty("db.url");
-        user = propiedades.getProperty("db.user");
-        password = propiedades.getProperty("db.password", "");
     }
 
-    public static synchronized Conexion getInstancia() {
-        if (instancia == null) {
-            instancia = new Conexion();
+    public static Conexion getInstance() {
+        return INSTANCIA;
+    }
+
+    public static Conexion getInstancia() {
+        return INSTANCIA;
+    }
+
+    private String valor(String clave, String variable, String predeterminado) {
+        String valor = System.getProperty("cine." + clave);
+        if (valor == null) {
+            valor = System.getenv(variable);
         }
-        return instancia;
+        return valor == null ? propiedades.getProperty(clave, predeterminado) : valor;
+    }
+
+    public Connection getConnection() throws SQLException {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            throw new SQLException("Falta MySQL Connector/J en las bibliotecas del proyecto.", ex);
+        }
+        String url = valor("db.url", "CINE_DB_URL",
+                "jdbc:mysql://localhost:3306/cinedb_in4cm?useSSL=false&serverTimezone=America/Guatemala");
+        return DriverManager.getConnection(url,
+                valor("db.user", "CINE_DB_USER", "IN4CM"),
+                valor("db.password", "CINE_DB_PASSWORD", ""));
+    }
+
+    public Connection getConexion() throws SQLException {
+        return getConnection();
     }
 
     public Connection conectar() throws SQLException {
-        return DriverManager.getConnection(url, user, password);
+        return getConnection();
     }
 }
