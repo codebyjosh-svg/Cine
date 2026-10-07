@@ -93,11 +93,20 @@ public class ClienteController {
 
         configurarTabla();
 
-        btnGuardar.setDisable(true);
+        btnGuardar.setDisable(false);
         btnEditar.setDisable(true);
         btnEliminar.setDisable(true);
         btnActivar.setDisable(true);
         btnDesactivar.setDisable(true);
+
+        tbClientes.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, anterior, actual) -> {
+
+                    if (actual != null) {
+                        seleccionarCliente();
+                    }
+                });
 
         cargarClientes();
     }
@@ -165,6 +174,168 @@ public class ClienteController {
     }
 
     @FXML
+    private void seleccionarCliente() {
+
+        Cliente seleccionado = tbClientes.getSelectionModel()
+                .getSelectedItem();
+
+        if (seleccionado == null) {
+            return;
+        }
+
+        clienteSeleccionado = seleccionado;
+
+        txtCui.setText(
+                seleccionado.getCui() == null
+                        ? ""
+                        : seleccionado.getCui()
+        );
+
+        txtNombreCliente.setText(
+                seleccionado.getNombreCliente()
+        );
+
+        txtApellidoCliente.setText(
+                seleccionado.getApellidoCliente()
+        );
+
+        txtCorreoElectronico.setText(
+                seleccionado.getCorreoElectronico()
+        );
+
+        txtTelefono.setText(
+                seleccionado.getTelefono() == null
+                        ? ""
+                        : seleccionado.getTelefono()
+        );
+
+        lblEstado.setText(
+                seleccionado.getEstado() == 1
+                        ? "Activo"
+                        : "Inactivo"
+        );
+
+        btnGuardar.setDisable(true);
+        btnEditar.setDisable(false);
+    }
+
+    private Cliente obtenerDatosFormulario() {
+
+        Cliente cliente = new Cliente();
+
+        cliente.setCui(
+                txtCui.getText().trim()
+        );
+
+        cliente.setNombreCliente(
+                txtNombreCliente.getText().trim()
+        );
+
+        cliente.setApellidoCliente(
+                txtApellidoCliente.getText().trim()
+        );
+
+        cliente.setCorreoElectronico(
+                txtCorreoElectronico.getText().trim()
+        );
+
+        cliente.setTelefono(
+                txtTelefono.getText().trim()
+        );
+
+        if (clienteSeleccionado != null) {
+
+            cliente.setIdCliente(
+                    clienteSeleccionado.getIdCliente()
+            );
+
+            cliente.setEstado(
+                    clienteSeleccionado.getEstado()
+            );
+
+            cliente.setFechaRegistro(
+                    clienteSeleccionado.getFechaRegistro()
+            );
+        }
+
+        return cliente;
+    }
+
+    @FXML
+    private void guardarCliente() {
+
+        if (clienteSeleccionado != null) {
+
+            mostrarAlerta(
+                    Alert.AlertType.WARNING,
+                    "Cliente seleccionado",
+                    "Pulsa Limpiar para registrar un nuevo cliente."
+            );
+
+            return;
+        }
+
+        Cliente cliente = obtenerDatosFormulario();
+
+        if (clienteDAO.insertar(cliente)) {
+
+            mostrarAlerta(
+                    Alert.AlertType.INFORMATION,
+                    "Registro exitoso",
+                    "El cliente fue registrado correctamente."
+            );
+
+            limpiarFormulario();
+            cargarClientes();
+
+        } else {
+
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "Error al registrar",
+                    clienteDAO.getUltimoError()
+            );
+        }
+    }
+
+    @FXML
+    private void editarCliente() {
+
+        if (clienteSeleccionado == null) {
+
+            mostrarAlerta(
+                    Alert.AlertType.WARNING,
+                    "Selecciona un cliente",
+                    "Selecciona un cliente de la tabla para editarlo."
+            );
+
+            return;
+        }
+
+        Cliente cliente = obtenerDatosFormulario();
+
+        if (clienteDAO.actualizar(cliente)) {
+
+            mostrarAlerta(
+                    Alert.AlertType.INFORMATION,
+                    "Actualización exitosa",
+                    "Los datos del cliente fueron actualizados."
+            );
+
+            limpiarFormulario();
+            cargarClientes();
+
+        } else {
+
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "Error al actualizar",
+                    clienteDAO.getUltimoError()
+            );
+        }
+    }
+
+    @FXML
     private void limpiarFormulario() {
 
         clienteSeleccionado = null;
@@ -181,19 +352,13 @@ public class ClienteController {
                 "Nuevo - se guardará como Activo"
         );
 
+        btnGuardar.setDisable(false);
+        btnEditar.setDisable(true);
+        btnEliminar.setDisable(true);
+        btnActivar.setDisable(true);
+        btnDesactivar.setDisable(true);
+
         txtNombreCliente.requestFocus();
-    }
-
-    @FXML
-    private void seleccionarCliente() {
-    }
-
-    @FXML
-    private void guardarCliente() {
-    }
-
-    @FXML
-    private void editarCliente() {
     }
 
     @FXML
