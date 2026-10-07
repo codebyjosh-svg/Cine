@@ -7,6 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -92,12 +93,7 @@ public class ClienteController {
     private void initialize() {
 
         configurarTabla();
-
-        btnGuardar.setDisable(false);
-        btnEditar.setDisable(true);
-        btnEliminar.setDisable(true);
-        btnActivar.setDisable(true);
-        btnDesactivar.setDisable(true);
+        limpiarFormulario();
 
         tbClientes.getSelectionModel()
                 .selectedItemProperty()
@@ -105,6 +101,8 @@ public class ClienteController {
 
                     if (actual != null) {
                         seleccionarCliente();
+                    } else {
+                        limpiarFormulario();
                     }
                 });
 
@@ -217,6 +215,15 @@ public class ClienteController {
 
         btnGuardar.setDisable(true);
         btnEditar.setDisable(false);
+        btnEliminar.setDisable(false);
+
+        btnActivar.setDisable(
+                seleccionado.getEstado() == 1
+        );
+
+        btnDesactivar.setDisable(
+                seleccionado.getEstado() == 0
+        );
     }
 
     private Cliente obtenerDatosFormulario() {
@@ -301,14 +308,7 @@ public class ClienteController {
     @FXML
     private void editarCliente() {
 
-        if (clienteSeleccionado == null) {
-
-            mostrarAlerta(
-                    Alert.AlertType.WARNING,
-                    "Selecciona un cliente",
-                    "Selecciona un cliente de la tabla para editarlo."
-            );
-
+        if (!hayClienteSeleccionado()) {
             return;
         }
 
@@ -333,6 +333,151 @@ public class ClienteController {
                     clienteDAO.getUltimoError()
             );
         }
+    }
+
+    @FXML
+    private void eliminarCliente() {
+
+        if (!hayClienteSeleccionado()) {
+            return;
+        }
+
+        int idCliente = clienteSeleccionado.getIdCliente();
+
+        String nombreCompleto = clienteSeleccionado.getNombreCliente()
+                + " " + clienteSeleccionado.getApellidoCliente();
+
+        if (!confirmarOperacion(
+                "Eliminar cliente",
+                "¿Deseas eliminar definitivamente a "
+                        + nombreCompleto + "?"
+        )) {
+            return;
+        }
+
+        if (clienteDAO.eliminar(idCliente)) {
+
+            mostrarAlerta(
+                    Alert.AlertType.INFORMATION,
+                    "Cliente eliminado",
+                    "El cliente fue eliminado correctamente."
+            );
+
+            limpiarFormulario();
+            cargarClientes();
+
+        } else {
+
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "No se pudo eliminar",
+                    clienteDAO.getUltimoError()
+            );
+        }
+    }
+
+    @FXML
+    private void activarCliente() {
+        cambiarEstadoCliente(1);
+    }
+
+    @FXML
+    private void desactivarCliente() {
+        cambiarEstadoCliente(0);
+    }
+
+    private void cambiarEstadoCliente(int estado) {
+
+        if (!hayClienteSeleccionado()) {
+            return;
+        }
+
+        if (clienteSeleccionado.getEstado() == estado) {
+
+            mostrarAlerta(
+                    Alert.AlertType.INFORMATION,
+                    "Estado del cliente",
+                    estado == 1
+                            ? "El cliente ya está activo."
+                            : "El cliente ya está inactivo."
+            );
+
+            return;
+        }
+
+        int idCliente = clienteSeleccionado.getIdCliente();
+
+        String accion = estado == 1
+                ? "activar"
+                : "desactivar";
+
+        String nombreCompleto = clienteSeleccionado.getNombreCliente()
+                + " " + clienteSeleccionado.getApellidoCliente();
+
+        if (!confirmarOperacion(
+                "Cambiar estado",
+                "¿Deseas " + accion + " a " + nombreCompleto + "?"
+        )) {
+            return;
+        }
+
+        if (clienteDAO.cambiarEstado(idCliente, estado)) {
+
+            mostrarAlerta(
+                    Alert.AlertType.INFORMATION,
+                    "Estado actualizado",
+                    estado == 1
+                            ? "El cliente fue activado correctamente."
+                            : "El cliente fue desactivado correctamente."
+            );
+
+            limpiarFormulario();
+            cargarClientes();
+
+        } else {
+
+            mostrarAlerta(
+                    Alert.AlertType.ERROR,
+                    "Error al cambiar estado",
+                    clienteDAO.getUltimoError()
+            );
+        }
+    }
+
+    private boolean hayClienteSeleccionado() {
+
+        if (clienteSeleccionado == null) {
+
+            mostrarAlerta(
+                    Alert.AlertType.WARNING,
+                    "Selecciona un cliente",
+                    "Selecciona un cliente de la tabla."
+            );
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean confirmarOperacion(String titulo, String mensaje) {
+
+        Alert alerta = new Alert(
+                Alert.AlertType.CONFIRMATION,
+                mensaje,
+                ButtonType.OK,
+                ButtonType.CANCEL
+        );
+
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+
+        if (tbClientes.getScene() != null) {
+            alerta.initOwner(tbClientes.getScene().getWindow());
+        }
+
+        return alerta.showAndWait()
+                .orElse(ButtonType.CANCEL) == ButtonType.OK;
     }
 
     @FXML
@@ -361,18 +506,6 @@ public class ClienteController {
         txtNombreCliente.requestFocus();
     }
 
-    @FXML
-    private void eliminarCliente() {
-    }
-
-    @FXML
-    private void activarCliente() {
-    }
-
-    @FXML
-    private void desactivarCliente() {
-    }
-
     private void mostrarAlerta(Alert.AlertType tipo,
             String titulo, String mensaje) {
 
@@ -381,6 +514,10 @@ public class ClienteController {
         alerta.setTitle(titulo);
         alerta.setHeaderText(null);
         alerta.setContentText(mensaje);
+
+        if (tbClientes.getScene() != null) {
+            alerta.initOwner(tbClientes.getScene().getWindow());
+        }
 
         alerta.showAndWait();
     }
