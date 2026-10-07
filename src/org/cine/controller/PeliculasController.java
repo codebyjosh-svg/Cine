@@ -147,8 +147,8 @@ public class PeliculasController {
         colEstado.setCellValueFactory(
                 datos -> new SimpleStringProperty(
                         datos.getValue().getEstado() == 1
-                                ? "Activo"
-                                : "Inactivo"
+                        ? "Activo"
+                        : "Inactivo"
                 )
         );
     }
@@ -158,21 +158,21 @@ public class PeliculasController {
         cmbGenero.setConverter(
                 new StringConverter<Genero>() {
 
-                    @Override
-                    public String toString(Genero genero) {
+            @Override
+            public String toString(Genero genero) {
 
-                        if (genero == null) {
-                            return "";
-                        }
-
-                        return genero.getNombreGenero();
-                    }
-
-                    @Override
-                    public Genero fromString(String texto) {
-                        return null;
-                    }
+                if (genero == null) {
+                    return "";
                 }
+
+                return genero.getNombreGenero();
+            }
+
+            @Override
+            public Genero fromString(String texto) {
+                return null;
+            }
+        }
         );
     }
 
@@ -192,5 +192,109 @@ public class PeliculasController {
         tblPeliculas.setItems(
                 FXCollections.observableArrayList(lista)
         );
+    }
+
+    private boolean validarDatosPelicula() {
+
+        String titulo = txtTitulo.getText().trim();
+        String duracionTexto = txtDuracion.getText().trim();
+        String idioma = txtIdioma.getText().trim();
+
+        if (titulo.isEmpty()) {
+
+            System.out.println(
+                    "Error: el título es obligatorio."
+            );
+
+            return false;
+        }
+
+        if (duracionTexto.isEmpty()) {
+
+            System.out.println(
+                    "Error: la duración es obligatoria."
+            );
+
+            return false;
+        }
+
+        int duracion;
+
+        try {
+
+            duracion = Integer.parseInt(duracionTexto);
+
+        } catch (NumberFormatException e) {
+
+            System.out.println(
+                    "Error: la duración debe ser numérica."
+            );
+
+            return false;
+        }
+
+        if (duracion < 1 || duracion > 600) {
+
+            System.out.println(
+                    "Error: la duración debe estar entre 1 y 600 minutos."
+            );
+
+            return false;
+        }
+
+        if (cmbClasificacion.getValue() == null) {
+
+            System.out.println(
+                    "Error: debe seleccionar una clasificación."
+            );
+
+            return false;
+        }
+
+        if (idioma.isEmpty()) {
+
+            System.out.println(
+                    "Error: el idioma es obligatorio."
+            );
+
+            return false;
+        }
+
+        if (cmbGenero.getValue() == null) {
+
+            System.out.println(
+                    "Error: debe seleccionar un género."
+            );
+
+            return false;
+        }
+
+        if (existeTituloDuplicado(titulo)) {
+
+            System.out.println(
+                    "Error: ya existe una película con ese título."
+            );
+
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean existeTituloDuplicado(String titulo) {
+
+        List<Pelicula> peliculas
+                = peliculaDAO.listarTodos();
+
+        for (Pelicula pelicula : peliculas) {
+
+            if (pelicula.getTitulo()
+                    .equalsIgnoreCase(titulo)) {
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }
