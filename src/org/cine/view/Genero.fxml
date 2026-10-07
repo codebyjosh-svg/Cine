@@ -12,6 +12,7 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cine.controller.GeneroController"
             prefHeight="600.0"
             prefWidth="900.0">
 
@@ -50,20 +51,25 @@
             <HBox spacing="10.0">
 
                 <Button fx:id="btnGuardar"
+                        onAction="#guardarGenero" 
                         text="Guardar"
                         style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
 
                 <Button fx:id="btnEditar"
+                        onAction="#editarGenero"
                         text="Editar"/>
 
                 <Button fx:id="btnEliminar"
+                        onAction="#eliminarGenero"
                         text="Eliminar"
                         style="-fx-background-color: #dc3545; -fx-text-fill: white;"/>
 
                 <Button fx:id="btnCambiarEstado"
+                        onAction="#cambiarEstadoGenero"
                         text="Activar / Desactivar"/>
 
                 <Button fx:id="btnLimpiar"
+                        onAction="#limpiarFormulario"
                         text="Limpiar"/>
 
             </HBox>
@@ -73,6 +79,7 @@
 
     <center>
         <TableView fx:id="tbGeneros"
+                   onMouseClicked="#seleccionarGenero"
                    BorderPane.alignment="CENTER">
 
             <columns>
