@@ -230,25 +230,11 @@ public class ClienteController {
 
         Cliente cliente = new Cliente();
 
-        cliente.setCui(
-                txtCui.getText().trim()
-        );
-
-        cliente.setNombreCliente(
-                txtNombreCliente.getText().trim()
-        );
-
-        cliente.setApellidoCliente(
-                txtApellidoCliente.getText().trim()
-        );
-
-        cliente.setCorreoElectronico(
-                txtCorreoElectronico.getText().trim()
-        );
-
-        cliente.setTelefono(
-                txtTelefono.getText().trim()
-        );
+        cliente.setCui(txtCui.getText().trim());
+        cliente.setNombreCliente(txtNombreCliente.getText().trim());
+        cliente.setApellidoCliente(txtApellidoCliente.getText().trim());
+        cliente.setCorreoElectronico(txtCorreoElectronico.getText().trim());
+        cliente.setTelefono(txtTelefono.getText().trim());
 
         if (clienteSeleccionado != null) {
 
@@ -268,6 +254,134 @@ public class ClienteController {
         return cliente;
     }
 
+    private boolean validarFormulario() {
+
+        String cui = txtCui.getText().trim();
+        String nombre = txtNombreCliente.getText().trim();
+        String apellido = txtApellidoCliente.getText().trim();
+        String correo = txtCorreoElectronico.getText().trim();
+        String telefono = txtTelefono.getText().trim();
+
+        if (!cui.isEmpty() && !cui.matches("[0-9]{13}")) {
+
+            return indicarDatoInvalido(
+                    txtCui,
+                    "El CUI debe tener exactamente 13 dígitos. "
+                            + "También puedes dejarlo vacío."
+            );
+        }
+
+        if (nombre.isEmpty()) {
+
+            return indicarDatoInvalido(
+                    txtNombreCliente,
+                    "Debes ingresar los nombres del cliente."
+            );
+        }
+
+        if (nombre.length() > 100) {
+
+            return indicarDatoInvalido(
+                    txtNombreCliente,
+                    "Los nombres no pueden superar los 100 caracteres."
+            );
+        }
+
+        String patronNombre =
+                "[\\p{L}\\p{M}]+(?:[ '\\-’][\\p{L}\\p{M}]+)*";
+
+        if (!nombre.matches(patronNombre)) {
+
+            return indicarDatoInvalido(
+                    txtNombreCliente,
+                    "Los nombres deben contener letras. "
+                            + "Se permiten espacios, guiones y apóstrofos."
+            );
+        }
+
+        if (apellido.isEmpty()) {
+
+            return indicarDatoInvalido(
+                    txtApellidoCliente,
+                    "Debes ingresar los apellidos del cliente."
+            );
+        }
+
+        if (apellido.length() > 100) {
+
+            return indicarDatoInvalido(
+                    txtApellidoCliente,
+                    "Los apellidos no pueden superar los 100 caracteres."
+            );
+        }
+
+        if (!apellido.matches(patronNombre)) {
+
+            return indicarDatoInvalido(
+                    txtApellidoCliente,
+                    "Los apellidos deben contener letras. "
+                            + "Se permiten espacios, guiones y apóstrofos."
+            );
+        }
+
+        if (correo.isEmpty()) {
+
+            return indicarDatoInvalido(
+                    txtCorreoElectronico,
+                    "Debes ingresar el correo electrónico."
+            );
+        }
+
+        if (correo.length() > 120) {
+
+            return indicarDatoInvalido(
+                    txtCorreoElectronico,
+                    "El correo no puede superar los 120 caracteres."
+            );
+        }
+
+        String patronCorreo =
+                "[A-Za-z0-9_%+\\-]+"
+                + "(?:\\.[A-Za-z0-9_%+\\-]+)*"
+                + "@"
+                + "(?:[A-Za-z0-9](?:[A-Za-z0-9\\-]*[A-Za-z0-9])?\\.)+"
+                + "[A-Za-z]{2,}";
+
+        if (!correo.matches(patronCorreo)) {
+
+            return indicarDatoInvalido(
+                    txtCorreoElectronico,
+                    "Ingresa un correo válido, por ejemplo: "
+                            + "cliente@correo.com. No se permiten espacios, "
+                            + "puntos consecutivos ni un punto antes de @."
+            );
+        }
+
+        if (telefono.length() > 20) {
+
+            return indicarDatoInvalido(
+                    txtTelefono,
+                    "El teléfono no puede superar los 20 caracteres."
+            );
+        }
+
+        return true;
+    }
+
+    private boolean indicarDatoInvalido(TextField campo, String mensaje) {
+
+        mostrarAlerta(
+                Alert.AlertType.WARNING,
+                "Datos inválidos",
+                mensaje
+        );
+
+        campo.requestFocus();
+        campo.selectAll();
+
+        return false;
+    }
+
     @FXML
     private void guardarCliente() {
 
@@ -279,6 +393,10 @@ public class ClienteController {
                     "Pulsa Limpiar para registrar un nuevo cliente."
             );
 
+            return;
+        }
+
+        if (!validarFormulario()) {
             return;
         }
 
@@ -309,6 +427,10 @@ public class ClienteController {
     private void editarCliente() {
 
         if (!hayClienteSeleccionado()) {
+            return;
+        }
+
+        if (!validarFormulario()) {
             return;
         }
 
