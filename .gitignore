@@ -1,0 +1,21 @@
+# NetBeans
+/nbproject/private/
+/build/
+/dist/
+
+# Java
+*.class
+
+# Configuración local
+db.properties
+
+# IDE
+.idea/
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
