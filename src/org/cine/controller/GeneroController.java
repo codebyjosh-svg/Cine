@@ -8,8 +8,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Label;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.property.SimpleStringProperty;
 
 import org.cine.dao.GeneroDAO;
 import org.cine.dao.impl.GeneroDAOImpl;
@@ -21,7 +25,10 @@ public class GeneroController {
     private TextField txtNombreGenero;
 
     @FXML
-    private TextField txtDescripcion;
+    private TextArea txtDescripcion;
+
+    @FXML
+    private Label lblEstado;
 
     @FXML
     private Button btnGuardar;
@@ -33,7 +40,10 @@ public class GeneroController {
     private Button btnEliminar;
 
     @FXML
-    private Button btnCambiarEstado;
+    private Button btnActivar;
+
+    @FXML
+    private Button btnDesactivar;
 
     @FXML
     private Button btnLimpiar;
@@ -51,9 +61,9 @@ public class GeneroController {
     private TableColumn<Genero, String> colDescripcion;
 
     @FXML
-    private TableColumn<Genero, Integer> colEstado;
+    private TableColumn<Genero, String> colEstado;
 
-    private final GeneroDAO generoDAO = new GeneroDAOImpl();
+    private GeneroDAO generoDAO = new GeneroDAOImpl();
 
     private Genero generoSeleccionado;
 
@@ -80,7 +90,11 @@ public class GeneroController {
         );
 
         colEstado.setCellValueFactory(
-                new PropertyValueFactory<>("estado")
+                datos -> new SimpleStringProperty(
+                        datos.getValue().getEstado() == 1
+                                ? "Activo"
+                                : "Inactivo"
+                )
         );
     }
 
@@ -97,7 +111,8 @@ public class GeneroController {
     private void seleccionarGenero() {
 
         generoSeleccionado =
-                tbGeneros.getSelectionModel().getSelectedItem();
+                tbGeneros.getSelectionModel()
+                        .getSelectedItem();
 
         if (generoSeleccionado == null) {
             return;
@@ -110,18 +125,32 @@ public class GeneroController {
         txtDescripcion.setText(
                 generoSeleccionado.getDescripcion()
         );
+
+        if (generoSeleccionado.getEstado() == 1) {
+
+            lblEstado.setText("Activo");
+
+        } else {
+
+            lblEstado.setText("Inactivo");
+        }
     }
 
     @FXML
     private void guardarGenero() {
 
-        String nombre = txtNombreGenero.getText().trim();
-        String descripcion = txtDescripcion.getText().trim();
+        String nombre =
+                txtNombreGenero.getText().trim();
+
+        String descripcion =
+                txtDescripcion.getText().trim();
 
         if (nombre.isEmpty()) {
+
             mostrarAdvertencia(
                     "Debe ingresar el nombre del género."
             );
+
             return;
         }
 
@@ -161,8 +190,11 @@ public class GeneroController {
             return;
         }
 
-        String nombre = txtNombreGenero.getText().trim();
-        String descripcion = txtDescripcion.getText().trim();
+        String nombre =
+                txtNombreGenero.getText().trim();
+
+        String descripcion =
+                txtDescripcion.getText().trim();
 
         if (nombre.isEmpty()) {
 
@@ -174,7 +206,10 @@ public class GeneroController {
         }
 
         generoSeleccionado.setNombreGenero(nombre);
-        generoSeleccionado.setDescripcion(descripcion);
+
+        generoSeleccionado.setDescripcion(
+                descripcion
+        );
 
         if (generoDAO.actualizar(generoSeleccionado)) {
 
@@ -215,9 +250,9 @@ public class GeneroController {
                 "¿Está seguro de eliminar el género seleccionado?"
         );
 
-        if (confirmacion.showAndWait().isPresent()
-                && confirmacion.getResult()
-                        == javafx.scene.control.ButtonType.OK) {
+        if (confirmacion.showAndWait().orElse(
+                ButtonType.CANCEL
+        ) == ButtonType.OK) {
 
             if (generoDAO.eliminar(
                     generoSeleccionado.getIdGenero())) {
@@ -239,7 +274,18 @@ public class GeneroController {
     }
 
     @FXML
-    private void cambiarEstadoGenero() {
+    private void activarGenero() {
+
+        cambiarEstado(1);
+    }
+
+    @FXML
+    private void desactivarGenero() {
+
+        cambiarEstado(0);
+    }
+
+    private void cambiarEstado(int estado) {
 
         if (generoSeleccionado == null) {
 
@@ -250,20 +296,40 @@ public class GeneroController {
             return;
         }
 
-        int nuevoEstado =
-                generoSeleccionado.getEstado() == 1
-                        ? 0
-                        : 1;
+        if (generoSeleccionado.getEstado() == estado) {
+
+            if (estado == 1) {
+
+                mostrarAdvertencia(
+                        "El género ya está activo."
+                );
+
+            } else {
+
+                mostrarAdvertencia(
+                        "El género ya está inactivo."
+                );
+            }
+
+            return;
+        }
 
         if (generoDAO.cambiarEstado(
                 generoSeleccionado.getIdGenero(),
-                nuevoEstado)) {
+                estado)) {
 
-            mostrarInformacion(
-                    nuevoEstado == 1
-                            ? "Género activado correctamente."
-                            : "Género desactivado correctamente."
-            );
+            if (estado == 1) {
+
+                mostrarInformacion(
+                        "Género activado correctamente."
+                );
+
+            } else {
+
+                mostrarInformacion(
+                        "Género desactivado correctamente."
+                );
+            }
 
             cargarGeneros();
             limpiarFormulario();
@@ -282,12 +348,18 @@ public class GeneroController {
         txtNombreGenero.clear();
         txtDescripcion.clear();
 
+        lblEstado.setText(
+                "Nuevo - se guardará como Activo"
+        );
+
         generoSeleccionado = null;
 
-        tbGeneros.getSelectionModel().clearSelection();
+        tbGeneros.getSelectionModel()
+                .clearSelection();
     }
 
-    private void mostrarInformacion(String mensaje) {
+    private void mostrarInformacion(
+            String mensaje) {
 
         Alert alerta = new Alert(
                 Alert.AlertType.INFORMATION
@@ -299,7 +371,8 @@ public class GeneroController {
         alerta.showAndWait();
     }
 
-    private void mostrarAdvertencia(String mensaje) {
+    private void mostrarAdvertencia(
+            String mensaje) {
 
         Alert alerta = new Alert(
                 Alert.AlertType.WARNING
@@ -311,7 +384,8 @@ public class GeneroController {
         alerta.showAndWait();
     }
 
-    private void mostrarError(String mensaje) {
+    private void mostrarError(
+            String mensaje) {
 
         Alert alerta = new Alert(
                 Alert.AlertType.ERROR

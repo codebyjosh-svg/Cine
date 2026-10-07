@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.GridPane?>
@@ -32,28 +33,38 @@
 
                 <TextField fx:id="txtNombreGenero"
                            promptText="Nombre del género"
+                           prefWidth="300.0"
                            GridPane.columnIndex="1"
-                           GridPane.rowIndex="0"
-                           prefWidth="250.0"/>
+                           GridPane.rowIndex="0"/>
 
                 <Label text="Descripción:"
                        GridPane.columnIndex="0"
                        GridPane.rowIndex="1"/>
 
-                <TextField fx:id="txtDescripcion"
-                           promptText="Descripción del género"
-                           GridPane.columnIndex="1"
-                           GridPane.rowIndex="1"
-                           prefWidth="250.0"/>
+                <TextArea fx:id="txtDescripcion"
+                          promptText="Descripción del género"
+                          prefWidth="300.0"
+                          prefHeight="70.0"
+                          wrapText="true"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="1"/>
+
+                <Label text="Estado:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="2"/>
+
+                <Label fx:id="lblEstado"
+                       text="Nuevo - se guardará como Activo"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="2"/>
 
             </GridPane>
 
             <HBox spacing="10.0">
 
                 <Button fx:id="btnGuardar"
-                        onAction="#guardarGenero" 
-                        text="Guardar"
-                        style="-fx-background-color: #28a745; -fx-text-fill: white;"/>
+                        onAction="#guardarGenero"
+                        text="Guardar"/>
 
                 <Button fx:id="btnEditar"
                         onAction="#editarGenero"
@@ -61,12 +72,15 @@
 
                 <Button fx:id="btnEliminar"
                         onAction="#eliminarGenero"
-                        text="Eliminar"
-                        style="-fx-background-color: #dc3545; -fx-text-fill: white;"/>
+                        text="Eliminar"/>
 
-                <Button fx:id="btnCambiarEstado"
-                        onAction="#cambiarEstadoGenero"
-                        text="Activar / Desactivar"/>
+                <Button fx:id="btnActivar"
+                        onAction="#activarGenero"
+                        text="Activar"/>
+
+                <Button fx:id="btnDesactivar"
+                        onAction="#desactivarGenero"
+                        text="Desactivar"/>
 
                 <Button fx:id="btnLimpiar"
                         onAction="#limpiarFormulario"
@@ -78,14 +92,14 @@
     </top>
 
     <center>
+
         <TableView fx:id="tbGeneros"
-                   onMouseClicked="#seleccionarGenero"
-                   BorderPane.alignment="CENTER">
+                   onMouseClicked="#seleccionarGenero">
 
             <columns>
 
                 <TableColumn fx:id="colIdGenero"
-                             prefWidth="100.0"
+                             prefWidth="80.0"
                              text="ID"/>
 
                 <TableColumn fx:id="colNombreGenero"
@@ -93,7 +107,7 @@
                              text="Nombre"/>
 
                 <TableColumn fx:id="colDescripcion"
-                             prefWidth="350.0"
+                             prefWidth="400.0"
                              text="Descripción"/>
 
                 <TableColumn fx:id="colEstado"
@@ -103,6 +117,7 @@
             </columns>
 
         </TableView>
+
     </center>
 
 </BorderPane>
