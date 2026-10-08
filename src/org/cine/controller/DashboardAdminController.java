@@ -72,6 +72,8 @@ public class DashboardAdminController {
     // CERRAR SESIÓN
     // ==============================
 
+    @FXML private void abrirVenta() throws IOException { Principal.mostrarVenta(); }
+
     @FXML
     private void cerrarSesion() throws IOException {
         Principal.cerrarSesion();

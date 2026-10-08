@@ -82,6 +82,7 @@
                         </HBox>
 
 
+                        <Button text="Vender boletos" onAction="#abrirVenta" styleClass="menu-button" maxWidth="Infinity"/>
                         <Button maxWidth="Infinity"
                                 mnemonicParsing="false"
                                 alignment="CENTER_LEFT"

@@ -121,6 +121,19 @@ public class Principal extends Application {
         );
     }
 
+    public static void mostrarVenta() throws IOException {
+        String rol=SesionContext.getRolActual();
+        if(rol==null||!("admin".equalsIgnoreCase(rol)||"taquillero".equalsIgnoreCase(rol)))throw new IllegalStateException("No autorizado para ventas");
+        cambiarEscena("/org/cine/view/Venta.fxml","Cinema - Venta de boletos");
+    }
+    public static void mostrarFactura(int id) throws IOException {
+        String rol=SesionContext.getRolActual();
+        if(rol==null||!("admin".equalsIgnoreCase(rol)||"taquillero".equalsIgnoreCase(rol)))throw new IllegalStateException("No autorizado para facturas");
+        FXMLLoader l=new FXMLLoader(Principal.class.getResource("/org/cine/view/Factura.fxml"));Parent root=l.load();
+        stagePrincipal.setScene(new Scene(root,1050,700));stagePrincipal.setTitle("Cinema - Factura");
+        ((org.cine.controller.FacturaController)l.getController()).mostrar(id);
+        stagePrincipal.centerOnScreen();
+    }
     public static void cerrarSesion() throws IOException {
         SesionContext.cerrarSesion();
         mostrarLogin();
@@ -145,12 +158,13 @@ public class Principal extends Application {
         boolean peliculas = ruta.endsWith("/Peliculas.fxml");
         boolean generos = ruta.endsWith("/Generos.fxml");
         boolean clientes = ruta.endsWith("/Clientes.fxml");
+        boolean venta = ruta.endsWith("/Venta.fxml");
 
         boolean moduloGrande =
                 usuarios
                 || peliculas
                 || generos
-                || clientes;
+                || clientes || venta;
 
         double ancho = moduloGrande ? 1100 : 860;
         double alto = moduloGrande ? 700 : 540;
