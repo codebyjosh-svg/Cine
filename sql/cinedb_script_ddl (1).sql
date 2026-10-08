@@ -978,3 +978,65 @@ SELECT v.id_venta, v.fecha_venta, v.id_cliente, v.cui, v.cliente, v.correo_elect
 
 CREATE OR REPLACE VIEW vw_reporte_ventas_diarias AS
 SELECT DATE(fecha_venta) AS fecha, COUNT(*) AS cantidad_ventas, SUM(cantidad_boletos) AS cantidad_boletos, SUM(total_boletos) AS total_boletos, SUM(total_productos) AS total_productos, SUM(total_venta) AS total_ventas FROM vw_lista_ventas WHERE estado = 'confirmada' GROUP BY DATE(fecha_venta);
+
+USE cinedb_in4cm;
+
+-- Actualiza el usuario 'admin' con el hash correcto para la clave '1234'
+UPDATE usuarios 
+SET username = 'admin',
+    contrasena_hash = 'pbkdf2_sha256$600000$3j9IgnoEL441xuJ8e8/XKA==$0/olZKm2mBiM4GO+MAYPJmisFti3OD6zQDFZ4zk8Q8o='
+WHERE id_usuario = 1;
+
+USE cinedb_in4cm;
+
+SELECT id_usuario, username, estado, id_rol
+FROM usuarios;
+
+SHOW PROCEDURE STATUS
+WHERE Db = 'cinedb_in4cm';
+
+USE cinedb_in4cm;
+
+SHOW CREATE PROCEDURE sp_buscarusuario_login;
+
+SELECT 
+    username,
+    estado,
+    LENGTH(contrasena_hash) AS longitud_hash,
+    LEFT(contrasena_hash, 20) AS formato_hash
+FROM usuarios
+WHERE username IN ('admin', 'admin.cine');
+
+CALL sp_buscarusuario_login('admin');
+
+USE cinedb_in4cm;
+
+DROP PROCEDURE IF EXISTS sp_buscarusuario_login;
+
+DELIMITER $$
+
+CREATE PROCEDURE sp_buscarusuario_login(IN _username VARCHAR(50))
+BEGIN
+    SELECT
+        u.id_usuario,
+        u.nombre_usuario,
+        u.apellido_usuario,
+        u.username,
+        u.correo_electronico,
+        u.contrasena_hash,
+        u.id_rol,
+        r.nombre_rol,
+        u.id_cliente,
+        u.estado,
+        u.fecha_registro
+    FROM usuarios u
+    INNER JOIN roles r
+        ON r.id_rol = u.id_rol
+    WHERE u.username = _username;
+END $$
+
+DELIMITER ;
+
+USE cinedb_in4cm;
+
+CALL sp_buscarusuario_login('admin');
