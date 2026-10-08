@@ -1,0 +1,71 @@
+CINE - LOGIN Y GESTIÓN DE USUARIOS
+Diego - US-1.2
+
+Este proyecto usa como base el Cine(3).zip que enviaste.
+El login y los dashboards de US-1.1 siguen en el proyecto.
+Desde el dashboard del administrador, el botón Usuarios abre el formulario
+y la tabla. Volver regresa al dashboard y Cerrar sesión vuelve al login.
+
+Para ejecutarlo en NetBeans:
+1. Descomprime todo el ZIP y abre la carpeta Cine.
+2. Usa JDK 21 y JavaFX 21.
+3. En nbproject/project.properties ajusta esta ruta si es necesario:
+   javafx.lib.dir=C:/javafx-sdk-21.0.11/lib
+   MySQL Connector/J ya está incluido en lib/.
+4. Edita src/db.properties con tu conexión de MySQL.
+   La contraseña está vacía para que pongas la tuya.
+5. Ejecuta Clean and Build y después Run Project.
+   La clase principal es org.cine.system.Principal.
+6. Ingresa con admin.cine / AdminCine2026! y pulsa Usuarios.
+
+SQL:
+- Si la base es nueva, ejecuta sql/cinedb_script_ddl.sql y después
+  sql/cinedb_script_dml.sql una sola vez.
+- Si la base ya tiene tablas y datos, ejecuta sql/actualizar_us_1_2.sql.
+  Ese archivo actualiza los procedimientos para esta versión del proyecto.
+- Todos los scripts usan cinedb_in4cm.
+
+Funciones de Usuarios:
+- Nuevo limpia el formulario y Guardar crea una cuenta.
+- Selecciona una fila y pulsa Editar para cambiar sus datos.
+- Deja ambas contraseñas vacías al editar para conservar la actual.
+- Activar/Desactivar cambia el estado. Eliminar borra una cuenta sin historial.
+- El rol cliente necesita un cliente vinculado.
+- El buscador y el filtro de estado trabajan sobre la tabla.
+- Desplaza la tabla hacia la derecha para ver las últimas columnas.
+- El administrador no puede cambiar su propio rol, desactivarse o eliminarse.
+
+Archivos agregados o completados:
+model/Usuario.java, model/Rol.java y model/ClienteVinculo.java.
+dao/UsuarioDAO.java y dao/impl/UsuarioDAOImpl.java: login y CRUD en un mismo DAO.
+service/UsuarioService.java: validaciones.
+controller/UsuarioController.java: formulario, tabla y botones.
+view/Usuarios.fxml y view/style/usuarios.css: pantalla sencilla.
+util/Conexion.java: conexión usada por login y usuarios.
+util/PasswordUtil.java: usa SecurityUtil para que las nuevas claves sirvan en el login.
+Todas las clases están bajo src/org/cine/.
+
+Git:
+El ZIP incluye los datos Git del proyecto y está en la rama
+feat/US-1.2-gestion-usuarios-diego, creada desde el develop de tu ZIP.
+Repositorio: https://github.com/codebyjosh-svg/Cine.git
+Abre Git Bash o PowerShell en la carpeta Cine, donde está build.xml:
+
+git status
+git add .
+git commit -m "Integrar gestion de usuarios US-1.2"
+git push -u origin feat/US-1.2-gestion-usuarios-diego
+
+Después abre el Pull Request en GitHub con base develop.
+
+Pruebas:
+Pasaron 51 comprobaciones de CRUD, 14 de formulario, 13 de los SQL
+y 21 del recorrido completo de login, dashboard, usuarios y cierre de sesión.
+También pasaron las cuatro clases de prueba originales de US-1.1.
+Los resultados y las capturas están en test/evidencia/.
+Para repetir las pruebas, usa una base de pruebas y agrega
+-Dcine.pruebas.bd=true a las opciones de VM, manteniendo las de JavaFX.
+Ejecuta las clases en test/org/cine/test/ con Run File.
+PruebaUsuariosFXML acepta automáticamente sus diálogos de prueba.
+La conexión también admite CINE_DB_URL, CINE_DB_USER y CINE_DB_PASSWORD.
+Quita -Dcine.pruebas.bd=true al terminar.

@@ -49,6 +49,11 @@ INSERT INTO usuarios (id_usuario, nombre_usuario, apellido_usuario, username, co
     (3, 'Luisa', 'Ortiz', 'bodega.cine', 'bodega.cine@example.com', 'pbkdf2_sha256$600000$CTrBMsBCJBIqpwrIO6R44g==$b+KCJPdok3jxd+aVATUJycDXtnPxtAfgi4PbaKUSABs=', 3, NULL),
     (4, 'Lucía', 'Fernández', 'cliente.cine', 'cliente06@example.com', 'pbkdf2_sha256$600000$SEy65Yg2WuzSwr7cek637A==$IHiQmJtUBLDT/pqZEoBAk8saCxyloxu3Lp0Ec0jL/Y4=', 4, 6);
 
+-- US-1.2: cuenta para probar que un usuario inactivo no puede iniciar sesión.
+INSERT INTO usuarios (id_usuario, nombre_usuario, apellido_usuario, username, correo_electronico, contrasena_hash, id_rol, estado) VALUES
+    (5, 'Usuario', 'Inactivo', 'inactivo.cine', 'inactivo.cine@example.com', 'pbkdf2_sha256$600000$CTrBMsBCJBIqpwrIO6R44g==$b+KCJPdok3jxd+aVATUJycDXtnPxtAfgi4PbaKUSABs=', 3, 0);
+-- Contraseña de prueba: BodegaCine2026!
+
 -- GÉNEROS Y PELÍCULAS DEL CATÁLOGO
 INSERT INTO generos (id_genero, nombre_genero, descripcion) VALUES
     (1, 'Acción', 'Historias con aventuras y secuencias de acción.'),

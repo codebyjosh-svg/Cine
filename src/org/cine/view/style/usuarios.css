@@ -1,0 +1,14 @@
+.root {
+    -fx-font-family: "Arial";
+    -fx-font-size: 13px;
+    -fx-background-color: #eeeeee;
+}
+.cabecera, .pie { -fx-background-color: #dddddd; }
+.titulo { -fx-font-size: 19px; -fx-text-fill: #873333; }
+.subtitulo { -fx-font-size: 15px; -fx-font-weight: bold; }
+.formulario { -fx-background-color: white; -fx-border-color: #bbbbbb; }
+.scroll-pane, .scroll-pane > .viewport { -fx-background-color: white; }
+.scroll-pane { -fx-background-insets: 0; -fx-padding: 0; }
+.button { -fx-padding: 6 12 6 12; }
+.ayuda { -fx-text-fill: #555555; -fx-font-size: 12px; }
+.error { -fx-text-fill: #a02020; }

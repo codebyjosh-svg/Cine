@@ -1,0 +1,2 @@
+SQL correcto: cinedb_script_ddl.sql
+SQL correcto: cinedb_script_dml.sql

@@ -1,5 +1,6 @@
 -- PROYECTO CINE: ESTRUCTURA, PROCEDIMIENTOS Y VISTAS
 -- Adaptación completa del script DDL proporcionado.
+-- US-1.2: validaciones del CRUD de usuarios integradas con el login de US-1.1.
 -- Servidor: MySQL 8.0.16 o posterior. Motor InnoDB y codificación UTF-8.
 -- 1. Ejecutar este archivo una sola vez en una base de datos nueva.
 -- 2. Ejecutar después cinedb_script_dml.sql.
@@ -599,12 +600,22 @@ CREATE PROCEDURE sp_insertarusuario(
     IN _contrasena_hash VARCHAR(255)
 )
 BEGIN
-    IF EXISTS (SELECT 1 FROM roles WHERE id_rol = _id_rol AND nombre_rol = 'cliente')
-        AND _id_cliente IS NULL THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El usuario cliente debe vincularse con un cliente.';
+    DECLARE _rol VARCHAR(20) DEFAULT NULL;
+    SELECT nombre_rol INTO _rol FROM roles WHERE id_rol = _id_rol;
+    IF _rol IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El rol seleccionado no existe.';
+    END IF;
+    IF _rol = 'cliente' AND (_id_cliente IS NULL OR NOT EXISTS (
+        SELECT 1 FROM clientes WHERE id_cliente = _id_cliente AND estado = 1
+    )) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Seleccionar un cliente activo para vincular la cuenta.';
+    END IF;
+    IF _rol <> 'cliente' AND _id_cliente IS NOT NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Solo una cuenta de rol cliente puede vincularse a un cliente.';
     END IF;
     INSERT INTO usuarios (nombre_usuario, apellido_usuario, username, correo_electronico, id_rol, id_cliente, contrasena_hash)
-    VALUES (_nombre_usuario, _apellido_usuario, _username, _correo_electronico, _id_rol, _id_cliente, _contrasena_hash);
+    VALUES (TRIM(_nombre_usuario), TRIM(_apellido_usuario), TRIM(_username), TRIM(_correo_electronico),
+        _id_rol, _id_cliente, _contrasena_hash);
     SELECT LAST_INSERT_ID() AS id_usuario;
 END $$
 
@@ -636,35 +647,57 @@ CREATE PROCEDURE sp_actualizarusuario(
     IN _id_cliente INT
 )
 BEGIN
-    IF EXISTS (SELECT 1 FROM roles WHERE id_rol = _id_rol AND nombre_rol = 'cliente')
-        AND _id_cliente IS NULL THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El usuario cliente debe vincularse con un cliente.';
+    DECLARE _rol VARCHAR(20) DEFAULT NULL;
+    DECLARE _cliente_anterior INT DEFAULT NULL;
+    IF NOT EXISTS (SELECT 1 FROM usuarios WHERE id_usuario = _id_usuario) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El usuario ya no existe.';
     END IF;
-    UPDATE usuarios SET nombre_usuario = _nombre_usuario, apellido_usuario = _apellido_usuario,
-        username = _username, correo_electronico = _correo_electronico, id_rol = _id_rol,
+    SELECT id_cliente INTO _cliente_anterior FROM usuarios WHERE id_usuario = _id_usuario;
+    SELECT nombre_rol INTO _rol FROM roles WHERE id_rol = _id_rol;
+    IF _rol IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El rol seleccionado no existe.';
+    END IF;
+    IF _rol = 'cliente' AND (_id_cliente IS NULL OR NOT EXISTS (
+        SELECT 1 FROM clientes WHERE id_cliente = _id_cliente
+            AND (estado = 1 OR _id_cliente <=> _cliente_anterior)
+    )) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Seleccionar un cliente activo para vincular la cuenta.';
+    END IF;
+    IF _rol <> 'cliente' AND _id_cliente IS NOT NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Solo una cuenta de rol cliente puede vincularse a un cliente.';
+    END IF;
+    UPDATE usuarios SET nombre_usuario = TRIM(_nombre_usuario), apellido_usuario = TRIM(_apellido_usuario),
+        username = TRIM(_username), correo_electronico = TRIM(_correo_electronico), id_rol = _id_rol,
         id_cliente = _id_cliente WHERE id_usuario = _id_usuario;
 END $$
 
-CREATE PROCEDURE sp_eliminarusuario(
-    IN _id_usuario INT
-)
+CREATE PROCEDURE sp_eliminarusuario(IN _id_usuario INT)
 BEGIN
+    IF NOT EXISTS (SELECT 1 FROM usuarios WHERE id_usuario = _id_usuario) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El usuario ya no existe.';
+    END IF;
     DELETE FROM usuarios WHERE id_usuario = _id_usuario;
 END $$
 
-CREATE PROCEDURE sp_cambiarestadousuario(
-    IN _id_usuario INT,
-    IN _estado TINYINT
-)
+CREATE PROCEDURE sp_cambiarestadousuario(IN _id_usuario INT, IN _estado TINYINT)
 BEGIN
+    IF _estado IS NULL OR _estado NOT IN (0, 1) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El estado debe ser 0 o 1.';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM usuarios WHERE id_usuario = _id_usuario) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El usuario ya no existe.';
+    END IF;
     UPDATE usuarios SET estado = _estado WHERE id_usuario = _id_usuario;
 END $$
 
-CREATE PROCEDURE sp_cambiarcontrasena(
-    IN _id_usuario INT,
-    IN _contrasena_hash VARCHAR(255)
-)
+CREATE PROCEDURE sp_cambiarcontrasena(IN _id_usuario INT, IN _contrasena_hash VARCHAR(255))
 BEGIN
+    IF _contrasena_hash IS NULL OR CHAR_LENGTH(_contrasena_hash) < 60 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La contraseña debe enviarse como hash seguro.';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM usuarios WHERE id_usuario = _id_usuario) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El usuario ya no existe.';
+    END IF;
     UPDATE usuarios SET contrasena_hash = _contrasena_hash WHERE id_usuario = _id_usuario;
 END $$
 
