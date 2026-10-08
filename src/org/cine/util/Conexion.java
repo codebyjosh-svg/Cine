@@ -10,15 +10,21 @@ import java.util.Properties;
 public final class Conexion {
 
     private static final Conexion INSTANCIA = new Conexion();
+
     private final Properties propiedades = new Properties();
 
     private Conexion() {
+
         try (InputStream entrada =
                 Conexion.class.getResourceAsStream("/db.properties")) {
 
-            if (entrada != null) {
-                propiedades.load(entrada);
+            if (entrada == null) {
+                throw new IllegalStateException(
+                        "No se encontró el archivo db.properties."
+                );
             }
+
+            propiedades.load(entrada);
 
         } catch (IOException ex) {
             throw new IllegalStateException(
@@ -47,9 +53,14 @@ public final class Conexion {
             valor = System.getenv(variable);
         }
 
-        return valor == null
-                ? propiedades.getProperty(clave, predeterminado)
-                : valor;
+        if (valor == null) {
+            valor = propiedades.getProperty(
+                    clave,
+                    predeterminado
+            );
+        }
+
+        return valor;
     }
 
     public Connection getConnection() throws SQLException {
@@ -67,13 +78,27 @@ public final class Conexion {
         String url = valor(
                 "db.url",
                 "CINE_DB_URL",
-                "jdbc:mysql://localhost:3306/cinedb_in4cm?useSSL=false&serverTimezone=America/Guatemala"
+                "jdbc:mysql://localhost:3306/cinedb_in4cm"
+                + "?useSSL=false"
+                + "&serverTimezone=America/Guatemala"
+        );
+
+        String user = valor(
+                "db.user",
+                "CINE_DB_USER",
+                "IN4CM"
+        );
+
+        String password = valor(
+                "db.password",
+                "CINE_DB_PASSWORD",
+                ""
         );
 
         return DriverManager.getConnection(
                 url,
-                valor("db.user", "CINE_DB_USER", "IN4CM"),
-                valor("db.password", "CINE_DB_PASSWORD", "")
+                user,
+                password
         );
     }
 

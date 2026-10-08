@@ -21,8 +21,14 @@ public class DashboardAdminController {
         Usuario usuario = SesionContext.getUsuarioActual();
 
         if (usuario != null) {
-            lblUsuario.setText(usuario.getNombreCompleto());
-            lblRol.setText(usuario.getNombreRol());
+
+            if (lblUsuario != null) {
+                lblUsuario.setText(usuario.getNombreCompleto());
+            }
+
+            if (lblRol != null) {
+                lblRol.setText(usuario.getNombreRol());
+            }
         }
     }
 
@@ -51,6 +57,15 @@ public class DashboardAdminController {
     @FXML
     private void abrirGeneros() throws IOException {
         Principal.mostrarGeneros();
+    }
+
+    // ==============================
+    // CLIENTES
+    // ==============================
+
+    @FXML
+    private void abrirClientes() throws IOException {
+        Principal.mostrarClientes();
     }
 
     // ==============================

@@ -50,7 +50,7 @@ public class Principal extends Application {
 
         if (actual == null
                 || !actual.isEstado()
-                || !"admin".equals(actual.getNombreRol())) {
+                || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
 
             throw new IllegalStateException(
                     "La gestión de usuarios requiere una sesión de administrador."
@@ -68,7 +68,7 @@ public class Principal extends Application {
 
         if (actual == null
                 || !actual.isEstado()
-                || !"admin".equals(actual.getNombreRol())) {
+                || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
 
             throw new IllegalStateException(
                     "La gestión de películas requiere una sesión de administrador."
@@ -86,7 +86,7 @@ public class Principal extends Application {
 
         if (actual == null
                 || !actual.isEstado()
-                || !"admin".equals(actual.getNombreRol())) {
+                || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
 
             throw new IllegalStateException(
                     "La gestión de géneros requiere una sesión de administrador."
@@ -96,6 +96,28 @@ public class Principal extends Application {
         cambiarEscena(
                 "/org/cine/view/Generos.fxml",
                 "Cine - Géneros"
+        );
+    }
+
+    /**
+     * US-1.4 - Gestión de clientes.
+     */
+    public static void mostrarClientes() throws IOException {
+
+        Usuario actual = SesionContext.getUsuarioActual();
+
+        if (actual == null
+                || !actual.isEstado()
+                || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
+
+            throw new IllegalStateException(
+                    "La gestión de clientes requiere una sesión de administrador."
+            );
+        }
+
+        cambiarEscena(
+                "/org/cine/view/Clientes.fxml",
+                "Cine - Clientes"
         );
     }
 
@@ -116,21 +138,37 @@ public class Principal extends Application {
             );
         }
 
-        Parent root = FXMLLoader.load(recurso);
+        FXMLLoader loader = new FXMLLoader(recurso);
+        Parent root = loader.load();
 
         boolean usuarios = ruta.endsWith("/Usuarios.fxml");
         boolean peliculas = ruta.endsWith("/Peliculas.fxml");
         boolean generos = ruta.endsWith("/Generos.fxml");
+        boolean clientes = ruta.endsWith("/Clientes.fxml");
 
-        boolean moduloGrande = usuarios || peliculas || generos;
+        boolean moduloGrande =
+                usuarios
+                || peliculas
+                || generos
+                || clientes;
 
         double ancho = moduloGrande ? 1100 : 860;
         double alto = moduloGrande ? 700 : 540;
 
-        Scene scene = new Scene(root, ancho, alto);
+        Scene scene = new Scene(
+                root,
+                ancho,
+                alto
+        );
 
-        stagePrincipal.setMinWidth(moduloGrande ? 1000 : 860);
-        stagePrincipal.setMinHeight(moduloGrande ? 650 : 540);
+        stagePrincipal.setMinWidth(
+                moduloGrande ? 1000 : 860
+        );
+
+        stagePrincipal.setMinHeight(
+                moduloGrande ? 650 : 540
+        );
+
         stagePrincipal.setScene(scene);
         stagePrincipal.setTitle(titulo);
         stagePrincipal.sizeToScene();
