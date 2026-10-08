@@ -32,3 +32,13 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
+.functions-button {
+    -fx-pref-width: 180;
+    -fx-pref-height: 40;
+    -fx-background-radius: 8;
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+.functions-button:hover { -fx-background-color: #1d4ed8; }

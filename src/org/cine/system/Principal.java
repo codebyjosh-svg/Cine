@@ -39,6 +39,15 @@ public class Principal extends Application {
         mostrarLogin();
     }
 
+    public static void mostrarProgramacion() throws IOException {
+        if (!SesionContext.haySesionActiva()
+                || !SesionContext.getUsuarioActual().isEstado()
+                || !"admin".equals(SesionContext.getRolActual())) {
+            throw new IllegalStateException("La programación de funciones requiere una sesión de administrador.");
+        }
+        cambiarEscena("/org/cine/view/Programacion.fxml", "Cinema - Programación de funciones");
+    }
+
     public static void cambiarEscena(String ruta, String titulo) throws IOException {
         URL recurso = Principal.class.getResource(ruta);
         if (recurso == null) {
@@ -48,6 +57,7 @@ public class Principal extends Application {
         Scene scene = new Scene(root);
         stagePrincipal.setScene(scene);
         stagePrincipal.setTitle(titulo);
+        stagePrincipal.sizeToScene();
         stagePrincipal.centerOnScreen();
     }
 
