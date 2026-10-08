@@ -14,6 +14,7 @@ public class Pelicula {
     private Date fechaEstreno;
     private int idGenero;
     private int estado;
+    private byte[] imagen;
 
     public Pelicula() {
     }
@@ -32,6 +33,16 @@ public class Pelicula {
         this.fechaEstreno = fechaEstreno;
         this.idGenero = idGenero;
         this.estado = estado;
+    }
+
+    public Pelicula(int idPelicula, String titulo, String sinopsis,
+            String director, int duracionMinutos, String clasificacion,
+            String idioma, Date fechaEstreno, int idGenero, int estado,
+            byte[] imagen) {
+
+        this(idPelicula, titulo, sinopsis, director, duracionMinutos,
+                clasificacion, idioma, fechaEstreno, idGenero, estado);
+        this.imagen = imagen;
     }
 
     public int getIdPelicula() {
@@ -112,6 +123,14 @@ public class Pelicula {
 
     public void setEstado(int estado) {
         this.estado = estado;
+    }
+
+    public byte[] getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
     }
 
     @Override
