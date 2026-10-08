@@ -283,7 +283,7 @@ public class ClienteController {
 
             return indicarDatoInvalido(
                     txtNombreCliente,
-                    "Los nombres no pueden superar los 100 caracteres."
+                    "Los nombres de los clientes no pueden superar los 100 caracteres."
             );
         }
 
