@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cine.controller.GeneroController"
+            prefHeight="600.0"
+            prefWidth="900.0">
+
+    <top>
+        <VBox spacing="10.0"
+              style="-fx-padding: 20;">
+
+            <Label text="Gestión de Géneros"
+                   style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+            <GridPane hgap="10.0"
+                      vgap="10.0">
+
+                <Label text="Nombre:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="0"/>
+
+                <TextField fx:id="txtNombreGenero"
+                           promptText="Nombre del género"
+                           prefWidth="300.0"
+                           GridPane.columnIndex="1"
+                           GridPane.rowIndex="0"/>
+
+                <Label text="Descripción:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="1"/>
+
+                <TextArea fx:id="txtDescripcion"
+                          promptText="Descripción del género"
+                          prefWidth="300.0"
+                          prefHeight="70.0"
+                          wrapText="true"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="1"/>
+
+                <Label text="Estado:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="2"/>
+
+                <Label fx:id="lblEstado"
+                       text="Nuevo - se guardará como Activo"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="2"/>
+
+            </GridPane>
+
+            <HBox spacing="10.0">
+
+                <Button fx:id="btnGuardar"
+                        onAction="#guardarGenero"
+                        text="Guardar"/>
+
+                <Button fx:id="btnEditar"
+                        onAction="#editarGenero"
+                        text="Editar"/>
+
+                <Button fx:id="btnEliminar"
+                        onAction="#eliminarGenero"
+                        text="Eliminar"/>
+
+                <Button fx:id="btnActivar"
+                        onAction="#activarGenero"
+                        text="Activar"/>
+
+                <Button fx:id="btnDesactivar"
+                        onAction="#desactivarGenero"
+                        text="Desactivar"/>
+
+                <Button fx:id="btnLimpiar"
+                        onAction="#limpiarFormulario"
+                        text="Limpiar"/>
+
+            </HBox>
+
+        </VBox>
+    </top>
+
+    <center>
+
+        <TableView fx:id="tbGeneros"
+                   onMouseClicked="#seleccionarGenero">
+
+            <columns>
+
+                <TableColumn fx:id="colIdGenero"
+                             prefWidth="80.0"
+                             text="ID"/>
+
+                <TableColumn fx:id="colNombreGenero"
+                             prefWidth="220.0"
+                             text="Nombre"/>
+
+                <TableColumn fx:id="colDescripcion"
+                             prefWidth="400.0"
+                             text="Descripción"/>
+
+                <TableColumn fx:id="colEstado"
+                             prefWidth="120.0"
+                             text="Estado"/>
+
+            </columns>
+
+        </TableView>
+
+    </center>
+
+</BorderPane>

@@ -8,16 +8,23 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public final class Conexion {
+
     private static final Conexion INSTANCIA = new Conexion();
     private final Properties propiedades = new Properties();
 
     private Conexion() {
-        try (InputStream entrada = Conexion.class.getResourceAsStream("/db.properties")) {
+        try (InputStream entrada =
+                Conexion.class.getResourceAsStream("/db.properties")) {
+
             if (entrada != null) {
                 propiedades.load(entrada);
             }
+
         } catch (IOException ex) {
-            throw new IllegalStateException("No se pudo leer db.properties.", ex);
+            throw new IllegalStateException(
+                    "No se pudo leer db.properties.",
+                    ex
+            );
         }
     }
 
@@ -29,25 +36,45 @@ public final class Conexion {
         return INSTANCIA;
     }
 
-    private String valor(String clave, String variable, String predeterminado) {
+    private String valor(
+            String clave,
+            String variable,
+            String predeterminado) {
+
         String valor = System.getProperty("cine." + clave);
+
         if (valor == null) {
             valor = System.getenv(variable);
         }
-        return valor == null ? propiedades.getProperty(clave, predeterminado) : valor;
+
+        return valor == null
+                ? propiedades.getProperty(clave, predeterminado)
+                : valor;
     }
 
     public Connection getConnection() throws SQLException {
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+
         } catch (ClassNotFoundException ex) {
-            throw new SQLException("Falta MySQL Connector/J en las bibliotecas del proyecto.", ex);
+            throw new SQLException(
+                    "Falta MySQL Connector/J en las bibliotecas del proyecto.",
+                    ex
+            );
         }
-        String url = valor("db.url", "CINE_DB_URL",
-                "jdbc:mysql://localhost:3306/cinedb_in4cm?useSSL=false&serverTimezone=America/Guatemala");
-        return DriverManager.getConnection(url,
+
+        String url = valor(
+                "db.url",
+                "CINE_DB_URL",
+                "jdbc:mysql://localhost:3306/cinedb_in4cm?useSSL=false&serverTimezone=America/Guatemala"
+        );
+
+        return DriverManager.getConnection(
+                url,
                 valor("db.user", "CINE_DB_USER", "IN4CM"),
-                valor("db.password", "CINE_DB_PASSWORD", ""));
+                valor("db.password", "CINE_DB_PASSWORD", "")
+        );
     }
 
     public Connection getConexion() throws SQLException {
