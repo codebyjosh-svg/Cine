@@ -1,0 +1,7 @@
+[OK] SecurityUtil valida PBKDF2 correctamente.
+[OK] Navegación por rol correcta.
+[OK] Pruebas de login ejecutadas.
+[OK] Usuario inactivo rechazado correctamente.
+[OK] Sesión iniciada correctamente.
+[OK] Logout limpia correctamente la sesión.
+[OK] T1.1.10 completada.

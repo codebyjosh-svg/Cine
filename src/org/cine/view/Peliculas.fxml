@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.cine.controller.PeliculasController"
+      spacing="10"
+      prefWidth="1050"
+      prefHeight="700">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Gestión de Películas"
+           style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="10" vgap="8">
+
+        <Label text="Título:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtTitulo"
+                   promptText="Título de la película"
+                   prefWidth="250"
+                   GridPane.rowIndex="0"
+                   GridPane.columnIndex="1"/>
+
+        <Label text="Director:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtDirector"
+                   promptText="Director"
+                   prefWidth="250"
+                   GridPane.rowIndex="0"
+                   GridPane.columnIndex="3"/>
+
+        <Label text="Duración:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtDuracion"
+                   promptText="Minutos"
+                   prefWidth="250"
+                   GridPane.rowIndex="1"
+                   GridPane.columnIndex="1"/>
+
+        <Label text="Clasificación:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <ComboBox fx:id="cmbClasificacion"
+                  promptText="Seleccionar"
+                  prefWidth="250"
+                  GridPane.rowIndex="1"
+                  GridPane.columnIndex="3"/>
+
+        <Label text="Idioma:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtIdioma"
+                   promptText="Idioma"
+                   prefWidth="250"
+                   GridPane.rowIndex="2"
+                   GridPane.columnIndex="1"/>
+
+        <Label text="Fecha estreno:" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+        <DatePicker fx:id="dpFechaEstreno"
+                    prefWidth="250"
+                    GridPane.rowIndex="2"
+                    GridPane.columnIndex="3"/>
+
+        <Label text="Género:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cmbGenero"
+                  promptText="Seleccionar género"
+                  prefWidth="250"
+                  GridPane.rowIndex="3"
+                  GridPane.columnIndex="1"/>
+
+        <Label text="Sinopsis:" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+        <TextArea fx:id="txtSinopsis"
+                  promptText="Descripción de la película"
+                  prefWidth="250"
+                  prefHeight="70"
+                  GridPane.rowIndex="3"
+                  GridPane.columnIndex="3"/>
+
+    </GridPane>
+
+    <HBox spacing="8">
+
+        <Button fx:id="btnGuardar"
+                text="Guardar"/>
+
+        <Button fx:id="btnEditar"
+                text="Editar"/>
+
+        <Button fx:id="btnEliminar"
+                text="Eliminar"/>
+
+        <Button fx:id="btnActivar"
+                text="Activar"/>
+
+        <Button fx:id="btnDesactivar"
+                text="Desactivar"/>
+
+        <Button fx:id="btnLimpiar"
+                text="Limpiar"/>
+
+    </HBox>
+
+    <TableView fx:id="tblPeliculas"
+               VBox.vgrow="ALWAYS">
+
+        <columns>
+
+            <TableColumn fx:id="colId"
+                         text="ID"
+                         prefWidth="50"/>
+
+            <TableColumn fx:id="colTitulo"
+                         text="Título"
+                         prefWidth="180"/>
+
+            <TableColumn fx:id="colDirector"
+                         text="Director"
+                         prefWidth="130"/>
+
+            <TableColumn fx:id="colDuracion"
+                         text="Duración"
+                         prefWidth="80"/>
+
+            <TableColumn fx:id="colClasificacion"
+                         text="Clasificación"
+                         prefWidth="100"/>
+
+            <TableColumn fx:id="colIdioma"
+                         text="Idioma"
+                         prefWidth="100"/>
+
+            <TableColumn fx:id="colFechaEstreno"
+                         text="Fecha estreno"
+                         prefWidth="110"/>
+
+            <TableColumn fx:id="colGenero"
+                         text="Género"
+                         prefWidth="120"/>
+
+            <TableColumn fx:id="colEstado"
+                         text="Estado"
+                         prefWidth="100"/>
+
+        </columns>
+
+    </TableView>
+
+</VBox>
