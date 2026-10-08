@@ -1,101 +1,406 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.cine.controller.UsuarioController" stylesheets="@style/usuarios.css">
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cine.controller.UsuarioController"
+            stylesheets="@style/usuarios.css"
+            styleClass="root">
+
+    <!-- ================================================= -->
+    <!-- ENCABEZADO -->
+    <!-- ================================================= -->
+
     <top>
-        <HBox alignment="CENTER_LEFT" spacing="10" styleClass="cabecera">
-            <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
-            <Label text="Cine - Gestión de usuarios" styleClass="titulo"/>
+        <HBox alignment="CENTER_LEFT"
+              spacing="15"
+              styleClass="header">
+
+            <VBox spacing="3">
+
+                <Label text="Gestión de usuarios"
+                       styleClass="title"/>
+
+                <Label text="Administración de usuarios, roles y estados"
+                       styleClass="subtitle"/>
+
+            </VBox>
+
             <Region HBox.hgrow="ALWAYS"/>
-            <Button fx:id="btnVolver" text="Volver" onAction="#onVolver"/>
+
+            <Button text="Cerrar"
+                    onAction="#onVolver"
+                    styleClass="close-button"/>
+
         </HBox>
     </top>
+
+
+    <!-- ================================================= -->
+    <!-- CONTENIDO -->
+    <!-- ================================================= -->
+
     <center>
-        <HBox spacing="12">
-            <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
-            <VBox prefWidth="300" minWidth="300" maxWidth="300" spacing="10" styleClass="formulario">
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
-                    <content>
-                        <VBox spacing="6">
-                            <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
-                            <Label fx:id="lblModo" text="Nuevo usuario" styleClass="subtitulo"/>
-                            <HBox spacing="8">
-                                <VBox spacing="4" minWidth="0" HBox.hgrow="ALWAYS">
-                                    <Label text="Nombre *"/>
-                                    <TextField fx:id="txtNombre" promptText="Nombre"/>
-                                </VBox>
-                                <VBox spacing="4" minWidth="0" HBox.hgrow="ALWAYS">
-                                    <Label text="Apellido *"/>
-                                    <TextField fx:id="txtApellido" promptText="Apellido"/>
-                                </VBox>
-                            </HBox>
-                            <Label text="Username *"/>
-                            <TextField fx:id="txtUsername" promptText="Ejemplo: diego.cine"/>
-                            <Label text="Correo *"/>
-                            <TextField fx:id="txtCorreo" promptText="usuario@ejemplo.com"/>
-                            <Label text="Rol *"/>
-                            <ComboBox fx:id="cmbRol" promptText="Selecciona un rol" maxWidth="Infinity"/>
-                            <VBox fx:id="bloqueCliente" spacing="4" visible="false" managed="false">
-                                <Label text="Cliente *"/>
-                                <ComboBox fx:id="cmbCliente" promptText="Selecciona un cliente" maxWidth="Infinity"/>
-                            </VBox>
-                            <Label text="Contraseña *"/>
-                            <PasswordField fx:id="txtContrasena" promptText="Mínimo 8 caracteres"/>
-                            <Label text="Confirmar contraseña *"/>
-                            <PasswordField fx:id="txtConfirmacion" promptText="Repite la contraseña"/>
-                            <Label text="Al editar, deja las contraseñas vacías para mantener la actual."
-                                   wrapText="true" styleClass="ayuda"/>
-                            <Label text="* Campos obligatorios" styleClass="ayuda"/>
+
+        <ScrollPane fitToWidth="true"
+                    fitToHeight="true"
+                    hbarPolicy="NEVER"
+                    vbarPolicy="AS_NEEDED"
+                    styleClass="scroll">
+
+            <HBox spacing="18"
+                  styleClass="content">
+
+
+                <!-- ========================================= -->
+                <!-- FORMULARIO -->
+                <!-- ========================================= -->
+
+                <VBox prefWidth="330"
+                      minWidth="300"
+                      spacing="12"
+                      styleClass="card">
+
+                    <HBox alignment="CENTER_LEFT"
+                          spacing="8">
+
+                        <Label text="●"
+                               styleClass="blue-dot"/>
+
+                        <Label fx:id="lblModo"
+                               text="Nuevo usuario"
+                               styleClass="card-title"/>
+
+                    </HBox>
+
+
+                    <!-- NOMBRE Y APELLIDO -->
+
+                    <GridPane hgap="10"
+                              vgap="5">
+
+                        <VBox spacing="5"
+                              GridPane.columnIndex="0"
+                              GridPane.rowIndex="0">
+
+                            <Label text="Nombre *"
+                                   styleClass="field-label"/>
+
+                            <TextField fx:id="txtNombre"
+                                       promptText="Nombre"
+                                       prefWidth="145"
+                                       styleClass="field"/>
+
                         </VBox>
-                    </content>
-                </ScrollPane>
-                <HBox spacing="8">
-                    <padding><Insets top="0" right="12" bottom="12" left="12"/></padding>
-                    <Button fx:id="btnGuardar" text="Guardar" onAction="#onGuardar"/>
-                    <Button fx:id="btnNuevo" text="Nuevo" onAction="#onNuevo"/>
-                </HBox>
-            </VBox>
-            <VBox spacing="10" minWidth="0" HBox.hgrow="ALWAYS">
-                <HBox alignment="CENTER_LEFT" spacing="8">
-                    <Label text="Lista de usuarios" styleClass="subtitulo"/>
-                    <Region HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="btnActualizar" text="Actualizar" onAction="#onActualizar"/>
-                </HBox>
-                <HBox spacing="8">
-                    <TextField fx:id="txtBusqueda" promptText="Buscar nombre, username, correo o rol" HBox.hgrow="ALWAYS"/>
-                    <ComboBox fx:id="cmbFiltroEstado" prefWidth="115" minWidth="115"/>
-                </HBox>
-                <TableView fx:id="tblUsuarios" VBox.vgrow="ALWAYS" minHeight="180">
-                    <columns>
-                        <TableColumn fx:id="colId" text="ID" prefWidth="40"/>
-                        <TableColumn fx:id="colNombre" text="Nombre completo" prefWidth="155"/>
-                        <TableColumn fx:id="colUsername" text="Username" prefWidth="130"/>
-                        <TableColumn fx:id="colRol" text="Rol" prefWidth="80"/>
-                        <TableColumn fx:id="colEstado" text="Estado" prefWidth="80"/>
-                        <TableColumn fx:id="colCorreo" text="Correo" prefWidth="205"/>
-                        <TableColumn fx:id="colCliente" text="Cliente ID" prefWidth="85"/>
-                        <TableColumn fx:id="colFecha" text="Fecha de registro" prefWidth="170"/>
-                    </columns>
-                </TableView>
-                <HBox alignment="CENTER_LEFT" spacing="8">
-                    <Button fx:id="btnEditar" text="Editar" onAction="#onEditar"/>
-                    <Button fx:id="btnEstado" text="Desactivar" onAction="#onCambiarEstado"/>
-                    <Button fx:id="btnEliminar" text="Eliminar" onAction="#onEliminar"/>
-                    <Region HBox.hgrow="ALWAYS"/>
-                    <Label fx:id="lblResultados" text="0 usuarios"/>
-                </HBox>
-                <Label fx:id="lblError" text="" wrapText="true" maxWidth="Infinity" styleClass="error"/>
-            </VBox>
-        </HBox>
+
+
+                        <VBox spacing="5"
+                              GridPane.columnIndex="1"
+                              GridPane.rowIndex="0">
+
+                            <Label text="Apellido *"
+                                   styleClass="field-label"/>
+
+                            <TextField fx:id="txtApellido"
+                                       promptText="Apellido"
+                                       prefWidth="145"
+                                       styleClass="field"/>
+
+                        </VBox>
+
+                    </GridPane>
+
+
+                    <!-- USERNAME -->
+
+                    <VBox spacing="5">
+
+                        <Label text="Username *"
+                               styleClass="field-label"/>
+
+                        <TextField fx:id="txtUsername"
+                                   promptText="Ejemplo: usuario.cine"
+                                   styleClass="field"/>
+
+                    </VBox>
+
+
+                    <!-- CORREO -->
+
+                    <VBox spacing="5">
+
+                        <Label text="Correo *"
+                               styleClass="field-label"/>
+
+                        <TextField fx:id="txtCorreo"
+                                   promptText="usuario@ejemplo.com"
+                                   styleClass="field"/>
+
+                    </VBox>
+
+
+                    <!-- ROL -->
+
+                    <VBox spacing="5">
+
+                        <Label text="Rol *"
+                               styleClass="field-label"/>
+
+                        <ComboBox fx:id="cmbRol"
+                                  promptText="Selecciona un rol"
+                                  maxWidth="1.7976931348623157E308"
+                                  styleClass="combo"/>
+
+                    </VBox>
+
+
+                    <!-- CLIENTE -->
+
+                    <VBox fx:id="bloqueCliente"
+                          spacing="5"
+                          managed="false"
+                          visible="false">
+
+                        <Label text="Cliente"
+                               styleClass="field-label"/>
+
+                        <ComboBox fx:id="cmbCliente"
+                                  promptText="Selecciona un cliente"
+                                  maxWidth="1.7976931348623157E308"
+                                  styleClass="combo"/>
+
+                    </VBox>
+
+
+                    <!-- CONTRASEÑA -->
+
+                    <VBox spacing="5">
+
+                        <Label text="Contraseña *"
+                               styleClass="field-label"/>
+
+                        <PasswordField fx:id="txtContrasena"
+                                       promptText="Mínimo 8 caracteres"
+                                       styleClass="field"/>
+
+                    </VBox>
+
+
+                    <!-- CONFIRMACION -->
+
+                    <VBox spacing="5">
+
+                        <Label text="Confirmar contraseña *"
+                               styleClass="field-label"/>
+
+                        <PasswordField fx:id="txtConfirmacion"
+                                       promptText="Repita la contraseña"
+                                       styleClass="field"/>
+
+                    </VBox>
+
+
+                    <Label text="* Campos obligatorios"
+                           styleClass="required"/>
+
+
+                    <Label fx:id="lblError"
+                           text=""
+                           wrapText="true"
+                           styleClass="error-label"/>
+
+
+                    <Region VBox.vgrow="ALWAYS"/>
+
+
+                    <!-- BOTONES -->
+
+                    <HBox spacing="8">
+
+                        <Button fx:id="btnGuardar"
+                                text="Guardar"
+                                onAction="#onGuardar"
+                                maxWidth="1.7976931348623157E308"
+                                HBox.hgrow="ALWAYS"
+                                styleClass="primary-button"/>
+
+                        <Button text="Nuevo"
+                                onAction="#onNuevo"
+                                styleClass="secondary-button"/>
+
+                    </HBox>
+
+                </VBox>
+
+
+                <!-- ========================================= -->
+                <!-- LISTA -->
+                <!-- ========================================= -->
+
+                <VBox spacing="12"
+                      styleClass="card"
+                      HBox.hgrow="ALWAYS">
+
+                    <HBox alignment="CENTER_LEFT"
+                          spacing="8">
+
+                        <Label text="●"
+                               styleClass="green-dot"/>
+
+                        <Label text="Lista de usuarios"
+                               styleClass="card-title"/>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <Label fx:id="lblResultados"
+                               text="0 usuarios"
+                               styleClass="counter"/>
+
+                    </HBox>
+
+
+                    <!-- BUSCADOR -->
+
+                    <HBox spacing="8">
+
+                        <TextField fx:id="txtBusqueda"
+                                   promptText="Buscar nombre, username, correo o rol"
+                                   HBox.hgrow="ALWAYS"
+                                   styleClass="search-field"/>
+
+                        <ComboBox fx:id="cmbFiltroEstado"
+                                  prefWidth="105"
+                                  styleClass="combo-small"/>
+
+                        <Button text="Actualizar"
+                                onAction="#onActualizar"
+                                styleClass="secondary-button"/>
+
+                    </HBox>
+
+
+                    <!-- TABLA -->
+
+                    <TableView fx:id="tblUsuarios"
+                               VBox.vgrow="ALWAYS"
+                               styleClass="table">
+
+                        <columns>
+
+                            <TableColumn fx:id="colId"
+                                         text="ID"
+                                         prefWidth="45"/>
+
+                            <TableColumn fx:id="colNombre"
+                                         text="Nombre completo"
+                                         prefWidth="145"/>
+
+                            <TableColumn fx:id="colUsername"
+                                         text="Username"
+                                         prefWidth="105"/>
+
+                            <TableColumn fx:id="colCorreo"
+                                         text="Correo"
+                                         prefWidth="175"/>
+
+                            <TableColumn fx:id="colRol"
+                                         text="Rol"
+                                         prefWidth="85"/>
+
+                            <TableColumn fx:id="colCliente"
+                                         text="Cliente"
+                                         prefWidth="70"/>
+
+                            <TableColumn fx:id="colEstado"
+                                         text="Estado"
+                                         prefWidth="80"/>
+
+                            <TableColumn fx:id="colFecha"
+                                         text="Fecha"
+                                         prefWidth="120"/>
+
+                        </columns>
+
+                        <placeholder>
+
+                            <Label text="No hay usuarios registrados."
+                                   styleClass="empty"/>
+
+                        </placeholder>
+
+                    </TableView>
+
+
+                    <!-- BOTONES DE TABLA -->
+
+                    <HBox alignment="CENTER_LEFT"
+                          spacing="8">
+
+                        <Button fx:id="btnEditar"
+                                text="Editar"
+                                onAction="#onEditar"
+                                styleClass="edit-button"/>
+
+                        <Button fx:id="btnEstado"
+                                text="Desactivar"
+                                onAction="#onCambiarEstado"
+                                styleClass="status-button"/>
+
+                        <Button fx:id="btnEliminar"
+                                text="Eliminar"
+                                onAction="#onEliminar"
+                                styleClass="delete-button"/>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <Label fx:id="lblStatus"
+                               text="Datos actualizados."
+                               styleClass="status-label"/>
+
+                    </HBox>
+
+                </VBox>
+
+            </HBox>
+
+        </ScrollPane>
+
     </center>
+
+
+    <!-- ================================================= -->
+    <!-- PIE -->
+    <!-- ================================================= -->
+
     <bottom>
-        <HBox styleClass="pie">
-            <padding><Insets top="8" right="12" bottom="8" left="12"/></padding>
-            <Label fx:id="lblStatus" text="Cargando datos..." wrapText="true"/>
+
+        <HBox alignment="CENTER_LEFT"
+              styleClass="footer">
+
+            <Label text="CINEMA | Sistema de Gestión de Cine"
+                   styleClass="footer-text"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label text="Gestión de usuarios"
+                   styleClass="footer-text"/>
+
         </HBox>
+
     </bottom>
+
 </BorderPane>

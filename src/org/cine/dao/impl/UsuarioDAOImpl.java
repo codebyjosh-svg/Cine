@@ -18,60 +18,102 @@ import org.cine.util.SecurityUtil;
 import org.cine.service.AutenticacionException;
 
 public class UsuarioDAOImpl implements UsuarioDAO {
+
     private static final String SP_BUSCAR_LOGIN = "{call sp_buscarusuario_login(?)}";
 
     @Override
     public Optional<Usuario> buscarPorUsername(String username) throws SQLException {
+
         if (username == null || username.isBlank()) {
             return Optional.empty();
         }
-        try (Connection cn = Conexion.getInstancia().conectar();
-             CallableStatement cs = cn.prepareCall(SP_BUSCAR_LOGIN)) {
+
+        try (Connection cn = Conexion.getInstancia().conectar(); CallableStatement cs = cn.prepareCall(
+                "{call sp_buscarusuario_login(?)}")) {
+
             cs.setString(1, username.trim());
+
             try (ResultSet rs = cs.executeQuery()) {
+
                 if (rs.next()) {
+
                     Usuario usuario = convertir(rs);
-                    usuario.setContrasenaHash(rs.getString("contrasena_hash"));
+
+                    usuario.setContrasenaHash(
+                            rs.getString("contrasena_hash")
+                    );
+
                     return Optional.of(usuario);
                 }
+
                 return Optional.empty();
             }
         }
     }
 
     @Override
-    public Usuario autenticar(String username, String password) throws AutenticacionException {
-        if (username == null || username.isBlank() || password == null || password.isEmpty()) {
+    public Usuario autenticar(String username, String password)
+            throws AutenticacionException {
+
+        if (username == null || username.isBlank()
+                || password == null || password.isEmpty()) {
+
             throw new AutenticacionException(
                     AutenticacionException.Motivo.CREDENCIALES_INVALIDAS,
-                    "Ingrese usuario y contraseña.");
+                    "Ingrese usuario y contraseña."
+            );
         }
+
         try {
-            Optional<Usuario> encontrado = buscarPorUsername(username);
+
+            Optional<Usuario> encontrado
+                    = buscarPorUsername(username);
+
             if (encontrado.isEmpty()) {
+
                 throw new AutenticacionException(
                         AutenticacionException.Motivo.CREDENCIALES_INVALIDAS,
-                        "Usuario o contraseña incorrectos.");
+                        "Usuario o contraseña incorrectos."
+                );
             }
+
             Usuario usuario = encontrado.get();
-            if (!SecurityUtil.verifyPassword(password, usuario.getContrasenaHash())) {
+
+            boolean correcta
+                    = SecurityUtil.verifyPassword(
+                            password,
+                            usuario.getContrasenaHash()
+                    );
+
+            if (!correcta) {
+
                 throw new AutenticacionException(
                         AutenticacionException.Motivo.CREDENCIALES_INVALIDAS,
-                        "Usuario o contraseña incorrectos.");
+                        "Usuario o contraseña incorrectos."
+                );
             }
+
             if (!usuario.isEstado()) {
+
                 throw new AutenticacionException(
                         AutenticacionException.Motivo.USUARIO_INACTIVO,
-                        "El usuario se encuentra inactivo.");
+                        "El usuario se encuentra inactivo."
+                );
             }
+
             return usuario;
+
         } catch (SQLException ex) {
+
+            ex.printStackTrace();
+
             throw new AutenticacionException(
                     AutenticacionException.Motivo.ERROR_DATOS,
-                    "No fue posible validar las credenciales.", ex);
+                    "No fue posible validar las credenciales.",
+                    ex
+            );
         }
     }
-
 
     private Usuario convertir(ResultSet resultado) throws SQLException {
         Usuario usuario = new Usuario();
@@ -106,9 +148,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     @Override
     public List<Usuario> listar() throws SQLException {
         List<Usuario> usuarios = new ArrayList<>();
-        try (Connection conexion = Conexion.getInstance().getConnection();
-             CallableStatement sentencia = conexion.prepareCall("{call sp_listarusuarios()}" );
-             ResultSet resultado = sentencia.executeQuery()) {
+        try (Connection conexion = Conexion.getInstance().getConnection(); CallableStatement sentencia = conexion.prepareCall("{call sp_listarusuarios()}"); ResultSet resultado = sentencia.executeQuery()) {
             while (resultado.next()) {
                 usuarios.add(convertir(resultado));
             }
@@ -118,8 +158,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
     @Override
     public Optional<Usuario> buscarPorId(int idUsuario) throws SQLException {
-        try (Connection conexion = Conexion.getInstance().getConnection();
-             CallableStatement sentencia = conexion.prepareCall("{call sp_buscarusuario(?)}")) {
+        try (Connection conexion = Conexion.getInstance().getConnection(); CallableStatement sentencia = conexion.prepareCall("{call sp_buscarusuario(?)}")) {
             sentencia.setInt(1, idUsuario);
             try (ResultSet resultado = sentencia.executeQuery()) {
                 return resultado.next() ? Optional.of(convertir(resultado)) : Optional.empty();
@@ -129,8 +168,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
     @Override
     public int insertar(Usuario usuario) throws SQLException {
-        try (Connection conexion = Conexion.getInstance().getConnection();
-             CallableStatement sentencia = conexion.prepareCall("{call sp_insertarusuario(?,?,?,?,?,?,?)}")) {
+        try (Connection conexion = Conexion.getInstance().getConnection(); CallableStatement sentencia = conexion.prepareCall("{call sp_insertarusuario(?,?,?,?,?,?,?)}")) {
             parametros(sentencia, usuario, 1);
             sentencia.setString(7, usuario.getContrasenaHash());
             try (ResultSet resultado = sentencia.executeQuery()) {
@@ -172,8 +210,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
     @Override
     public void cambiarEstado(int idUsuario, boolean activo) throws SQLException {
-        try (Connection conexion = Conexion.getInstance().getConnection();
-             CallableStatement sentencia = conexion.prepareCall("{call sp_cambiarestadousuario(?,?)}")) {
+        try (Connection conexion = Conexion.getInstance().getConnection(); CallableStatement sentencia = conexion.prepareCall("{call sp_cambiarestadousuario(?,?)}")) {
             sentencia.setInt(1, idUsuario);
             sentencia.setBoolean(2, activo);
             sentencia.execute();
@@ -182,8 +219,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
     @Override
     public void eliminar(int idUsuario) throws SQLException {
-        try (Connection conexion = Conexion.getInstance().getConnection();
-             CallableStatement sentencia = conexion.prepareCall("{call sp_eliminarusuario(?)}")) {
+        try (Connection conexion = Conexion.getInstance().getConnection(); CallableStatement sentencia = conexion.prepareCall("{call sp_eliminarusuario(?)}")) {
             sentencia.setInt(1, idUsuario);
             sentencia.execute();
         }
@@ -192,9 +228,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     @Override
     public List<Rol> listarRoles() throws SQLException {
         List<Rol> roles = new ArrayList<>();
-        try (Connection conexion = Conexion.getInstance().getConnection();
-             CallableStatement sentencia = conexion.prepareCall("{call sp_listarroles()}" );
-             ResultSet resultado = sentencia.executeQuery()) {
+        try (Connection conexion = Conexion.getInstance().getConnection(); CallableStatement sentencia = conexion.prepareCall("{call sp_listarroles()}"); ResultSet resultado = sentencia.executeQuery()) {
             while (resultado.next()) {
                 roles.add(new Rol(resultado.getInt("id_rol"), resultado.getString("nombre_rol"),
                         resultado.getString("descripcion")));
@@ -206,9 +240,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     @Override
     public List<ClienteVinculo> listarClientes() throws SQLException {
         List<ClienteVinculo> clientes = new ArrayList<>();
-        try (Connection conexion = Conexion.getInstance().getConnection();
-             CallableStatement sentencia = conexion.prepareCall("{call sp_listarclientes()}" );
-             ResultSet resultado = sentencia.executeQuery()) {
+        try (Connection conexion = Conexion.getInstance().getConnection(); CallableStatement sentencia = conexion.prepareCall("{call sp_listarclientes()}"); ResultSet resultado = sentencia.executeQuery()) {
             while (resultado.next()) {
                 clientes.add(new ClienteVinculo(resultado.getInt("id_cliente"),
                         resultado.getString("nombre_cliente") + " " + resultado.getString("apellido_cliente"),
