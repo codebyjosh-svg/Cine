@@ -140,6 +140,8 @@ main
 
 ## Estado del proyecto
 
-Actualmente se encuentra en la etapa inicial de configuración del proyecto.
+El proyecto incluye el login y los dashboards de US-1.1 y la gestión de usuarios de Diego (US-1.2).
 
-La estructura de packages está preparada y las clases serán creadas conforme se desarrollen las historias de usuario de cada Sprint.
+El administrador puede abrir Usuarios desde su dashboard para guardar, editar, activar/desactivar y eliminar cuentas. El botón Volver regresa al dashboard. Los demás roles conservan sus pantallas.
+
+Consulta LEEME_US_1_2.txt para configurar y ejecutar el proyecto en NetBeans. Las clases están en src/, los scripts en sql/ y las pruebas y capturas en test/. La clase principal es org.cine.system.Principal.

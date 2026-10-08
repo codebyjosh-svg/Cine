@@ -19,7 +19,6 @@ public final class Conexion {
                 Conexion.class.getResourceAsStream("/db.properties")) {
 
             if (entrada == null) {
-
                 throw new IllegalStateException(
                         "No se encontró el archivo db.properties."
                 );
@@ -28,7 +27,6 @@ public final class Conexion {
             propiedades.load(entrada);
 
         } catch (IOException ex) {
-
             throw new IllegalStateException(
                     "No se pudo leer db.properties.",
                     ex
@@ -49,9 +47,7 @@ public final class Conexion {
             String variable,
             String predeterminado) {
 
-        String valor = System.getProperty(
-                "cine." + clave
-        );
+        String valor = System.getProperty("cine." + clave);
 
         if (valor == null) {
             valor = System.getenv(variable);
@@ -70,13 +66,9 @@ public final class Conexion {
     public Connection getConnection() throws SQLException {
 
         try {
-
-            Class.forName(
-                    "com.mysql.cj.jdbc.Driver"
-            );
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
         } catch (ClassNotFoundException ex) {
-
             throw new SQLException(
                     "Falta MySQL Connector/J en las bibliotecas del proyecto.",
                     ex

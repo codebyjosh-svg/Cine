@@ -1,0 +1,29 @@
+CINE - US-1.1 Y US-1.2 INTEGRADAS - 7 DE OCTUBRE DE 2026
+
+Base: Cine(3).zip enviado con el login y los dashboards de US-1.1.
+Se ejecutaron los SQL completos de este proyecto en MySQL de pruebas.
+
+13 comprobaciones de los scripts completos:
+cuatro cuentas activas, una inactiva, vínculo con cliente, bloqueo del login
+inactivo, hashes compatibles y conservación de las ventas y objetos del cine.
+
+51 comprobaciones de CRUD:
+crear, listar, buscar, editar, contraseña, activar/desactivar, eliminar,
+duplicados, campos obligatorios, rol, cliente y rollback de cambios fallidos.
+
+14 comprobaciones del formulario:
+carga de datos, validaciones, Guardar, Editar, Activar/Desactivar, Eliminar,
+buscador y botón Guardar visible en el tamaño mínimo de 1000 x 650.
+
+21 comprobaciones del recorrido integrado:
+login correcto e incorrecto, cuenta inactiva, dashboard del administrador,
+botón Usuarios, acceso por rol, sesión conservada, bloqueo del propio rol,
+Volver al dashboard y cierre de sesión de los cuatro roles.
+
+99 comprobaciones correctas en estas cuatro pruebas.
+Las cuatro clases originales de US-1.1 también terminaron correctamente.
+La actualización SQL para una base existente se ejecutó sin perder los datos.
+
+Entorno: Java 21, JavaFX 21.0.11, Connector/J 8.4.0 y MySQL 8.0.46.
+Las capturas corresponden a las pantallas JavaFX reales en modo headless.
+Para usar NetBeans hay que configurar la ruta de JavaFX y la conexión MySQL.

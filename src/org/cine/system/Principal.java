@@ -17,16 +17,12 @@ public class Principal extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-
         stagePrincipal = stage;
-
         mostrarLogin();
-
         stage.show();
     }
 
     public static void mostrarLogin() throws IOException {
-
         cambiarEscena(
                 "/org/cine/view/Login.fxml",
                 "Cine - Inicio de sesión"
@@ -34,7 +30,6 @@ public class Principal extends Application {
     }
 
     public static void mostrarDashboardSegunRol() throws IOException {
-
         if (!SesionContext.haySesionActiva()) {
             mostrarLogin();
             return;
@@ -51,7 +46,6 @@ public class Principal extends Application {
     }
 
     public static void mostrarUsuarios() throws IOException {
-
         Usuario actual = SesionContext.getUsuarioActual();
 
         if (actual == null
@@ -70,7 +64,6 @@ public class Principal extends Application {
     }
 
     public static void mostrarPeliculas() throws IOException {
-
         Usuario actual = SesionContext.getUsuarioActual();
 
         if (actual == null
@@ -89,7 +82,6 @@ public class Principal extends Application {
     }
 
     public static void mostrarGeneros() throws IOException {
-
         Usuario actual = SesionContext.getUsuarioActual();
 
         if (actual == null
@@ -130,9 +122,7 @@ public class Principal extends Application {
     }
 
     public static void cerrarSesion() throws IOException {
-
         SesionContext.cerrarSesion();
-
         mostrarLogin();
     }
 
@@ -143,14 +133,12 @@ public class Principal extends Application {
         URL recurso = Principal.class.getResource(ruta);
 
         if (recurso == null) {
-
             throw new IOException(
                     "No se encontró la vista: " + ruta
             );
         }
 
         FXMLLoader loader = new FXMLLoader(recurso);
-
         Parent root = loader.load();
 
         boolean usuarios = ruta.endsWith("/Usuarios.fxml");
@@ -183,7 +171,6 @@ public class Principal extends Application {
 
         stagePrincipal.setScene(scene);
         stagePrincipal.setTitle(titulo);
-
         stagePrincipal.sizeToScene();
         stagePrincipal.centerOnScreen();
     }
