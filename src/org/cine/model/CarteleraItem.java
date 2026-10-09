@@ -7,8 +7,7 @@ import java.time.LocalTime;
 /**
  * DTO utilizado para representar un elemento de la cartelera.
  *
- * Contiene la información de una película programada
- * en una sala determinada.
+ * Contiene la información de una película programada en una sala determinada.
  *
  * @author Joshua
  */
@@ -28,6 +27,7 @@ public class CarteleraItem {
 
     private BigDecimal precio;
     private int asientosDisponibles;
+    private String estado;
 
     public CarteleraItem() {
     }
@@ -144,6 +144,14 @@ public class CarteleraItem {
 
     public void setAsientosDisponibles(int asientosDisponibles) {
         this.asientosDisponibles = asientosDisponibles;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     @Override

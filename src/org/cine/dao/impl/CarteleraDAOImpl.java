@@ -45,24 +45,21 @@ public class CarteleraDAOImpl implements CarteleraDAO {
                 """;
 
         try (
-                Connection con = Conexion.getInstancia().conectar();
-                PreparedStatement ps = con.prepareStatement(sql);
-                ResultSet rs = ps.executeQuery()
-        ) {
+                Connection con = Conexion.getInstancia().conectar(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
 
-                Timestamp timestamp =
-                        rs.getTimestamp("fecha_inicio");
+                Timestamp timestamp
+                        = rs.getTimestamp("fecha_inicio");
 
-                LocalDate fecha =
-                        timestamp.toLocalDateTime().toLocalDate();
+                LocalDate fecha
+                        = timestamp.toLocalDateTime().toLocalDate();
 
-                LocalTime hora =
-                        timestamp.toLocalDateTime().toLocalTime();
+                LocalTime hora
+                        = timestamp.toLocalDateTime().toLocalTime();
 
-                BigDecimal precio =
-                        rs.getBigDecimal("precio_boleto");
+                BigDecimal precio
+                        = rs.getBigDecimal("precio_boleto");
 
                 CarteleraItem item = new CarteleraItem(
                         rs.getInt("id_funcion"),
@@ -77,6 +74,8 @@ public class CarteleraDAOImpl implements CarteleraDAO {
                         precio,
                         rs.getInt("butacas_disponibles")
                 );
+
+                item.setEstado(rs.getString("estado"));
 
                 lista.add(item);
             }
