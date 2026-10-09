@@ -16,6 +16,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.cine.dao.ClienteDAO;
 import org.cine.dao.impl.ClienteDAOImpl;
 import org.cine.model.Cliente;
+import org.cine.system.Principal;
+import java.io.IOException;
 
 public class ClienteController {
 
@@ -643,5 +645,15 @@ public class ClienteController {
 
         alerta.showAndWait();
     }
-}
+    @FXML
+    private void volver() {
+        try {
+            Principal.mostrarDashboardSegunRol();
+        } catch (IOException ex) {
+            mostrarAlerta(Alert.AlertType.ERROR,
+                    "Error de navegación",
+                    "No se pudo volver al dashboard: " + ex.getMessage());
+        }
+    }
 
+}

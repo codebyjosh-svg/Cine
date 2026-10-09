@@ -1,7 +1,446 @@
+/* =========================================================
+   GESTIÓN DE GÉNEROS
+   Misma identidad visual que Gestión de Películas
+   ========================================================= */
+
+.generos-root {
+    -fx-background-color: #f4f7fb;
+    -fx-font-family: "Segoe UI";
+}
+
+
+/* =========================================================
+   BARRA SUPERIOR
+   ========================================================= */
+
+.top-bar {
+    -fx-background-color: #17243a;
+}
+
+.brand-label {
+    -fx-text-fill: white;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+.brand-subtitle {
+    -fx-text-fill: #b9c7da;
+    -fx-font-size: 9px;
+}
+
+.top-section-title {
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.back-button {
+    -fx-background-color: #33445f;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 9px 14px;
+    -fx-cursor: hand;
+}
+
+.back-button:hover {
+    -fx-background-color: #405575;
+}
+
+
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
+
+.content-container {
+    -fx-padding: 18px 24px 22px 24px;
+    -fx-background-color: #f4f7fb;
+}
+
+.page-heading {
+    -fx-padding: 2px 4px 2px 4px;
+}
+
+.page-title {
+    -fx-text-fill: #111d31;
+    -fx-font-size: 25px;
+    -fx-font-weight: bold;
+}
+
+.page-subtitle {
+    -fx-text-fill: #66758c;
+    -fx-font-size: 13px;
+}
+
+
+/* =========================================================
+   TARJETAS
+   ========================================================= */
+
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-border-color: #dbe3ef;
+    -fx-border-radius: 10px;
+    -fx-padding: 14px;
+}
+
+.table-card {
+    -fx-padding: 14px;
+}
+
+
+/* =========================================================
+   TÍTULOS DE SECCIÓN
+   ========================================================= */
+
+.section-title {
+    -fx-text-fill: #10203a;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.section-subtitle {
+    -fx-text-fill: #708097;
+    -fx-font-size: 10px;
+}
+
+
+/* =========================================================
+   ESTADO
+   ========================================================= */
+
+.state-caption {
+    -fx-text-fill: #708097;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.status-badge {
+    -fx-background-color: #e8f7ee;
+    -fx-text-fill: #15803d;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 6px 9px;
+    -fx-background-radius: 5px;
+}
+
+
+/* =========================================================
+   CAMPOS
+   ========================================================= */
+
+.field-label {
+    -fx-text-fill: #15233b;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.form-field {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #cbd8e8;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 7px 9px;
+    -fx-text-fill: #1c2b43;
+    -fx-font-size: 11px;
+}
+
+.form-field:focused {
+    -fx-border-color: #2c6be5;
+    -fx-background-color: white;
+}
+
+.form-textarea {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #cbd8e8;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-text-fill: #1c2b43;
+    -fx-font-size: 11px;
+}
+
+.form-textarea:focused {
+    -fx-border-color: #2c6be5;
+    -fx-background-color: white;
+}
+
+.form-textarea .content {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 6px;
+}
+
+.form-textarea:focused .content {
+    -fx-background-color: white;
+}
+
+.field-help {
+    -fx-text-fill: #8290a4;
+    -fx-font-size: 9px;
+}
+
+
+/* =========================================================
+   BOTONES
+   ========================================================= */
+
+.button-primary,
+.button-edit,
+.button-danger,
+.button-success,
+.button-warning,
+.button-secondary {
+    -fx-font-weight: bold;
+    -fx-background-radius: 6px;
+    -fx-padding: 8px 11px;
+    -fx-cursor: hand;
+    -fx-font-size: 10px;
+}
+
+
+/* Guardar */
+
+.button-primary {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+}
+
+.button-primary:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+
+/* Editar */
+
+.button-edit {
+    -fx-background-color: #dbeafe;
+    -fx-text-fill: #174ea6;
+}
+
+.button-edit:hover {
+    -fx-background-color: #c7dcfb;
+}
+
+
+/* Eliminar */
+
+.button-danger {
+    -fx-background-color: #dc2626;
+    -fx-text-fill: white;
+}
+
+.button-danger:hover {
+    -fx-background-color: #b91c1c;
+}
+
+
+/* Activar */
+
+.button-success {
+    -fx-background-color: #16a34a;
+    -fx-text-fill: white;
+}
+
+.button-success:hover {
+    -fx-background-color: #15803d;
+}
+
+
+/* Desactivar */
+
+.button-warning {
+    -fx-background-color: #f59e0b;
+    -fx-text-fill: white;
+}
+
+.button-warning:hover {
+    -fx-background-color: #d97706;
+}
+
+
+/* Limpiar */
+
+.button-secondary {
+    -fx-background-color: #e6edf6;
+    -fx-text-fill: #243650;
+}
+
+.button-secondary:hover {
+    -fx-background-color: #d7e1ef;
+}
+
+
+/* Deshabilitados */
+
+.button-primary:disabled,
+.button-edit:disabled,
+.button-danger:disabled,
+.button-success:disabled,
+.button-warning:disabled,
+.button-secondary:disabled {
+    -fx-opacity: 0.55;
+}
+
+
+/* =========================================================
+   BÚSQUEDA
+   ========================================================= */
+
+.search-field {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #cbd8e8;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 6px 8px;
+    -fx-font-size: 10px;
+    -fx-text-fill: #243650;
+}
+
+.search-field:focused {
+    -fx-border-color: #2c6be5;
+    -fx-background-color: white;
+}
+
+.table-count-badge {
+    -fx-background-color: #edf4ff;
+    -fx-text-fill: #2161d1;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-padding: 6px 9px;
+    -fx-background-radius: 5px;
+}
+
+.refresh-button {
+    -fx-background-color: #e6edf6;
+    -fx-text-fill: #243650;
+    -fx-background-radius: 5px;
+    -fx-padding: 6px 9px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.refresh-button:hover {
+    -fx-background-color: #d7e1ef;
+}
+
+
+/* =========================================================
+   TABLA
+   ========================================================= */
+
+.generos-table {
+    -fx-background-color: white;
+    -fx-border-color: #d8e2ef;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-table-cell-border-color: #edf1f6;
+}
+
+
+/* Encabezado */
+
+.generos-table .column-header-background {
+    -fx-background-color: #18243b;
+}
+
+.generos-table .column-header,
+.generos-table .filler {
+    -fx-background-color: #18243b;
+    -fx-border-color: transparent;
+}
+
+.generos-table .column-header .label {
+    -fx-text-fill: white;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+
+/* Filas */
+
+.generos-table .table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: transparent transparent #edf1f6 transparent;
+    -fx-cell-size: 31px;
+}
+
+.generos-table .table-row-cell:filled:selected {
+    -fx-background-color: #dbeafe;
+}
+
+.generos-table .table-row-cell:filled:hover {
+    -fx-background-color: #f2f6fc;
+}
+
+
+/* Celdas */
+
+.generos-table .table-cell {
+    -fx-text-fill: #243650;
+    -fx-font-size: 10px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 5px 8px;
+}
+
+
+/* ID centrado */
+
+.generos-table .table-column:first-child .table-cell {
+    -fx-alignment: CENTER;
+}
+
+
+/* =========================================================
+   SCROLLBAR DE LA TABLA
+   ========================================================= */
+
 /*
- * Empty Stylesheet file.
+ * IMPORTANTE:
+ * No existe ScrollPane para toda la escena.
+ * La TableView administra su propio scroll.
  */
 
-.mainFxmlClass {
+.generos-table .scroll-bar:vertical {
+    -fx-background-color: #f4f7fb;
+    -fx-pref-width: 10px;
+}
 
+.generos-table .scroll-bar:horizontal {
+    -fx-background-color: #f4f7fb;
+    -fx-pref-height: 10px;
+}
+
+.generos-table .scroll-bar .thumb {
+    -fx-background-color: #b8c5d8;
+    -fx-background-radius: 5px;
+}
+
+.generos-table .scroll-bar .thumb:hover {
+    -fx-background-color: #94a6bf;
+}
+
+.generos-table .scroll-bar .increment-button,
+.generos-table .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+
+/* =========================================================
+   TABLA VACÍA
+   ========================================================= */
+
+.empty-table-label {
+    -fx-text-fill: #8390a3;
+    -fx-font-size: 11px;
+}
+
+
+/* =========================================================
+   PIE
+   ========================================================= */
+
+.table-help-label {
+    -fx-text-fill: #718097;
+    -fx-font-size: 9px;
 }

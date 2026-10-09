@@ -24,7 +24,7 @@ public class ReportesController {
  @FXML private void initialize(){
   cmbPeriodo.getItems().setAll("Todas","Día","Semana","Mes"); cmbPeriodo.setValue("Mes"); dpFecha.setValue(LocalDate.now());
   colId.setCellValueFactory(c->new ReadOnlyObjectWrapper<>(c.getValue().getIdVenta()));
-  colFecha.setCellValueFactory(c->new ReadOnlyStringWrapper<>(c.getValue().getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
+  colFecha.setCellValueFactory(c->new ReadOnlyStringWrapper(c.getValue().getFecha().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
   colCliente.setCellValueFactory(c->new ReadOnlyStringWrapper(c.getValue().getCliente()));
   colTaquillero.setCellValueFactory(c->new ReadOnlyStringWrapper(c.getValue().getTaquillero()));
   colBoletos.setCellValueFactory(c->new ReadOnlyObjectWrapper<>(c.getValue().getBoletos()));

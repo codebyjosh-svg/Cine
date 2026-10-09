@@ -9,7 +9,8 @@
   <HBox spacing="12" alignment="CENTER_LEFT"><Label text="Período:"/><ComboBox fx:id="cmbPeriodo" prefWidth="150"/><Label text="Fecha de referencia:"/><DatePicker fx:id="dpFecha"/><Button text="Actualizar" onAction="#filtrar"/><Button text="Volver al dashboard" onAction="#volver"/></HBox>
  </VBox></top>
  <center><VBox spacing="14"><padding><Insets top="18" right="24" bottom="18" left="24"/></padding>
-  <TableView fx:id="tablaVentas" VBox.vgrow="ALWAYS" placeholder="No hay ventas para mostrar">
+  <TableView fx:id="tablaVentas" VBox.vgrow="ALWAYS">
+   <placeholder><Label text="No hay ventas para mostrar"/></placeholder>
    <columns><TableColumn fx:id="colId" text="No. venta" prefWidth="90"/><TableColumn fx:id="colFecha" text="Fecha" prefWidth="145"/><TableColumn fx:id="colCliente" text="Cliente" prefWidth="210"/><TableColumn fx:id="colTaquillero" text="Taquillero" prefWidth="180"/><TableColumn fx:id="colBoletos" text="Boletos" prefWidth="90"/><TableColumn fx:id="colTotal" text="Total" prefWidth="140"/></columns>
   </TableView>
   <HBox alignment="CENTER_RIGHT" spacing="28"><Label fx:id="lblCantidad" text="Ventas: 0" styleClass="summary"/><Label fx:id="lblTotal" text="Total: Q 0.00" styleClass="summary"/></HBox>

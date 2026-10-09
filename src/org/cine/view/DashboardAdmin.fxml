@@ -52,7 +52,6 @@
 
                     </HBox>
 
-
                     <Label text="MENÚ PRINCIPAL"
                            styleClass="menu-title">
 
@@ -62,8 +61,9 @@
 
                     </Label>
 
-
                     <VBox spacing="3">
+
+                        <!-- DASHBOARD -->
 
                         <HBox alignment="CENTER_LEFT"
                               prefHeight="36"
@@ -81,8 +81,8 @@
 
                         </HBox>
 
+                        <!-- USUARIOS -->
 
-                        <Button text="Vender boletos" onAction="#abrirVenta" styleClass="menu-button" maxWidth="Infinity"/>
                         <Button maxWidth="Infinity"
                                 mnemonicParsing="false"
                                 alignment="CENTER_LEFT"
@@ -100,6 +100,7 @@
 
                         </Button>
 
+                        <!-- PELÍCULAS -->
 
                         <Button maxWidth="Infinity"
                                 mnemonicParsing="false"
@@ -118,6 +119,7 @@
 
                         </Button>
 
+                        <!-- GÉNEROS -->
 
                         <Button maxWidth="Infinity"
                                 mnemonicParsing="false"
@@ -136,57 +138,54 @@
 
                         </Button>
 
+                        <!-- SALAS Y BUTACAS -->
 
-                        <HBox alignment="CENTER_LEFT"
-                              prefHeight="36"
-                              styleClass="menu-disabled">
+                        <Button maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                alignment="CENTER_LEFT"
+                                contentDisplay="LEFT"
+                                graphicTextGap="10"
+                                onAction="#abrirSalas"
+                                styleClass="menu-button">
 
-                            <padding>
-                                <Insets left="10"/>
-                            </padding>
+                            <graphic>
+                                <Label text="S"
+                                       styleClass="menu-icon"/>
+                            </graphic>
 
-                            <Label text="▣"
-                                   styleClass="menu-icon"/>
+                            <text>Salas y butacas</text>
 
-                            <Label text="Salas"
-                                   styleClass="menu-text"/>
+                        </Button>
 
-                        </HBox>
+                        <!-- FUNCIONES -->
 
+                        <Button maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                alignment="CENTER_LEFT"
+                                contentDisplay="LEFT"
+                                graphicTextGap="10"
+                                onAction="#abrirFunciones"
+                                styleClass="menu-button">
 
-                        <HBox alignment="CENTER_LEFT"
-                              prefHeight="36"
-                              styleClass="menu-disabled">
+                            <graphic>
+                                <Label text="◷"
+                                       styleClass="menu-icon"/>
+                            </graphic>
 
-                            <padding>
-                                <Insets left="10"/>
-                            </padding>
+                            <text>Funciones</text>
 
-                            <Label text="◷"
-                                   styleClass="menu-icon"/>
+                        </Button>
 
-                            <Label text="Funciones"
-                                   styleClass="menu-text"/>
+                        <!-- CLIENTES -->
+                        <Button maxWidth="Infinity" mnemonicParsing="false"
+                                alignment="CENTER_LEFT" contentDisplay="LEFT"
+                                graphicTextGap="10" onAction="#abrirClientes"
+                                styleClass="menu-button">
+                            <graphic><Label text="♙" styleClass="menu-icon"/></graphic>
+                            <text>Clientes</text>
+                        </Button>
 
-                        </HBox>
-
-
-                        <HBox alignment="CENTER_LEFT"
-                              prefHeight="36"
-                              styleClass="menu-disabled">
-
-                            <padding>
-                                <Insets left="10"/>
-                            </padding>
-
-                            <Label text="♙"
-                                   styleClass="menu-icon"/>
-
-                            <Label text="Clientes"
-                                   styleClass="menu-text"/>
-
-                        </HBox>
-
+                        <!-- CONFITERÍA -->
 
                         <HBox alignment="CENTER_LEFT"
                               prefHeight="36"
@@ -204,46 +203,39 @@
 
                         </HBox>
 
+                        <!-- VENTAS -->
 
-                        <HBox alignment="CENTER_LEFT"
-                              prefHeight="36"
-                              styleClass="menu-disabled">
+                        <Button maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                alignment="CENTER_LEFT"
+                                contentDisplay="LEFT"
+                                graphicTextGap="10"
+                                onAction="#abrirVenta"
+                                styleClass="menu-button">
 
-                            <padding>
-                                <Insets left="10"/>
-                            </padding>
+                            <graphic>
+                                <Label text="V"
+                                       styleClass="menu-icon"/>
+                            </graphic>
 
-                            <Label text="V"
-                                   styleClass="menu-icon"/>
+                            <text>Ventas</text>
 
-                            <Label text="Ventas"
-                                   styleClass="menu-text"/>
+                        </Button>
 
-                        </HBox>
-
-
-                        <HBox alignment="CENTER_LEFT"
-                              prefHeight="36"
-                              styleClass="menu-disabled">
-
-                            <padding>
-                                <Insets left="10"/>
-                            </padding>
-
-                            <Label text="▤"
-                                   styleClass="menu-icon"/>
-
-                            <Label text="Reportes"
-                                   styleClass="menu-text"/>
-
-                        </HBox>
+                        <!-- REPORTES -->
+                        <Button maxWidth="Infinity" mnemonicParsing="false"
+                                alignment="CENTER_LEFT" contentDisplay="LEFT"
+                                graphicTextGap="10" onAction="#abrirReportes"
+                                styleClass="menu-button">
+                            <graphic><Label text="▤" styleClass="menu-icon"/></graphic>
+                            <text>Reportes</text>
+                        </Button>
 
                     </VBox>
 
                 </VBox>
 
             </top>
-
 
             <bottom>
 
@@ -255,7 +247,6 @@
                                 bottom="16"
                                 left="16"/>
                     </padding>
-
 
                     <HBox alignment="CENTER_LEFT"
                           prefHeight="36"
@@ -273,7 +264,6 @@
 
                     </HBox>
 
-
                     <Button text="Cerrar sesión"
                             onAction="#cerrarSesion"
                             maxWidth="Infinity"
@@ -289,11 +279,9 @@
 
     </left>
 
-
     <center>
 
         <BorderPane styleClass="main-area">
-
 
             <top>
 
@@ -305,7 +293,6 @@
                                 bottom="18"
                                 left="24"/>
                     </padding>
-
 
                     <left>
 
@@ -320,7 +307,6 @@
                         </VBox>
 
                     </left>
-
 
                     <right>
 
@@ -340,7 +326,6 @@
 
                             </VBox>
 
-
                             <StackPane prefWidth="38"
                                        prefHeight="38"
                                        styleClass="avatar">
@@ -349,7 +334,6 @@
                                        styleClass="avatar-text"/>
 
                             </StackPane>
-
 
                             <StackPane prefWidth="34"
                                        prefHeight="34"
@@ -368,7 +352,6 @@
 
             </top>
 
-
             <bottom>
 
                 <BorderPane styleClass="footer">
@@ -380,14 +363,12 @@
                                 left="24"/>
                     </padding>
 
-
                     <left>
 
                         <Label text="CINEMA | Sistema de Gestión de Cine"
                                styleClass="footer-text"/>
 
                     </left>
-
 
                     <right>
 
@@ -400,7 +381,6 @@
 
             </bottom>
 
-
             <center>
 
                 <ScrollPane fitToWidth="true"
@@ -411,6 +391,7 @@
                     <VBox spacing="18"
                           styleClass="content">
 
+                        <!-- RESUMEN -->
 
                         <VBox spacing="3">
 
@@ -422,6 +403,7 @@
 
                         </VBox>
 
+                        <!-- KPI -->
 
                         <GridPane hgap="14"
                                   vgap="14">
@@ -438,6 +420,7 @@
 
                             </columnConstraints>
 
+                            <!-- USUARIOS -->
 
                             <VBox GridPane.columnIndex="0"
                                   styleClass="kpi-card">
@@ -447,7 +430,8 @@
                                     <Label text="U"
                                            styleClass="kpi-letter"/>
 
-                                    <Label fx:id="lblKpiUsuarios" text="—" styleClass="kpi-number"/>
+                                    <Label text="4"
+                                           styleClass="kpi-number"/>
 
                                 </HBox>
 
@@ -459,6 +443,7 @@
 
                             </VBox>
 
+                            <!-- PELÍCULAS -->
 
                             <VBox GridPane.columnIndex="1"
                                   styleClass="kpi-card">
@@ -468,7 +453,8 @@
                                     <Label text="P"
                                            styleClass="kpi-letter"/>
 
-                                    <Label fx:id="lblKpiPeliculas" text="—" styleClass="kpi-number"/>
+                                    <Label text="10"
+                                           styleClass="kpi-number"/>
 
                                 </HBox>
 
@@ -480,6 +466,7 @@
 
                             </VBox>
 
+                            <!-- GÉNEROS -->
 
                             <VBox GridPane.columnIndex="2"
                                   styleClass="kpi-card">
@@ -489,18 +476,20 @@
                                     <Label text="G"
                                            styleClass="kpi-letter"/>
 
-                                    <Label fx:id="lblKpiClientes" text="—" styleClass="kpi-number"/>
+                                    <Label text="10"
+                                           styleClass="kpi-number"/>
 
                                 </HBox>
 
-                                <Label text="Clientes activos"
+                                <Label text="Géneros"
                                        styleClass="kpi-title"/>
 
-                                <Label text="Clientes registrados y activos"
+                                <Label text="Géneros registrados"
                                        styleClass="kpi-description"/>
 
                             </VBox>
 
+                            <!-- SALAS -->
 
                             <VBox GridPane.columnIndex="3"
                                   styleClass="kpi-card">
@@ -510,20 +499,22 @@
                                     <Label text="S"
                                            styleClass="kpi-letter"/>
 
-                                    <Label fx:id="lblKpiVentas" text="—" styleClass="kpi-number"/>
+                                    <Label text="0"
+                                           styleClass="kpi-number"/>
 
                                 </HBox>
 
-                                <Label text="Ventas confirmadas"
+                                <Label text="Salas"
                                        styleClass="kpi-title"/>
 
-                                <Label text="Ventas válidas realizadas"
+                                <Label text="Módulo en desarrollo"
                                        styleClass="kpi-description"/>
 
                             </VBox>
 
                         </GridPane>
 
+                        <!-- GESTIÓN -->
 
                         <HBox alignment="CENTER_LEFT">
 
@@ -537,12 +528,12 @@
 
                             </VBox>
 
-
-                            <Label text="3 módulos disponibles"
+                            <Label text="5 módulos disponibles"
                                    styleClass="available-badge"/>
 
                         </HBox>
 
+                        <!-- MÓDULOS -->
 
                         <GridPane hgap="14"
                                   vgap="14">
@@ -556,7 +547,6 @@
                                 <ColumnConstraints percentWidth="33.34"/>
 
                             </columnConstraints>
-
 
                             <!-- USUARIOS -->
 
@@ -590,8 +580,7 @@
 
                             </VBox>
 
-
-                            <!-- PELICULAS -->
+                            <!-- PELÍCULAS -->
 
                             <VBox GridPane.columnIndex="1"
                                   GridPane.rowIndex="0"
@@ -623,8 +612,7 @@
 
                             </VBox>
 
-
-                            <!-- GENEROS -->
+                            <!-- GÉNEROS -->
 
                             <VBox GridPane.columnIndex="2"
                                   GridPane.rowIndex="0"
@@ -656,104 +644,86 @@
 
                             </VBox>
 
-
-                            <!-- SALAS -->
+                            <!-- SALAS Y BUTACAS - US-2.1 -->
 
                             <VBox GridPane.columnIndex="0"
                                   GridPane.rowIndex="1"
-                                  styleClass="module-disabled">
+                                  styleClass="module-active"
+                                  pickOnBounds="true"
+                                  onMouseClicked="#abrirSalas">
 
-                                <HBox alignment="CENTER_LEFT">
+                                <HBox alignment="CENTER_LEFT"
+                                      mouseTransparent="true">
 
                                     <Label text="S"
-                                           styleClass="module-letter"/>
+                                           styleClass="module-letter"
+                                           mouseTransparent="true"/>
 
-                                    <Label text="EN DESARROLLO"
-                                           styleClass="development-label"/>
+                                    <Label text="DISPONIBLE"
+                                           styleClass="available-label"
+                                           mouseTransparent="true"/>
 
                                 </HBox>
 
-                                <Label text="Salas"
-                                       styleClass="module-title"/>
+                                <Label text="Salas y butacas"
+                                       styleClass="module-title"
+                                       mouseTransparent="true"/>
 
-                                <Label text="Gestión de salas del cine."
+                                <Label text="Administrar salas, formatos, butacas y estados."
                                        wrapText="true"
-                                       styleClass="module-description"/>
-
-                                <Button text="Próximamente"
-                                        disable="true"
-                                        maxWidth="Infinity"
-                                        mnemonicParsing="false"
-                                        styleClass="module-button-disabled"/>
+                                       styleClass="module-description"
+                                       mouseTransparent="true"/>
 
                             </VBox>
-
 
                             <!-- FUNCIONES -->
 
                             <VBox GridPane.columnIndex="1"
                                   GridPane.rowIndex="1"
-                                  styleClass="module-disabled">
+                                  styleClass="module-active"
+                                  pickOnBounds="true"
+                                  onMouseClicked="#abrirFunciones">
 
-                                <HBox alignment="CENTER_LEFT">
+                                <HBox alignment="CENTER_LEFT"
+                                      mouseTransparent="true">
 
                                     <Label text="F"
-                                           styleClass="module-letter"/>
+                                           styleClass="module-letter"
+                                           mouseTransparent="true"/>
 
-                                    <Label text="EN DESARROLLO"
-                                           styleClass="development-label"/>
+                                    <Label text="DISPONIBLE"
+                                           styleClass="available-label"
+                                           mouseTransparent="true"/>
 
                                 </HBox>
 
                                 <Label text="Funciones"
-                                       styleClass="module-title"/>
+                                       styleClass="module-title"
+                                       mouseTransparent="true"/>
 
                                 <Label text="Programación de funciones y horarios."
                                        wrapText="true"
-                                       styleClass="module-description"/>
-
-                                <Button text="Próximamente"
-                                        disable="true"
-                                        maxWidth="Infinity"
-                                        mnemonicParsing="false"
-                                        styleClass="module-button-disabled"/>
+                                       styleClass="module-description"
+                                       mouseTransparent="true"/>
 
                             </VBox>
-
 
                             <!-- CLIENTES -->
-
                             <VBox GridPane.columnIndex="2"
                                   GridPane.rowIndex="1"
-                                  styleClass="module-disabled">
-
-                                <HBox alignment="CENTER_LEFT">
-
-                                    <Label text="C"
-                                           styleClass="module-letter"/>
-
-                                    <Label text="EN DESARROLLO"
-                                           styleClass="development-label"/>
-
+                                  styleClass="module-active"
+                                  pickOnBounds="true"
+                                  onMouseClicked="#abrirClientes">
+                                <HBox alignment="CENTER_LEFT" mouseTransparent="true">
+                                    <Label text="C" styleClass="module-letter" mouseTransparent="true"/>
+                                    <Label text="DISPONIBLE" styleClass="available-label" mouseTransparent="true"/>
                                 </HBox>
-
-                                <Label text="Clientes"
-                                       styleClass="module-title"/>
-
+                                <Label text="Clientes" styleClass="module-title" mouseTransparent="true"/>
                                 <Label text="Gestión de clientes del cine."
-                                       wrapText="true"
-                                       styleClass="module-description"/>
-
-                                <Button text="Próximamente"
-                                        disable="true"
-                                        maxWidth="Infinity"
-                                        mnemonicParsing="false"
-                                        styleClass="module-button-disabled"/>
-
+                                       wrapText="true" styleClass="module-description" mouseTransparent="true"/>
                             </VBox>
 
-
-                            <!-- CONFITERIA -->
+                            <!-- CONFITERÍA -->
 
                             <VBox GridPane.columnIndex="0"
                                   GridPane.rowIndex="2"
@@ -784,68 +754,56 @@
 
                             </VBox>
 
-
                             <!-- VENTAS -->
 
                             <VBox GridPane.columnIndex="1"
                                   GridPane.rowIndex="2"
-                                  styleClass="module-disabled">
+                                  styleClass="module-active"
+                                  pickOnBounds="true"
+                                  onMouseClicked="#abrirVenta">
 
-                                <HBox alignment="CENTER_LEFT">
+                                <HBox alignment="CENTER_LEFT"
+                                      mouseTransparent="true">
 
                                     <Label text="V"
-                                           styleClass="module-letter"/>
+                                           styleClass="module-letter"
+                                           mouseTransparent="true"/>
 
-                                    <Label text="EN DESARROLLO"
-                                           styleClass="development-label"/>
+                                    <Label text="DISPONIBLE"
+                                           styleClass="available-label"
+                                           mouseTransparent="true"/>
 
                                 </HBox>
 
                                 <Label text="Ventas"
-                                       styleClass="module-title"/>
+                                       styleClass="module-title"
+                                       mouseTransparent="true"/>
 
                                 <Label text="Gestión de ventas y boletos."
                                        wrapText="true"
-                                       styleClass="module-description"/>
-
-                                <Button text="Próximamente"
-                                        disable="true"
-                                        maxWidth="Infinity"
-                                        mnemonicParsing="false"
-                                        styleClass="module-button-disabled"/>
+                                       styleClass="module-description"
+                                       mouseTransparent="true"/>
 
                             </VBox>
 
-
                             <!-- REPORTES -->
-
                             <VBox GridPane.columnIndex="2"
                                   GridPane.rowIndex="2"
-                                  styleClass="module-disabled">
-
-                                <HBox alignment="CENTER_LEFT">
-
-                                    <Label text="R"
-                                           styleClass="module-letter"/>
-
-                                    <Label text="EN DESARROLLO"
-                                           styleClass="development-label"/>
-
+                                  styleClass="module-active"
+                                  pickOnBounds="true"
+                                  onMouseClicked="#abrirReportes">
+                                <HBox alignment="CENTER_LEFT" mouseTransparent="true">
+                                    <Label text="R" styleClass="module-letter" mouseTransparent="true"/>
+                                    <Label text="DISPONIBLE" styleClass="available-label" mouseTransparent="true"/>
                                 </HBox>
-
-                                <Label text="Reportes"
-                                       styleClass="module-title"/>
-
+                                <Label text="Reportes" styleClass="module-title" mouseTransparent="true"/>
                                 <Label text="Reportes y estadísticas del sistema."
-                                       wrapText="true"
-                                       styleClass="module-description"/>
-
-                                <Button text="Abrir reportes" onAction="#abrirReportes" maxWidth="Infinity" styleClass="menu-button"/>
-
+                                       wrapText="true" styleClass="module-description" mouseTransparent="true"/>
                             </VBox>
 
                         </GridPane>
 
+                        <!-- ACTIVIDAD RECIENTE -->
 
                         <VBox spacing="10"
                               styleClass="activity-card">
@@ -880,7 +838,6 @@
                                 </VBox>
 
                             </HBox>
-
 
                             <HBox alignment="CENTER_LEFT"
                                   spacing="12"
