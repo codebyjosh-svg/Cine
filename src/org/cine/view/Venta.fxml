@@ -1,53 +1,463 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?><?import javafx.scene.layout.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cine.controller.VentaController" stylesheets="@style/venta.css" styleClass="fondo">
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
+
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cine.controller.VentaController"
+            stylesheets="@style/venta.css"
+            styleClass="venta-root">
+
+    <!-- ===================================================== -->
+    <!-- ENCABEZADO -->
+    <!-- ===================================================== -->
+
     <top>
-        <VBox spacing="10" styleClass="panel">
-            <Label text="CINEMA | Venta de boletos" styleClass="titulo"/>
-            <HBox spacing="12">
-                <Label text="Cliente:"/>
-                <ComboBox fx:id="cbCliente"
-                          prefWidth="230"
-                          promptText="Cliente obligatorio"/>
 
-                <Label text="Función:"/>
-                <ComboBox fx:id="cbFuncion"
-                          prefWidth="420"
-                          promptText="Seleccionar función"/>
+        <VBox styleClass="header">
 
-                <Label text="Pago:"/>
-                <ComboBox fx:id="cbMetodoPago"
-                          prefWidth="150"
-                          promptText="Método de pago"/>
+            <padding>
+                <Insets top="8"
+                        right="14"
+                        bottom="8"
+                        left="14"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT"
+                  spacing="12">
+
+                <Label text="CINEMA"
+                       styleClass="header-title"/>
+
+                <Label text="Venta de boletos"
+                       styleClass="header-section"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label text="TAQUILLERO"
+                       styleClass="header-role"/>
+
+                <Label fx:id="lblEstado"
+                       text="Sin venta abierta"
+                       styleClass="header-status"/>
+
+                <Button text="Regresar al Dashboard"
+                        onAction="#volver"
+                        styleClass="header-button"/>
+
             </HBox>
+
         </VBox>
+
     </top>
+
+
+    <!-- ===================================================== -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- ===================================================== -->
+
     <center>
-        <VBox spacing="10" styleClass="panel">
-            <Label text="Selecciona las butacas verdes disponibles"/>
-            <ScrollPane fitToWidth="true" prefHeight="250">
+
+        <HBox spacing="10"
+              styleClass="main-content">
+
+            <padding>
+                <Insets top="10"
+                        right="10"
+                        bottom="6"
+                        left="10"/>
+            </padding>
+
+
+            <!-- ================================================= -->
+            <!-- PANEL IZQUIERDO - CLIENTE / FUNCIÓN / BUTACAS -->
+            <!-- ================================================= -->
+
+            <VBox spacing="8"
+                  styleClass="left-panel"
+                  HBox.hgrow="ALWAYS">
+
+                <!-- DATOS DE LA VENTA -->
+
+                <HBox spacing="8"
+                      alignment="CENTER_LEFT"
+                      styleClass="selection-bar">
+
+                    <!-- CLIENTE -->
+
+                    <VBox spacing="3"
+                          styleClass="field-group">
+
+                        <Label text="CLIENTE *"
+                               styleClass="field-label"/>
+
+                        <HBox spacing="5">
+
+                            <ComboBox fx:id="cbCliente"
+                                      prefWidth="230"
+                                      promptText="Cliente obligatorio"
+                                      styleClass="combo"/>
+
+                            <Button fx:id="btnNuevoCliente"
+                                    text="+ Nuevo cliente"
+                                    onAction="#abrirNuevoCliente"
+                                    styleClass="new-client-button"/>
+
+                        </HBox>
+
+                    </VBox>
+
+
+                    <!-- FUNCIÓN -->
+
+                    <VBox spacing="3"
+                          styleClass="field-group"
+                          HBox.hgrow="ALWAYS">
+
+                        <Label text="FUNCIÓN *"
+                               styleClass="field-label"/>
+
+                        <ComboBox fx:id="cbFuncion"
+                                  maxWidth="Infinity"
+                                  promptText="Seleccionar función"
+                                  styleClass="combo"/>
+
+                    </VBox>
+
+
+                    <!-- MÉTODO DE PAGO -->
+
+                    <VBox spacing="3"
+                          styleClass="field-group">
+
+                        <Label text="MÉTODO DE PAGO "/>
+                  
+
+                                            <ComboBox fx:id="cbMetodoPago"
+                                  prefWidth="160.0"
+                                  promptText="Método de pago"/>
+
+            </VBox>
+
+        </HBox>
+
+
+        <!-- INFORMACIÓN DE FUNCIÓN -->
+
+        <HBox alignment="CENTER_RIGHT"
+                      spacing="8"
+                      styleClass="function-info">
+
+            <Label text="Sala 4"
+                           styleClass="info-badge"/>
+
+            <Label text="12:15 hrs"
+                           styleClass="info-badge"/>
+
+            <Label text="Q45.00"
+                           styleClass="price-badge"/>
+
+        </HBox>
+
+
+        <!-- BUTACAS -->
+
+        <VBox spacing="7"
+                      styleClass="seat-panel"
+                      VBox.vgrow="ALWAYS">
+
+            <HBox alignment="CENTER_LEFT"
+                          spacing="8">
+
+                <Label text="●"
+                               styleClass="available-dot"/>
+
+                <Label text="SELECCIÓN DE BUTACAS"
+                               styleClass="section-title"/>
+
+                <Label text="(SALA 4)"
+                               styleClass="section-title-secondary"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label text="Haga clic sobre una butaca para agregarla"
+                               styleClass="helper-text"/>
+
+            </HBox>
+
+
+            <!-- PANTALLA -->
+
+            <HBox alignment="CENTER"
+                          styleClass="screen-container">
+
+                <Label text="P A N T A L L A"
+                               styleClass="screen-label"/>
+
+            </HBox>
+
+
+            <!-- BUTACAS DINÁMICAS -->
+
+            <ScrollPane fitToWidth="true"
+                                fitToHeight="true"
+                                hbarPolicy="NEVER"
+                                vbarPolicy="AS_NEEDED"
+                                styleClass="seat-scroll"
+                                VBox.vgrow="ALWAYS">
+
                 <content>
-                    <FlowPane fx:id="panelButacas" hgap="9" vgap="9" prefWrapLength="730" styleClass="asientos"/>
+
+                    <FlowPane fx:id="panelButacas"
+                                      alignment="CENTER"
+                                      hgap="8"
+                                      vgap="8"
+                                      prefWrapLength="500"
+                                      styleClass="seat-container"/>
+
                 </content>
+
             </ScrollPane>
-            <Label text="Boletos del carrito"/>
-            <ListView fx:id="listaBoletos" prefHeight="180"/>
+
+
+            <!-- LEYENDA -->
+
+            <HBox alignment="CENTER"
+                          spacing="18"
+                          styleClass="legend">
+
+                <HBox spacing="5"
+                              alignment="CENTER">
+
+                    <Label text="●"
+                                   styleClass="legend-available"/>
+
+                    <Label text="Disponible"
+                                   styleClass="legend-text"/>
+
+                </HBox>
+
+
+                <HBox spacing="5"
+                              alignment="CENTER">
+
+                    <Label text="●"
+                                   styleClass="legend-selected"/>
+
+                    <Label text="Seleccionada"
+                                   styleClass="legend-text"/>
+
+                </HBox>
+
+
+                <HBox spacing="5"
+                              alignment="CENTER">
+
+                    <Label text="●"
+                                   styleClass="legend-occupied"/>
+
+                    <Label text="Ocupada"
+                                   styleClass="legend-text"/>
+
+                </HBox>
+
+            </HBox>
+
         </VBox>
+
+    </VBox>
+
+
+    <!-- ================================================= -->
+    <!-- PANEL DERECHO - CARRITO -->
+    <!-- ================================================= -->
+
+    <VBox prefWidth="320"
+                  spacing="8"
+                  styleClass="cart-panel">
+
+        <HBox alignment="CENTER_LEFT">
+
+            <VBox spacing="2">
+
+                <Label text="BOLETOS DEL CARRITO"
+                               styleClass="cart-title"/>
+
+                <Label text="Cliente seleccionado"
+                               styleClass="cart-subtitle"/>
+
+            </VBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label text="0 ITEMS"
+                           styleClass="items-badge"/>
+
+        </HBox>
+
+
+        <!-- TABLA / LISTADO -->
+
+        <VBox spacing="4"
+                      VBox.vgrow="ALWAYS">
+
+            <HBox styleClass="cart-header">
+
+                <Label text="DETALLE BUTACA"
+                               styleClass="cart-column"
+                               HBox.hgrow="ALWAYS"/>
+
+                <Label text="UBICACIÓN"
+                               styleClass="cart-column-location"/>
+
+                <Label text="PRECIO"
+                               styleClass="cart-column-price"/>
+
+            </HBox>
+
+
+            <ListView fx:id="listaBoletos"
+                              VBox.vgrow="ALWAYS"
+                              styleClass="cart-list"/>
+
+        </VBox>
+
+
+        <!-- RESUMEN -->
+
+        <VBox spacing="5"
+                      styleClass="cart-summary">
+
+            <HBox>
+
+                <Label text="Cantidad seleccionada:"
+                               styleClass="summary-label"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label text="0 boletos"
+                               styleClass="summary-value"/>
+
+            </HBox>
+
+
+            <HBox>
+
+                <Label text="Total por boleto:"
+                               styleClass="summary-label"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label text="Q0.00"
+                               styleClass="summary-value"/>
+
+            </HBox>
+
+
+            <HBox>
+
+                <Label text="TOTAL A PAGAR"
+                               styleClass="total-label"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label fx:id="lblTotal"
+                               text="Q0.00"
+                               styleClass="total-value"/>
+
+            </HBox>
+
+        </VBox>
+
+    </VBox>
+
+</HBox>
+
     </center>
+
+
+    <!-- ===================================================== -->
+    <!-- PIE -->
+    <!-- ===================================================== -->
+
     <bottom>
-        <VBox spacing="10" styleClass="panel">
-            <HBox spacing="10">
-                <Button text="Agregar butacas" onAction="#agregar"/>
-                <Button text="Quitar boleto" onAction="#quitar"/>
-                <Button text="Confirmar venta" onAction="#confirmar" styleClass="importante"/>
-                <Button text="Cancelar" onAction="#cancelar"/>
-                <Button text="Reimprimir factura" onAction="#reimprimir"/>
-                <Button text="Volver" onAction="#volver"/>
+
+        <VBox spacing="5"
+              styleClass="bottom-panel">
+
+            <padding>
+                <Insets top="5"
+                        right="10"
+                        bottom="7"
+                        left="10"/>
+            </padding>
+
+
+            <HBox spacing="7"
+                  alignment="CENTER_LEFT">
+
+                <Button fx:id="btnAgregar"
+                        text="+ Agregar butacas"
+                        onAction="#agregar"
+                        styleClass="action-button"/>
+
+                <Button fx:id="btnQuitar"
+                        text="Quitar boleto"
+                        onAction="#quitar"
+                        styleClass="action-button"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="btnCancelar"
+                        text="Cancelar"
+                        onAction="#cancelar"
+                        styleClass="cancel-button"/>
+
+                <Button text="Reimprimir factura"
+                        onAction="#reimprimir"
+                        styleClass="dark-button"/>
+
+                <Button text="Volver"
+                        onAction="#volver"
+                        styleClass="dark-button"/>
+
+                <Button fx:id="btnConfirmar"
+                        text="✓ Confirmar venta"
+                        onAction="#confirmar"
+                        styleClass="confirm-button"/>
+
             </HBox>
-            <HBox spacing="20">
-                <Label fx:id="lblTotal" text="Total: Q0"/>
-                <Label fx:id="lblEstado" text="Sin venta abierta"/>
+
+
+            <HBox alignment="CENTER_LEFT">
+
+                <Label text="Total: Q0.00"
+                       styleClass="footer-total"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label text="Sistema de ventas CINEMA"
+                       styleClass="footer-text"/>
+
             </HBox>
+
         </VBox>
+
     </bottom>
+
 </BorderPane>

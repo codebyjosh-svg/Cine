@@ -10,6 +10,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.io.IOException;
+import javafx.scene.control.Alert;
+import org.cine.system.Principal;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -35,11 +38,11 @@ import org.cine.model.CarteleraItem;
 /**
  * Controlador de la pantalla de Cartelera.
  *
- * Permite consultar las funciones disponibles,
- * aplicar filtros y seleccionar una función.
+ * Permite consultar las funciones disponibles, aplicar filtros y seleccionar
+ * una función.
  *
- * La función seleccionada queda preparada para continuar
- * posteriormente hacia el flujo de venta.
+ * La función seleccionada queda preparada para continuar posteriormente hacia
+ * el flujo de venta.
  *
  * @author Joshua
  */
@@ -72,32 +75,31 @@ public class CarteleraController {
     /**
      * DAO encargado de consultar la cartelera.
      */
-    private final CarteleraDAO carteleraDAO =
-            new CarteleraDAOImpl();
+    private final CarteleraDAO carteleraDAO
+            = new CarteleraDAOImpl();
 
     /**
      * Formato utilizado para mostrar fechas.
      */
-    private final DateTimeFormatter formatoFecha =
-            DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private final DateTimeFormatter formatoFecha
+            = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     /**
      * Formato utilizado para mostrar horas.
      */
-    private final DateTimeFormatter formatoHora =
-            DateTimeFormatter.ofPattern("HH:mm");
+    private final DateTimeFormatter formatoHora
+            = DateTimeFormatter.ofPattern("HH:mm");
 
     /**
      * Lista completa obtenida desde la base de datos.
      */
-    private List<CarteleraItem> carteleraCompleta =
-            new ArrayList<>();
+    private List<CarteleraItem> carteleraCompleta
+            = new ArrayList<>();
 
     /**
      * Función actualmente seleccionada.
      *
-     * Esta función puede ser obtenida posteriormente
-     * por el flujo de venta.
+     * Esta función puede ser obtenida posteriormente por el flujo de venta.
      */
     private CarteleraItem funcionSeleccionada;
 
@@ -127,13 +129,13 @@ public class CarteleraController {
 
         try {
 
-            carteleraCompleta =
-                    carteleraDAO.listarCartelera();
+            carteleraCompleta
+                    = carteleraDAO.listarCartelera();
 
             if (carteleraCompleta == null) {
 
-                carteleraCompleta =
-                        new ArrayList<>();
+                carteleraCompleta
+                        = new ArrayList<>();
             }
 
             cargarOpcionesFiltros();
@@ -148,8 +150,8 @@ public class CarteleraController {
                     .getChildren()
                     .clear();
 
-            Label error =
-                    new Label(
+            Label error
+                    = new Label(
                             "No se pudo cargar la cartelera."
                     );
 
@@ -168,19 +170,18 @@ public class CarteleraController {
     }
 
     /**
-     * Carga los géneros y salas disponibles
-     * en los ComboBox.
+     * Carga los géneros y salas disponibles en los ComboBox.
      */
     private void cargarOpcionesFiltros() {
 
-        Set<String> generos =
-                new LinkedHashSet<>();
+        Set<String> generos
+                = new LinkedHashSet<>();
 
-        Set<String> salas =
-                new LinkedHashSet<>();
+        Set<String> salas
+                = new LinkedHashSet<>();
 
-        for (CarteleraItem item :
-                carteleraCompleta) {
+        for (CarteleraItem item
+                : carteleraCompleta) {
 
             if (item.getGenero() != null
                     && !item.getGenero().isBlank()) {
@@ -247,76 +248,69 @@ public class CarteleraController {
     /**
      * Aplica los filtros seleccionados.
      *
-     * Los filtros pueden utilizarse individualmente
-     * o combinados entre sí.
+     * Los filtros pueden utilizarse individualmente o combinados entre sí.
      */
     @FXML
     public void handleFiltrar() {
 
-        String texto =
-                txtBuscar.getText() == null
-                        ? ""
-                        : txtBuscar.getText()
-                                .trim()
-                                .toLowerCase();
+        String texto
+                = txtBuscar.getText() == null
+                ? ""
+                : txtBuscar.getText()
+                        .trim()
+                        .toLowerCase();
 
-        LocalDate fecha =
-                dpFecha.getValue();
+        LocalDate fecha
+                = dpFecha.getValue();
 
-        String genero =
-                cbGenero.getValue();
+        String genero
+                = cbGenero.getValue();
 
-        String sala =
-                cbSala.getValue();
+        String sala
+                = cbSala.getValue();
 
-        List<CarteleraItem> resultados =
-                carteleraCompleta
+        List<CarteleraItem> resultados
+                = carteleraCompleta
                         .stream()
                         .filter(item -> {
 
-                            boolean coincideTitulo =
-                                    texto.isBlank()
-                                    || (
-                                            item.getTituloPelicula()
-                                                    != null
-                                            && item.getTituloPelicula()
-                                                    .toLowerCase()
-                                                    .contains(texto)
-                                    );
+                            boolean coincideTitulo
+                                    = texto.isBlank()
+                                    || (item.getTituloPelicula()
+                                    != null
+                                    && item.getTituloPelicula()
+                                            .toLowerCase()
+                                            .contains(texto));
 
-                            boolean coincideFecha =
-                                    fecha == null
+                            boolean coincideFecha
+                                    = fecha == null
                                     || fecha.equals(
                                             item.getFecha()
                                     );
 
-                            boolean coincideGenero =
-                                    genero == null
+                            boolean coincideGenero
+                                    = genero == null
                                     || genero.equals(
                                             "Todos los géneros"
                                     )
-                                    || (
-                                            item.getGenero()
-                                                    != null
-                                            && item.getGenero()
-                                                    .equalsIgnoreCase(
-                                                            genero
-                                                    )
-                                    );
+                                    || (item.getGenero()
+                                    != null
+                                    && item.getGenero()
+                                            .equalsIgnoreCase(
+                                                    genero
+                                            ));
 
-                            boolean coincideSala =
-                                    sala == null
+                            boolean coincideSala
+                                    = sala == null
                                     || sala.equals(
                                             "Todas las salas"
                                     )
-                                    || (
-                                            item.getNombreSala()
-                                                    != null
-                                            && item.getNombreSala()
-                                                    .equalsIgnoreCase(
-                                                            sala
-                                                    )
-                                    );
+                                    || (item.getNombreSala()
+                                    != null
+                                    && item.getNombreSala()
+                                            .equalsIgnoreCase(
+                                                    sala
+                                            ));
 
                             return coincideTitulo
                                     && coincideFecha
@@ -333,8 +327,7 @@ public class CarteleraController {
     }
 
     /**
-     * Limpia todos los filtros y vuelve a mostrar
-     * todas las funciones.
+     * Limpia todos los filtros y vuelve a mostrar todas las funciones.
      */
     @FXML
     public void handleLimpiar() {
@@ -384,8 +377,8 @@ public class CarteleraController {
             return;
         }
 
-        for (CarteleraItem item :
-                lista) {
+        for (CarteleraItem item
+                : lista) {
 
             gridCartelera
                     .getChildren()
@@ -404,8 +397,8 @@ public class CarteleraController {
     private VBox crearTarjeta(
             CarteleraItem item) {
 
-        VBox tarjeta =
-                new VBox(0);
+        VBox tarjeta
+                = new VBox(0);
 
         tarjeta.setPrefWidth(275);
         tarjeta.setMaxWidth(275);
@@ -419,16 +412,15 @@ public class CarteleraController {
          * POSTER
          * ==============================
          */
-
-        StackPane posterContainer =
-                new StackPane();
+        StackPane posterContainer
+                = new StackPane();
 
         posterContainer
                 .getStyleClass()
                 .add("poster-container");
 
-        ImageView poster =
-                new ImageView();
+        ImageView poster
+                = new ImageView();
 
         poster.setFitWidth(257);
         poster.setFitHeight(185);
@@ -452,9 +444,8 @@ public class CarteleraController {
          * BADGES
          * ==============================
          */
-
-        HBox badges =
-                new HBox(4);
+        HBox badges
+                = new HBox(4);
 
         badges.setPadding(
                 new Insets(6)
@@ -465,8 +456,8 @@ public class CarteleraController {
                 Pos.TOP_RIGHT
         );
 
-        Label clasificacion =
-                new Label(
+        Label clasificacion
+                = new Label(
                         "Clasificación "
                         + valorTexto(
                                 item.getClasificacion()
@@ -479,8 +470,8 @@ public class CarteleraController {
                         "classification-badge"
                 );
 
-        Label genero =
-                new Label(
+        Label genero
+                = new Label(
                         valorTexto(
                                 item.getGenero()
                         )
@@ -506,9 +497,8 @@ public class CarteleraController {
          * INFORMACIÓN
          * ==============================
          */
-
-        VBox informacion =
-                new VBox(4);
+        VBox informacion
+                = new VBox(4);
 
         informacion
                 .getStyleClass()
@@ -517,16 +507,15 @@ public class CarteleraController {
         /*
          * TÍTULO Y PRECIO
          */
-
-        HBox tituloPrecio =
-                new HBox();
+        HBox tituloPrecio
+                = new HBox();
 
         tituloPrecio.setAlignment(
                 Pos.CENTER_LEFT
         );
 
-        Label titulo =
-                new Label(
+        Label titulo
+                = new Label(
                         valorTexto(
                                 item.getTituloPelicula()
                         )
@@ -538,16 +527,16 @@ public class CarteleraController {
 
         titulo.setWrapText(true);
 
-        Region espacio =
-                new Region();
+        Region espacio
+                = new Region();
 
         HBox.setHgrow(
                 espacio,
                 javafx.scene.layout.Priority.ALWAYS
         );
 
-        Label precio =
-                new Label(
+        Label precio
+                = new Label(
                         formatearPrecio(
                                 item.getPrecio()
                         )
@@ -568,21 +557,20 @@ public class CarteleraController {
         /*
          * FECHA Y HORA
          */
+        String fecha
+                = item.getFecha() != null
+                ? item.getFecha()
+                        .format(formatoFecha)
+                : "Sin fecha";
 
-        String fecha =
-                item.getFecha() != null
-                        ? item.getFecha()
-                                .format(formatoFecha)
-                        : "Sin fecha";
+        String hora
+                = item.getHora() != null
+                ? item.getHora()
+                        .format(formatoHora)
+                : "Sin hora";
 
-        String hora =
-                item.getHora() != null
-                        ? item.getHora()
-                                .format(formatoHora)
-                        : "Sin hora";
-
-        Label fechaHora =
-                new Label(
+        Label fechaHora
+                = new Label(
                         "● " + fecha
                         + "     ◷ "
                         + hora
@@ -596,9 +584,8 @@ public class CarteleraController {
         /*
          * SALA
          */
-
-        Label sala =
-                new Label(
+        Label sala
+                = new Label(
                         "▣ "
                         + valorTexto(
                                 item.getNombreSala()
@@ -612,9 +599,8 @@ public class CarteleraController {
         /*
          * ESTADO
          */
-
-        Label estado =
-                new Label(
+        Label estado
+                = new Label(
                         "Estado: "
                         + valorTexto(
                                 item.getEstado()
@@ -628,9 +614,8 @@ public class CarteleraController {
         /*
          * ASIENTOS
          */
-
-        Label asientos =
-                new Label(
+        Label asientos
+                = new Label(
                         "● "
                         + item.getAsientosDisponibles()
                         + " asientos disponibles"
@@ -643,9 +628,8 @@ public class CarteleraController {
         /*
          * ID DE FUNCIÓN
          */
-
-        Label idFuncion =
-                new Label(
+        Label idFuncion
+                = new Label(
                         "ID: F-"
                         + item.getIdFuncion()
                 );
@@ -654,15 +638,15 @@ public class CarteleraController {
                 .getStyleClass()
                 .add("movie-id");
 
-        HBox estadoFila =
-                new HBox(5);
+        HBox estadoFila
+                = new HBox(5);
 
         estadoFila.setAlignment(
                 Pos.CENTER_LEFT
         );
 
-        Region espacioEstado =
-                new Region();
+        Region espacioEstado
+                = new Region();
 
         HBox.setHgrow(
                 espacioEstado,
@@ -682,9 +666,8 @@ public class CarteleraController {
          * BOTÓN SELECCIONAR
          * ==============================
          */
-
-        Button verFuncion =
-                new Button(
+        Button verFuncion
+                = new Button(
                         "Ver función"
                 );
 
@@ -699,12 +682,12 @@ public class CarteleraController {
                 );
 
         verFuncion.setOnAction(
-                evento ->
-                        seleccionarFuncion(
-                                item,
-                                tarjeta,
-                                verFuncion
-                        )
+                evento
+                -> seleccionarFuncion(
+                        item,
+                        tarjeta,
+                        verFuncion
+                )
         );
 
         /*
@@ -712,7 +695,6 @@ public class CarteleraController {
          * AGREGAR ELEMENTOS
          * ==============================
          */
-
         informacion
                 .getChildren()
                 .addAll(
@@ -737,9 +719,8 @@ public class CarteleraController {
     /**
      * Selecciona una función.
      *
-     * La función seleccionada queda almacenada
-     * en funcionSeleccionada para poder ser utilizada
-     * posteriormente por el flujo de venta.
+     * La función seleccionada queda almacenada en funcionSeleccionada para
+     * poder ser utilizada posteriormente por el flujo de venta.
      *
      * @param item función seleccionada
      * @param tarjeta tarjeta visual
@@ -750,56 +731,69 @@ public class CarteleraController {
             VBox tarjeta,
             Button boton) {
 
-        /*
-         * Quitar selección anterior.
-         */
-
+        // Quitar selección anterior
         if (tarjetaSeleccionada != null) {
 
             tarjetaSeleccionada
                     .getStyleClass()
-                    .remove(
-                            "movie-card-selected"
-                    );
+                    .remove("movie-card-selected");
         }
 
         if (botonSeleccionado != null) {
 
-            botonSeleccionado
-                    .setText(
-                            "Ver función"
-                    );
+            botonSeleccionado.setText(
+                    "Ver función"
+            );
         }
 
-        /*
-         * Guardar nueva selección.
-         */
-
+        // Guardar función seleccionada
         funcionSeleccionada = item;
 
         tarjetaSeleccionada = tarjeta;
 
         botonSeleccionado = boton;
 
-        /*
-         * Marcar visualmente.
-         */
-
+        // Marcar visualmente
         tarjetaSeleccionada
                 .getStyleClass()
-                .add(
-                        "movie-card-selected"
-                );
+                .add("movie-card-selected");
 
-        botonSeleccionado
-                .setText(
-                        "Función seleccionada"
-                );
+        botonSeleccionado.setText(
+                "Función seleccionada"
+        );
 
         System.out.println(
                 "Función seleccionada: "
                 + item.getIdFuncion()
         );
+
+        // =========================================
+        // CONTINUAR AL PROCESO DE VENTA
+        // =========================================
+        try {
+
+            Principal.mostrarVenta(
+                    item.getIdFuncion()
+            );
+
+        } catch (IOException ex) {
+
+            ex.printStackTrace();
+
+            Alert alerta = new Alert(
+                    Alert.AlertType.ERROR
+            );
+
+            alerta.setTitle("Error");
+            alerta.setHeaderText(
+                    "No se pudo abrir la venta"
+            );
+            alerta.setContentText(
+                    "No fue posible continuar con la función seleccionada."
+            );
+
+            alerta.showAndWait();
+        }
     }
 
     /**
@@ -834,8 +828,8 @@ public class CarteleraController {
     /**
      * Obtiene la función actualmente seleccionada.
      *
-     * Este método permite que el flujo de venta
-     * pueda recibir la función seleccionada.
+     * Este método permite que el flujo de venta pueda recibir la función
+     * seleccionada.
      *
      * @return función seleccionada o null
      */
@@ -845,11 +839,10 @@ public class CarteleraController {
     }
 
     /**
-     * Prepara la función seleccionada para continuar
-     * hacia el flujo de venta.
+     * Prepara la función seleccionada para continuar hacia el flujo de venta.
      *
-     * Este método evita continuar si el usuario
-     * todavía no ha seleccionado una función.
+     * Este método evita continuar si el usuario todavía no ha seleccionado una
+     * función.
      *
      * @return función seleccionada
      * @throws IllegalStateException si no existe selección
@@ -872,19 +865,18 @@ public class CarteleraController {
     }
 
     /**
-     * Muestra un mensaje cuando se intenta utilizar
-     * la función seleccionada sin haber realizado
-     * una selección.
+     * Muestra un mensaje cuando se intenta utilizar la función seleccionada sin
+     * haber realizado una selección.
      */
     public void validarSeleccionParaVenta() {
 
         try {
 
-            CarteleraItem funcion =
-                    prepararFuncionParaVenta();
+            CarteleraItem funcion
+                    = prepararFuncionParaVenta();
 
-            Alert alerta =
-                    new Alert(
+            Alert alerta
+                    = new Alert(
                             Alert.AlertType.INFORMATION
                     );
 
@@ -906,19 +898,15 @@ public class CarteleraController {
                             funcion.getNombreSala()
                     )
                     + "\nFecha: "
-                    + (
-                            funcion.getFecha() != null
-                            ? funcion.getFecha()
-                                    .format(formatoFecha)
-                            : "Sin fecha"
-                    )
+                    + (funcion.getFecha() != null
+                    ? funcion.getFecha()
+                            .format(formatoFecha)
+                    : "Sin fecha")
                     + "\nHora: "
-                    + (
-                            funcion.getHora() != null
-                            ? funcion.getHora()
-                                    .format(formatoHora)
-                            : "Sin hora"
-                    )
+                    + (funcion.getHora() != null
+                    ? funcion.getHora()
+                            .format(formatoHora)
+                    : "Sin hora")
                     + "\nID función: "
                     + funcion.getIdFuncion()
             );
@@ -927,8 +915,8 @@ public class CarteleraController {
 
         } catch (IllegalStateException ex) {
 
-            Alert alerta =
-                    new Alert(
+            Alert alerta
+                    = new Alert(
                             Alert.AlertType.WARNING
                     );
 
@@ -964,61 +952,60 @@ public class CarteleraController {
             ".jpeg"
         };
 
-        for (String extension :
-                extensiones) {
+        for (String extension
+                : extensiones) {
 
-            String ruta =
-                    "/org/cine/resources/images/"
+            String ruta
+                    = "/org/cine/resources/images/"
                     + "pelicula_"
                     + idPelicula
                     + extension;
 
-            try (InputStream entrada =
-                    getClass()
+            try (InputStream entrada
+                    = getClass()
                             .getResourceAsStream(
                                     ruta
                             )) {
 
-                if (entrada != null) {
+                        if (entrada != null) {
 
-                    Image imagen =
-                            new Image(
-                                    entrada
-                            );
+                            Image imagen
+                                    = new Image(
+                                            entrada
+                                    );
 
-                    imageView
-                            .setImage(
-                                    imagen
-                            );
+                            imageView
+                                    .setImage(
+                                            imagen
+                                    );
 
-                    return;
-                }
+                            return;
+                        }
 
-            } catch (Exception ex) {
+                    } catch (Exception ex) {
 
-                System.out.println(
-                        "No se pudo cargar el poster: "
-                        + ruta
-                );
-            }
+                        System.out.println(
+                                "No se pudo cargar el poster: "
+                                + ruta
+                        );
+                    }
         }
     }
 
     /**
-     * Muestra el mensaje cuando no existen
-     * resultados para los filtros.
+     * Muestra el mensaje cuando no existen resultados para los filtros.
      */
     private void mostrarSinResultados() {
 
-        VBox mensaje =
-                new VBox(8);
+        VBox mensaje
+                = new VBox(8);
 
         mensaje.setAlignment(
                 Pos.CENTER
         );
 
-        Label titulo =
-                new Label(
+        Label titulo
+                = new Label(
                         "No se encontraron funciones"
                 );
 
@@ -1028,8 +1015,8 @@ public class CarteleraController {
                 + "-fx-text-fill: #10203a;"
         );
 
-        Label descripcion =
-                new Label(
+        Label descripcion
+                = new Label(
                         "Intenta cambiar los filtros de búsqueda."
                 );
 
@@ -1086,5 +1073,13 @@ public class CarteleraController {
         }
 
         return valor;
+    }
+
+    // ==============================
+// REGRESAR AL DASHBOARD
+// ==============================
+    @FXML
+    private void regresarDashboard() throws IOException {
+        org.cine.system.Principal.mostrarDashboardSegunRol();
     }
 }

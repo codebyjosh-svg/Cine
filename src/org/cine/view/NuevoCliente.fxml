@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cine.controller.NuevoClienteController"
+            stylesheets="@style/nuevo-cliente.css"
+            styleClass="cliente-root">
+
+    <top>
+
+        <VBox spacing="3"
+              styleClass="cliente-header">
+
+            <padding>
+                <Insets top="18"
+                        right="20"
+                        bottom="15"
+                        left="20"/>
+            </padding>
+
+            <Label text="NUEVO CLIENTE"
+                   styleClass="cliente-title"/>
+
+            <Label text="Registra los datos del cliente para asociarlo a la venta."
+                   styleClass="cliente-subtitle"/>
+
+        </VBox>
+
+    </top>
+
+
+    <center>
+
+        <VBox spacing="12"
+              styleClass="cliente-form">
+
+            <padding>
+                <Insets top="20"
+                        right="20"
+                        bottom="10"
+                        left="20"/>
+            </padding>
+
+
+            <!-- CUI -->
+
+            <VBox spacing="4">
+
+                <Label text="CUI"
+                       styleClass="field-label"/>
+
+                <TextField fx:id="txtCui"
+                           promptText="13 dígitos"
+                           maxWidth="Infinity"
+                           styleClass="text-field"/>
+
+            </VBox>
+
+
+            <!-- NOMBRE -->
+
+            <VBox spacing="4">
+
+                <Label text="NOMBRE *"
+                       styleClass="field-label"/>
+
+                <TextField fx:id="txtNombre"
+                           promptText="Nombre del cliente"
+                           maxWidth="Infinity"
+                           styleClass="text-field"/>
+
+            </VBox>
+
+
+            <!-- APELLIDO -->
+
+            <VBox spacing="4">
+
+                <Label text="APELLIDO *"
+                       styleClass="field-label"/>
+
+                <TextField fx:id="txtApellido"
+                           promptText="Apellido del cliente"
+                           maxWidth="Infinity"
+                           styleClass="text-field"/>
+
+            </VBox>
+
+
+            <!-- CORREO -->
+
+            <VBox spacing="4">
+
+                <Label text="CORREO ELECTRÓNICO *"
+                       styleClass="field-label"/>
+
+                <TextField fx:id="txtCorreo"
+                           promptText="correo@ejemplo.com"
+                           maxWidth="Infinity"
+                           styleClass="text-field"/>
+
+            </VBox>
+
+
+            <!-- TELÉFONO -->
+
+            <VBox spacing="4">
+
+                <Label text="TELÉFONO"
+                       styleClass="field-label"/>
+
+                <TextField fx:id="txtTelefono"
+                           promptText="Opcional"
+                           maxWidth="Infinity"
+                           styleClass="text-field"/>
+
+            </VBox>
+
+
+            <Label fx:id="lblMensaje"
+                   text=""
+                   wrapText="true"
+                   styleClass="message"/>
+
+        </VBox>
+
+    </center>
+
+
+    <bottom>
+
+        <HBox alignment="CENTER_RIGHT"
+              spacing="8"
+              styleClass="cliente-footer">
+
+            <padding>
+                <Insets top="10"
+                        right="20"
+                        bottom="18"
+                        left="20"/>
+            </padding>
+
+            <Button text="Cancelar"
+                    onAction="#cancelar"
+                    styleClass="cancel-button"/>
+
+            <Button text="Guardar cliente"
+                    onAction="#guardar"
+                    defaultButton="true"
+                    styleClass="save-button"/>
+
+        </HBox>
+
+    </bottom>
+
+</BorderPane>

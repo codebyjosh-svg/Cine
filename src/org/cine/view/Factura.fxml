@@ -1,3 +1,372 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.*?><?import javafx.scene.layout.*?>
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cine.controller.FacturaController" stylesheets="@style/venta.css" styleClass="fondo"><top><VBox spacing="12" styleClass="panel"><Label text="CINEMA | Factura" styleClass="titulo"/><HBox spacing="10"><TextField fx:id="txtIdVenta" promptText="Número de venta"/><Button text="Consultar" onAction="#consultar"/><Button text="Imprimir" onAction="#imprimir"/><Button text="Volver" onAction="#volver"/></HBox></VBox></top><center><TextArea fx:id="txtFactura" editable="false" wrapText="true" style="-fx-font-family:Consolas;-fx-font-size:15;"/></center><bottom><HBox styleClass="panel"><Label fx:id="lblTotal" text="TOTAL: Q0"/></HBox></bottom></BorderPane>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cine.controller.FacturaController"
+            stylesheets="@style/factura.css"
+            styleClass="factura-root"
+            prefWidth="1050.0"
+            prefHeight="700.0">
+
+    <!-- ===================================================== -->
+    <!-- ENCABEZADO -->
+    <!-- ===================================================== -->
+
+    <top>
+
+        <VBox styleClass="header">
+
+            <padding>
+                <Insets top="14"
+                        right="22"
+                        bottom="12"
+                        left="22"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT"
+                  spacing="12">
+
+                <StackPane prefWidth="34"
+                           prefHeight="34"
+                           styleClass="brand-logo">
+
+                    <Label text="C"
+                           styleClass="brand-letter"/>
+
+                </StackPane>
+
+                <Label text="CINEMA"
+                       styleClass="brand-title"/>
+
+                <Label text="|"
+                       styleClass="header-separator"/>
+
+                <Label text="Factura de Venta"
+                       styleClass="header-section"/>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Button text="← Regresar al Dashboard"
+                        onAction="#volver"
+                        styleClass="header-back-button"/>
+
+            </HBox>
+
+        </VBox>
+
+    </top>
+
+
+    <!-- ===================================================== -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- ===================================================== -->
+
+    <center>
+
+        <HBox spacing="18"
+              styleClass="main-content">
+
+            <padding>
+                <Insets top="18"
+                        right="22"
+                        bottom="18"
+                        left="22"/>
+            </padding>
+
+
+            <!-- ================================================= -->
+            <!-- FACTURA -->
+            <!-- ================================================= -->
+
+            <VBox spacing="12"
+                  styleClass="invoice-paper"
+                  prefWidth="700">
+
+                <HBox alignment="CENTER_LEFT"
+                      spacing="10">
+
+                    <VBox spacing="2">
+
+                        <Label text="CINEMA GUATEMALA"
+                               styleClass="invoice-company"/>
+
+                        <Label text="COMPROBANTE DE PAGO ELECTRÓNICO"
+                               styleClass="invoice-subtitle"/>
+
+                    </VBox>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <VBox alignment="CENTER_RIGHT"
+                          spacing="3">
+
+                        <Label text="NÚMERO DE FACTURA"
+                               styleClass="small-label"/>
+
+                        <Label fx:id="lblNumeroFactura"
+                               text="—"
+                               styleClass="invoice-number"/>
+
+                    </VBox>
+
+                </HBox>
+
+
+                <Separator/>
+
+
+                <!-- DATOS PRINCIPALES -->
+
+                <HBox spacing="30">
+
+                    <VBox spacing="4"
+                          HBox.hgrow="ALWAYS">
+
+                        <Label text="CLIENTE"
+                               styleClass="field-label"/>
+
+                        <Label fx:id="lblCliente"
+                               text="—"
+                               styleClass="field-value"/>
+
+                    </VBox>
+
+
+                    <VBox spacing="4"
+                          prefWidth="170">
+
+                        <Label text="ESTADO"
+                               styleClass="field-label"/>
+
+                        <Label fx:id="lblEstado"
+                               text="SIN CONSULTAR"
+                               styleClass="status-confirmed"/>
+
+                    </VBox>
+
+                </HBox>
+
+
+                <Separator/>
+
+
+                <!-- DETALLE -->
+
+                <VBox spacing="6"
+                      VBox.vgrow="ALWAYS">
+
+                    <Label text="DETALLE DE LA TRANSACCIÓN"
+                           styleClass="detail-title"/>
+
+                    <TextArea fx:id="txtFactura"
+                              editable="false"
+                              wrapText="true"
+                              VBox.vgrow="ALWAYS"
+                              styleClass="invoice-detail"/>
+
+                </VBox>
+
+
+                <!-- TOTAL -->
+
+                <HBox alignment="CENTER_RIGHT"
+                      styleClass="total-section">
+
+                    <VBox alignment="CENTER_RIGHT"
+                          spacing="2">
+
+                        <Label text="TOTAL A PAGAR"
+                               styleClass="total-label"/>
+
+                        <Label fx:id="lblTotal"
+                               text="Q0.00"
+                               styleClass="total-value"/>
+
+                    </VBox>
+
+                </HBox>
+
+
+                <!-- CODIGO VISUAL -->
+
+                <VBox alignment="CENTER"
+                      spacing="3"
+                      styleClass="barcode-section">
+
+                    <Label text="▌▌ ▌▌▌ ▌ ▌▌ ▌▌▌ ▌ ▌▌▌ ▌▌"
+                           styleClass="barcode"/>
+
+                    <Label text="Comprobante generado por CINEMA"
+                           styleClass="barcode-text"/>
+
+                </VBox>
+
+
+                <Label text="Gracias por visitar CINEMA. Conserve este comprobante."
+                       styleClass="invoice-footer"/>
+
+            </VBox>
+
+
+            <!-- ================================================= -->
+            <!-- PANEL LATERAL -->
+            <!-- ================================================= -->
+
+            <VBox spacing="14"
+                  prefWidth="275">
+
+
+                <!-- OPERACIONES -->
+
+                <VBox spacing="10"
+                      styleClass="side-card">
+
+                    <Label text="⚙  OPERACIONES RÁPIDAS"
+                           styleClass="side-title"/>
+
+
+                    <Button text="Nueva factura"
+                            onAction="#nuevaFactura"
+                            maxWidth="Infinity"
+                            styleClass="side-button"/>
+
+
+                    <Button text="Reimprimir comprobante"
+                            onAction="#reimprimir"
+                            maxWidth="Infinity"
+                            styleClass="side-button"/>
+
+
+                    <Button text="Anular transacción"
+                            disable="true"
+                            maxWidth="Infinity"
+                            styleClass="side-button-disabled"/>
+
+                </VBox>
+
+
+                <!-- CONSULTA -->
+
+                <VBox spacing="10"
+                      styleClass="side-card">
+
+                    <Label text="CONSULTA DE FACTURA"
+                           styleClass="side-title"/>
+
+                    <Label text="Número de factura"
+                           styleClass="field-label"/>
+
+                    <TextField fx:id="txtIdVenta"
+                               promptText="Ej. 9"
+                               onAction="#consultar"
+                               styleClass="invoice-search"/>
+
+                    <Button text="Consultar factura"
+                            onAction="#consultar"
+                            maxWidth="Infinity"
+                            styleClass="consult-button"/>
+
+                </VBox>
+
+
+                <!-- EMISOR -->
+
+                <VBox spacing="7"
+                      styleClass="side-card">
+
+                    <Label text="DATOS DEL EMISOR"
+                           styleClass="side-title"/>
+
+                    <Label text="CINEMA GUATEMALA"
+                           styleClass="emisor-main"/>
+
+                    <Label text="Sistema de Gestión de Cine"
+                           styleClass="emisor-detail"/>
+
+                    <Label text="Guatemala"
+                           styleClass="emisor-detail"/>
+
+                    <Separator/>
+
+                    <Label text="Comprobante generado desde el sistema CINEMA."
+                           wrapText="true"
+                           styleClass="emisor-detail"/>
+
+                </VBox>
+
+
+                <!-- ESTADO -->
+
+                <HBox alignment="CENTER_LEFT"
+                      spacing="7"
+                      styleClass="system-status">
+
+                    <Label text="●"
+                           styleClass="status-dot"/>
+
+                    <Label text="Documento listo para consulta"
+                           styleClass="system-status-text"/>
+
+                </HBox>
+
+            </VBox>
+
+        </HBox>
+
+    </center>
+
+
+    <!-- ===================================================== -->
+    <!-- PIE -->
+    <!-- ===================================================== -->
+
+    <bottom>
+
+        <BorderPane styleClass="footer">
+
+            <padding>
+                <Insets top="7"
+                        right="20"
+                        bottom="7"
+                        left="20"/>
+            </padding>
+
+            <left>
+
+                <Label text="●  Sistema de Gestión de Cine"
+                       styleClass="footer-text"/>
+
+            </left>
+
+            <right>
+
+                <HBox spacing="18">
+
+                    <Label text="Factura electrónica"
+                           styleClass="footer-text"/>
+
+                    <Label text="CINEMA 1.0"
+                           styleClass="footer-text"/>
+
+                </HBox>
+
+            </right>
+
+        </BorderPane>
+
+    </bottom>
+
+</BorderPane>

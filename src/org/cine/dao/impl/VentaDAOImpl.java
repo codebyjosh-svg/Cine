@@ -45,6 +45,75 @@ public class VentaDAOImpl implements VentaDAO {
     }
 
     @Override
+    public Opcion crearCliente(
+            String cui,
+            String nombre,
+            String apellido,
+            String correo,
+            String telefono
+    ) throws SQLException {
+
+        String nombreCompleto
+                = nombre.trim()
+                + " "
+                + apellido.trim();
+
+        try (Connection c = con(); CallableStatement s
+                = c.prepareCall(
+                        "{call sp_insertarcliente(?,?,?,?,?)}"
+                )) {
+
+            if (cui == null || cui.isBlank()) {
+                s.setNull(1, java.sql.Types.CHAR);
+            } else {
+                s.setString(1, cui.trim());
+            }
+
+            s.setString(
+                    2,
+                    nombre.trim()
+            );
+
+            s.setString(
+                    3,
+                    apellido.trim()
+            );
+
+            s.setString(
+                    4,
+                    correo.trim()
+            );
+
+            if (telefono == null || telefono.isBlank()) {
+                s.setNull(5, java.sql.Types.VARCHAR);
+            } else {
+                s.setString(
+                        5,
+                        telefono.trim()
+                );
+            }
+
+            try (ResultSet rs = s.executeQuery()) {
+
+                if (rs.next()) {
+
+                    int idCliente
+                            = rs.getInt("id_cliente");
+
+                    return new Opcion(
+                            idCliente,
+                            nombreCompleto
+                    );
+                }
+            }
+        }
+
+        throw new SQLException(
+                "No se pudo obtener el ID del nuevo cliente."
+        );
+    }
+
+    @Override
     public List<Funcion> funciones() throws SQLException {
 
         List<Funcion> l = new ArrayList<>();
@@ -310,112 +379,106 @@ public class VentaDAOImpl implements VentaDAO {
     }
 
     @Override
-   public List<String> factura(int venta) throws SQLException {
+    public List<String> factura(int venta) throws SQLException {
 
-    List<String> l = new ArrayList<>();
+        List<String> l = new ArrayList<>();
 
-    try (
-        Connection c = con();
-        CallableStatement s = c.prepareCall("{call sp_verfactura(?)}")
-    ) {
+        try (
+                Connection c = con(); CallableStatement s = c.prepareCall("{call sp_verfactura(?)}")) {
 
-        s.setInt(1, venta);
+            s.setInt(1, venta);
 
-        boolean hayResultados = s.execute();
-        int numeroResultado = 0;
+            boolean hayResultados = s.execute();
+            int numeroResultado = 0;
 
-        while (true) {
+            while (true) {
 
-            if (hayResultados) {
+                if (hayResultados) {
 
-                try (ResultSet rs = s.getResultSet()) {
+                    try (ResultSet rs = s.getResultSet()) {
 
-                    // RESULTADO 0 = ENCABEZADO
-                    if (numeroResultado == 0) {
+                        // RESULTADO 0 = ENCABEZADO
+                        if (numeroResultado == 0) {
 
-                        // No necesitamos agregar el encabezado
-                        // porque la pantalla de factura ya muestra
-                        // el ID de la venta.
+                            // No necesitamos agregar el encabezado
+                            // porque la pantalla de factura ya muestra
+                            // el ID de la venta.
+                            while (rs.next()) {
+                                // Se consume el ResultSet para poder
+                                // avanzar al siguiente.
+                            }
+                        } // RESULTADO 1 = BOLETOS
+                        else if (numeroResultado == 1) {
 
-                        while (rs.next()) {
-                            // Se consume el ResultSet para poder
-                            // avanzar al siguiente.
+                            while (rs.next()) {
+
+                                String pelicula
+                                        = rs.getString("pelicula");
+
+                                String sala
+                                        = rs.getString("nombre_sala");
+
+                                String butaca
+                                        = rs.getString("butaca");
+
+                                BigDecimal precio
+                                        = rs.getBigDecimal("precio_unitario");
+
+                                l.add(
+                                        "BOLETO | "
+                                        + pelicula
+                                        + " | "
+                                        + sala
+                                        + " | Butaca "
+                                        + butaca
+                                        + " | Q"
+                                        + precio
+                                );
+                            }
+                        } // RESULTADO 2 = PRODUCTOS
+                        else if (numeroResultado == 2) {
+
+                            while (rs.next()) {
+
+                                String producto
+                                        = rs.getString("nombre_producto");
+
+                                int cantidad
+                                        = rs.getInt("cantidad");
+
+                                BigDecimal precio
+                                        = rs.getBigDecimal("precio_unitario");
+
+                                BigDecimal subtotal
+                                        = rs.getBigDecimal("subtotal");
+
+                                l.add(
+                                        "PRODUCTO | "
+                                        + producto
+                                        + " | "
+                                        + cantidad
+                                        + " x Q"
+                                        + precio
+                                        + " = Q"
+                                        + subtotal
+                                );
+                            }
                         }
                     }
 
-                    // RESULTADO 1 = BOLETOS
-                    else if (numeroResultado == 1) {
+                    numeroResultado++;
+                } else {
 
-                        while (rs.next()) {
-
-                            String pelicula =
-                                    rs.getString("pelicula");
-
-                            String sala =
-                                    rs.getString("nombre_sala");
-
-                            String butaca =
-                                    rs.getString("butaca");
-
-                            BigDecimal precio =
-                                    rs.getBigDecimal("precio_unitario");
-
-                            l.add(
-                                "BOLETO | "
-                                + pelicula
-                                + " | "
-                                + sala
-                                + " | Butaca "
-                                + butaca
-                                + " | Q"
-                                + precio
-                            );
-                        }
-                    }
-
-                    // RESULTADO 2 = PRODUCTOS
-                    else if (numeroResultado == 2) {
-
-                        while (rs.next()) {
-
-                            String producto =
-                                    rs.getString("nombre_producto");
-
-                            int cantidad =
-                                    rs.getInt("cantidad");
-
-                            BigDecimal precio =
-                                    rs.getBigDecimal("precio_unitario");
-
-                            BigDecimal subtotal =
-                                    rs.getBigDecimal("subtotal");
-
-                            l.add(
-                                "PRODUCTO | "
-                                + producto
-                                + " | "
-                                + cantidad
-                                + " x Q"
-                                + precio
-                                + " = Q"
-                                + subtotal
-                            );
-                        }
+                    if (s.getUpdateCount() == -1) {
+                        break;
                     }
                 }
 
-                numeroResultado++;
-            } else {
-
-                if (s.getUpdateCount() == -1) {
-                    break;
-                }
+                hayResultados = s.getMoreResults();
             }
-
-            hayResultados = s.getMoreResults();
         }
-    }
 
-    return l;
-}
+        return l;
+    }
+    
 }
