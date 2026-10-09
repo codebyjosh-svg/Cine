@@ -39,6 +39,15 @@ public class Principal extends Application {
         mostrarLogin();
     }
 
+    public static void mostrarInventario() throws IOException {
+        if (!SesionContext.haySesionActiva() || !SesionContext.getUsuarioActual().isEstado()
+                || SesionContext.getUsuarioActual().getIdUsuario() <= 0
+                || !("admin".equals(SesionContext.getRolActual()) || "bodega".equals(SesionContext.getRolActual()))) {
+            throw new IllegalStateException("El inventario requiere una sesión activa de administrador o bodega.");
+        }
+        cambiarEscena("/org/cine/view/Inventario.fxml", "Cinema - Inventario de confitería");
+    }
+
     public static void cambiarEscena(String ruta, String titulo) throws IOException {
         URL recurso = Principal.class.getResource(ruta);
         if (recurso == null) {
@@ -48,6 +57,7 @@ public class Principal extends Application {
         Scene scene = new Scene(root);
         stagePrincipal.setScene(scene);
         stagePrincipal.setTitle(titulo);
+        stagePrincipal.sizeToScene();
         stagePrincipal.centerOnScreen();
     }
 

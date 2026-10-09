@@ -32,3 +32,13 @@
     -fx-text-fill: white;
     -fx-font-weight: bold;
 }
+.inventory-button {
+    -fx-pref-width: 180;
+    -fx-pref-height: 40;
+    -fx-background-radius: 8;
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+.inventory-button:hover { -fx-background-color: #1d4ed8; }

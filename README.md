@@ -1,5 +1,12 @@
 # Cinema - Sistema de Gestión Integral para Cine
 
+El módulo **Inventario** está disponible para administrador y bodega. Consulta
+`TAREAS_US_3_2_JAVA.md` para las tareas Java T3.2.3–T3.2.12, el uso y las pruebas.
+Las tareas SQL T3.2.1 y T3.2.2 siguen pendientes; los SQL se conservaron sin cambios.
+
+Esta copia usa JDK 21, bibliotecas incluidas en `lib/` y Classpath.
+La clase principal es `org.cine.system.Lanzador`.
+
 ## Descripción
 
 Cinema es un sistema de escritorio desarrollado para gestionar los principales procesos administrativos y operativos de un cine.

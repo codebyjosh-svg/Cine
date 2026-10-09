@@ -21,6 +21,11 @@ public class DashboardController {
     }
 
     @FXML
+    private void abrirInventario() throws IOException {
+        Principal.mostrarInventario();
+    }
+
+    @FXML
     private void cerrarSesion() throws IOException {
         Principal.cerrarSesion();
     }
