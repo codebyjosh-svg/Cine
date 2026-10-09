@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            stylesheets="@style/cartelera.css"
+            styleClass="cartelera-root">
+
+    <!-- ===================================================== -->
+    <!-- ENCABEZADO -->
+    <!-- ===================================================== -->
+
+    <top>
+
+        <HBox alignment="CENTER_LEFT"
+              spacing="15"
+              styleClass="top-bar">
+
+            <padding>
+                <Insets top="10"
+                        right="20"
+                        bottom="10"
+                        left="20"/>
+            </padding>
+
+            <VBox spacing="2">
+
+                <Label text="CINE"
+                       styleClass="brand-label"/>
+
+                <Label text="Sistema de Gestión"
+                       styleClass="brand-subtitle"/>
+
+            </VBox>
+
+            <Label text="Cartelera"
+                   styleClass="top-section-title"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button fx:id="btnVolver"
+                    text="← Regresar al Dashboard"
+                    styleClass="back-button"/>
+
+        </HBox>
+
+    </top>
+
+
+    <!-- ===================================================== -->
+    <!-- CONTENIDO -->
+    <!-- ===================================================== -->
+
+    <center>
+
+        <ScrollPane fitToWidth="true"
+                    hbarPolicy="NEVER"
+                    vbarPolicy="AS_NEEDED"
+                    styleClass="main-scroll">
+
+            <content>
+
+                <VBox spacing="14"
+                      fillWidth="true"
+                      styleClass="content-container">
+
+                    <!-- ================================================= -->
+                    <!-- TITULO -->
+                    <!-- ================================================= -->
+
+                    <HBox alignment="CENTER_LEFT">
+
+                        <VBox spacing="3">
+
+                            <Label text="Cartelera de funciones"
+                                   styleClass="page-title"/>
+
+                            <Label text="Consulta las películas, horarios, salas y precios disponibles."
+                                   styleClass="page-subtitle"/>
+
+                        </VBox>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <HBox spacing="8"
+                              styleClass="status-badge">
+
+                            <Label text="●"
+                                   styleClass="status-dot"/>
+
+                            <Label text="Sistema Activo"
+                                   styleClass="status-text"/>
+
+                            <Label text="Turno Taquillero"
+                                   styleClass="status-text-secondary"/>
+
+                        </HBox>
+
+                    </HBox>
+
+
+                    <!-- ================================================= -->
+                    <!-- FILTROS -->
+                    <!-- ================================================= -->
+
+                    <VBox spacing="8"
+                          styleClass="filter-card">
+
+                        <HBox spacing="10"
+                              alignment="BOTTOM_LEFT">
+
+                            <VBox spacing="4"
+                                  HBox.hgrow="ALWAYS">
+
+                                <Label text="Buscar película"
+                                       styleClass="field-label"/>
+
+                                <TextField fx:id="txtBuscar"
+                                           promptText="Buscar por título..."
+                                           styleClass="form-field"/>
+
+                            </VBox>
+
+
+                            <VBox spacing="4"
+                                  prefWidth="145">
+
+                                <Label text="Fecha"
+                                       styleClass="field-label"/>
+
+                                <DatePicker fx:id="dpFecha"
+                                            styleClass="form-date"
+                                            prefWidth="145"/>
+
+                            </VBox>
+
+
+                            <VBox spacing="4"
+                                  prefWidth="150">
+
+                                <Label text="Género"
+                                       styleClass="field-label"/>
+
+                                <ComboBox fx:id="cbGenero"
+                                          promptText="Todos los géneros"
+                                          prefWidth="150"
+                                          styleClass="form-combo"/>
+
+                            </VBox>
+
+
+                            <VBox spacing="4"
+                                  prefWidth="150">
+
+                                <Label text="Sala"
+                                       styleClass="field-label"/>
+
+                                <ComboBox fx:id="cbSala"
+                                          promptText="Todas las salas"
+                                          prefWidth="150"
+                                          styleClass="form-combo"/>
+
+                            </VBox>
+
+
+                            <Button fx:id="btnFiltrar"
+                                    text="Filtrar"
+                                    styleClass="button-primary"/>
+
+                            <Button fx:id="btnLimpiar"
+                                    text="Limpiar"
+                                    styleClass="button-secondary"/>
+
+                        </HBox>
+
+                    </VBox>
+
+
+                    <!-- ================================================= -->
+                    <!-- CARTELERA -->
+                    <!-- ================================================= -->
+
+                    <VBox spacing="8"
+                          styleClass="section-container">
+
+                        <HBox alignment="CENTER_LEFT">
+
+                            <VBox spacing="2">
+
+                                <Label text="Funciones disponibles"
+                                       styleClass="section-title"/>
+
+                                <Label text="Películas actualmente programadas en el cine"
+                                       styleClass="section-subtitle"/>
+
+                            </VBox>
+
+                            <Region HBox.hgrow="ALWAYS"/>
+
+                            <Label text="CARTELERA"
+                                   styleClass="section-badge"/>
+
+                        </HBox>
+
+                        <Separator/>
+
+
+                        <!-- ================================================= -->
+                        <!-- GRID DE PELICULAS -->
+                        <!-- ================================================= -->
+
+                        <TilePane fx:id="gridCartelera"
+                                  prefColumns="3"
+                                  hgap="16"
+                                  vgap="16"
+                                  alignment="TOP_LEFT"
+                                  prefTileWidth="235"
+                                  prefTileHeight="390"
+                                  styleClass="movies-grid">
+
+
+                            <!-- ================================================= -->
+                            <!-- TARJETA 1 - EJEMPLO VISUAL -->
+                            <!-- ================================================= -->
+
+                            <VBox spacing="7"
+                                  prefWidth="235"
+                                  maxWidth="235"
+                                  styleClass="movie-card">
+
+                                <StackPane styleClass="poster-container">
+
+                                    <ImageView fitWidth="217"
+                                               fitHeight="250"
+                                               preserveRatio="true"
+                                               styleClass="movie-poster"/>
+
+                                    <HBox alignment="TOP_RIGHT"
+                                          StackPane.alignment="TOP_RIGHT"
+                                          spacing="4">
+
+                                        <Label text="Clasif. B"
+                                               styleClass="classification-badge"/>
+
+                                        <Label text="Acción"
+                                               styleClass="genre-badge"/>
+
+                                    </HBox>
+
+                                    <Label text="Poster local"
+                                           StackPane.alignment="CENTER"
+                                           styleClass="poster-placeholder"/>
+
+                                </StackPane>
+
+
+                                <VBox spacing="5"
+                                      styleClass="movie-info">
+
+                                    <HBox alignment="CENTER_LEFT">
+
+                                        <Label text="La Última Misión"
+                                               styleClass="movie-title"/>
+
+                                        <Region HBox.hgrow="ALWAYS"/>
+
+                                        <Label text="Q45.00"
+                                               styleClass="movie-price"/>
+
+                                    </HBox>
+
+                                    <Label text="● 08/10/2026     ◷ 18:30 hrs"
+                                           styleClass="movie-detail"/>
+
+                                    <Label text="▣ Sala 1 - Principal"
+                                           styleClass="movie-detail"/>
+
+                                    <Label text="● 72 asientos disponibles"
+                                           styleClass="availability-badge"/>
+
+                                    <Button text="Ver función"
+                                            maxWidth="Infinity"
+                                            styleClass="button-ver-funcion"/>
+
+                                </VBox>
+
+                            </VBox>
+
+
+                            <!-- ================================================= -->
+                            <!-- TARJETA 2 -->
+                            <!-- ================================================= -->
+
+                            <VBox spacing="7"
+                                  prefWidth="235"
+                                  maxWidth="235"
+                                  styleClass="movie-card">
+
+                                <StackPane styleClass="poster-container">
+
+                                    <ImageView fitWidth="217"
+                                               fitHeight="250"
+                                               preserveRatio="true"
+                                               styleClass="movie-poster"/>
+
+                                    <HBox alignment="TOP_RIGHT"
+                                          StackPane.alignment="TOP_RIGHT"
+                                          spacing="4">
+
+                                        <Label text="Clasif. A"
+                                               styleClass="classification-badge"/>
+
+                                        <Label text="Aventura"
+                                               styleClass="genre-badge"/>
+
+                                    </HBox>
+
+                                    <Label text="Poster local"
+                                           StackPane.alignment="CENTER"
+                                           styleClass="poster-placeholder"/>
+
+                                </StackPane>
+
+
+                                <VBox spacing="5"
+                                      styleClass="movie-info">
+
+                                    <HBox alignment="CENTER_LEFT">
+
+                                        <Label text="La Isla Perdida"
+                                               styleClass="movie-title"/>
+
+                                        <Region HBox.hgrow="ALWAYS"/>
+
+                                        <Label text="Q40.00"
+                                               styleClass="movie-price"/>
+
+                                    </HBox>
+
+                                    <Label text="● 08/10/2026     ◷ 20:00 hrs"
+                                           styleClass="movie-detail"/>
+
+                                    <Label text="▣ Sala 2"
+                                           styleClass="movie-detail"/>
+
+                                    <Label text="● 35 asientos disponibles"
+                                           styleClass="availability-badge"/>
+
+                                    <Button text="Ver función"
+                                            maxWidth="Infinity"
+                                            styleClass="button-ver-funcion"/>
+
+                                </VBox>
+
+                            </VBox>
+
+
+                            <!-- ================================================= -->
+                            <!-- TARJETA 3 -->
+                            <!-- ================================================= -->
+
+                            <VBox spacing="7"
+                                  prefWidth="235"
+                                  maxWidth="235"
+                                  styleClass="movie-card">
+
+                                <StackPane styleClass="poster-container">
+
+                                    <ImageView fitWidth="217"
+                                               fitHeight="250"
+                                               preserveRatio="true"
+                                               styleClass="movie-poster"/>
+
+                                    <HBox alignment="TOP_RIGHT"
+                                          StackPane.alignment="TOP_RIGHT"
+                                          spacing="4">
+
+                                        <Label text="Clasif. B"
+                                               styleClass="classification-badge"/>
+
+                                        <Label text="Ciencia Ficción"
+                                               styleClass="genre-badge"/>
+
+                                    </HBox>
+
+                                    <Label text="Poster local"
+                                           StackPane.alignment="CENTER"
+                                           styleClass="poster-placeholder"/>
+
+                                </StackPane>
+
+
+                                <VBox spacing="5"
+                                      styleClass="movie-info">
+
+                                    <HBox alignment="CENTER_LEFT">
+
+                                        <Label text="Viaje al Espacio"
+                                               styleClass="movie-title"/>
+
+                                        <Region HBox.hgrow="ALWAYS"/>
+
+                                        <Label text="Q55.00"
+                                               styleClass="movie-price"/>
+
+                                    </HBox>
+
+                                    <Label text="● 08/10/2026     ◷ 19:15 hrs"
+                                           styleClass="movie-detail"/>
+
+                                    <Label text="▣ Sala 3 - IMAX"
+                                           styleClass="movie-detail"/>
+
+                                    <Label text="● 48 asientos disponibles"
+                                           styleClass="availability-badge"/>
+
+                                    <Button text="Ver función"
+                                            maxWidth="Infinity"
+                                            styleClass="button-ver-funcion"/>
+
+                                </VBox>
+
+                            </VBox>
+
+
+                            <!-- ================================================= -->
+                            <!-- TARJETA 4 -->
+                            <!-- ================================================= -->
+
+                            <VBox spacing="7"
+                                  prefWidth="235"
+                                  maxWidth="235"
+                                  styleClass="movie-card">
+
+                                <StackPane styleClass="poster-container">
+
+                                    <ImageView fitWidth="217"
+                                               fitHeight="250"
+                                               preserveRatio="true"
+                                               styleClass="movie-poster"/>
+
+                                    <HBox alignment="TOP_RIGHT"
+                                          StackPane.alignment="TOP_RIGHT"
+                                          spacing="4">
+
+                                        <Label text="Clasif. A"
+                                               styleClass="classification-badge"/>
+
+                                        <Label text="Comedia"
+                                               styleClass="genre-badge"/>
+
+                                    </HBox>
+
+                                    <Label text="Poster local"
+                                           StackPane.alignment="CENTER"
+                                           styleClass="poster-placeholder"/>
+
+                                </StackPane>
+
+
+                                <VBox spacing="5"
+                                      styleClass="movie-info">
+
+                                    <HBox alignment="CENTER_LEFT">
+
+                                        <Label text="De Locos"
+                                               styleClass="movie-title"/>
+
+                                        <Region HBox.hgrow="ALWAYS"/>
+
+                                        <Label text="Q38.00"
+                                               styleClass="movie-price"/>
+
+                                    </HBox>
+
+                                    <Label text="● 08/10/2026     ◷ 17:30 hrs"
+                                           styleClass="movie-detail"/>
+
+                                    <Label text="▣ Sala 1 - Principal"
+                                           styleClass="movie-detail"/>
+
+                                    <Label text="● 61 asientos disponibles"
+                                           styleClass="availability-badge"/>
+
+                                    <Button text="Ver función"
+                                            maxWidth="Infinity"
+                                            styleClass="button-ver-funcion"/>
+
+                                </VBox>
+
+                            </VBox>
+
+
+                            <!-- ================================================= -->
+                            <!-- TARJETA 5 -->
+                            <!-- ================================================= -->
+
+                            <VBox spacing="7"
+                                  prefWidth="235"
+                                  maxWidth="235"
+                                  styleClass="movie-card">
+
+                                <StackPane styleClass="poster-container">
+
+                                    <ImageView fitWidth="217"
+                                               fitHeight="250"
+                                               preserveRatio="true"
+                                               styleClass="movie-poster"/>
+
+                                    <HBox alignment="TOP_RIGHT"
+                                          StackPane.alignment="TOP_RIGHT"
+                                          spacing="4">
+
+                                        <Label text="Clasif. C"
+                                               styleClass="classification-badge"/>
+
+                                        <Label text="Terror"
+                                               styleClass="genre-badge"/>
+
+                                    </HBox>
+
+                                    <Label text="Poster local"
+                                           StackPane.alignment="CENTER"
+                                           styleClass="poster-placeholder"/>
+
+                                </StackPane>
+
+
+                                <VBox spacing="5"
+                                      styleClass="movie-info">
+
+                                    <HBox alignment="CENTER_LEFT">
+
+                                        <Label text="La Casa Oscura"
+                                               styleClass="movie-title"/>
+
+                                        <Region HBox.hgrow="ALWAYS"/>
+
+                                        <Label text="Q42.00"
+                                               styleClass="movie-price"/>
+
+                                    </HBox>
+
+                                    <Label text="● 08/10/2026     ◷ 21:00 hrs"
+                                           styleClass="movie-detail"/>
+
+                                    <Label text="▣ Sala 2"
+                                           styleClass="movie-detail"/>
+
+                                    <Label text="● 24 asientos disponibles"
+                                           styleClass="availability-badge"/>
+
+                                    <Button text="Ver función"
+                                            maxWidth="Infinity"
+                                            styleClass="button-ver-funcion"/>
+
+                                </VBox>
+
+                            </VBox>
+
+
+                            <!-- ================================================= -->
+                            <!-- TARJETA 6 -->
+                            <!-- ================================================= -->
+
+                            <VBox spacing="7"
+                                  prefWidth="235"
+                                  maxWidth="235"
+                                  styleClass="movie-card">
+
+                                <StackPane styleClass="poster-container">
+
+                                    <ImageView fitWidth="217"
+                                               fitHeight="250"
+                                               preserveRatio="true"
+                                               styleClass="movie-poster"/>
+
+                                    <HBox alignment="TOP_RIGHT"
+                                          StackPane.alignment="TOP_RIGHT"
+                                          spacing="4">
+
+                                        <Label text="Clasif. A"
+                                               styleClass="classification-badge"/>
+
+                                        <Label text="Animación"
+                                               styleClass="genre-badge"/>
+
+                                    </HBox>
+
+                                    <Label text="Poster local"
+                                           StackPane.alignment="CENTER"
+                                           styleClass="poster-placeholder"/>
+
+                                </StackPane>
+
+
+                                <VBox spacing="5"
+                                      styleClass="movie-info">
+
+                                    <HBox alignment="CENTER_LEFT">
+
+                                        <Label text="Colores"
+                                               styleClass="movie-title"/>
+
+                                        <Region HBox.hgrow="ALWAYS"/>
+
+                                        <Label text="Q40.00"
+                                               styleClass="movie-price"/>
+
+                                    </HBox>
+
+                                    <Label text="● 08/10/2026     ◷ 16:00 hrs"
+                                           styleClass="movie-detail"/>
+
+                                    <Label text="▣ Sala 3 - IMAX"
+                                           styleClass="movie-detail"/>
+
+                                    <Label text="● 40 asientos disponibles"
+                                           styleClass="availability-badge"/>
+
+                                    <Button text="Ver función"
+                                            maxWidth="Infinity"
+                                            styleClass="button-ver-funcion"/>
+
+                                </VBox>
+
+                            </VBox>
+
+                        </TilePane>
+
+                    </VBox>
+
+
+                    <!-- ================================================= -->
+                    <!-- INFORMACION -->
+                    <!-- ================================================= -->
+
+                    <HBox spacing="14">
+
+                        <VBox spacing="6"
+                              HBox.hgrow="ALWAYS"
+                              styleClass="info-card">
+
+                            <Label text="Información"
+                                   styleClass="info-title"/>
+
+                            <Label text="La cartelera muestra las funciones programadas y disponibles del cine."
+                                   wrapText="true"
+                                   styleClass="info-text"/>
+
+                        </VBox>
+
+
+                        <VBox spacing="6"
+                              HBox.hgrow="ALWAYS"
+                              styleClass="info-card">
+
+                            <Label text="Próximo paso"
+                                   styleClass="info-title"/>
+
+                            <Label text="Seleccione una función para continuar con el proceso de venta."
+                                   wrapText="true"
+                                   styleClass="info-text"/>
+
+                        </VBox>
+
+                    </HBox>
+
+                </VBox>
+
+            </content>
+
+        </ScrollPane>
+
+    </center>
+
+
+    <!-- ===================================================== -->
+    <!-- PIE -->
+    <!-- ===================================================== -->
+
+    <bottom>
+
+        <HBox alignment="CENTER_LEFT"
+              styleClass="footer-container">
+
+            <padding>
+                <Insets top="8"
+                        right="20"
+                        bottom="8"
+                        left="20"/>
+            </padding>
+
+            <Label text="● Sistema de Gestión de Cine"
+                   styleClass="footer-label"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label text="Módulo: Cartelera"
+                   styleClass="footer-label"/>
+
+        </HBox>
+
+    </bottom>
+
+</BorderPane>
