@@ -2,11 +2,13 @@ package org.cine.system;
 
 import java.io.IOException;
 import java.net.URL;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import org.cine.model.Usuario;
 import org.cine.service.NavegacionRol;
 import org.cine.service.SesionContext;
@@ -22,6 +24,10 @@ public class Principal extends Application {
         stage.show();
     }
 
+    // =========================================================
+    // LOGIN
+    // =========================================================
+
     public static void mostrarLogin() throws IOException {
         cambiarEscena(
                 "/org/cine/view/Login.fxml",
@@ -29,7 +35,12 @@ public class Principal extends Application {
         );
     }
 
+    // =========================================================
+    // DASHBOARD SEGÚN ROL
+    // =========================================================
+
     public static void mostrarDashboardSegunRol() throws IOException {
+
         if (!SesionContext.haySesionActiva()) {
             mostrarLogin();
             return;
@@ -45,7 +56,12 @@ public class Principal extends Application {
         );
     }
 
+    // =========================================================
+    // USUARIOS
+    // =========================================================
+
     public static void mostrarUsuarios() throws IOException {
+
         Usuario actual = SesionContext.getUsuarioActual();
 
         if (actual == null
@@ -63,7 +79,12 @@ public class Principal extends Application {
         );
     }
 
+    // =========================================================
+    // PELÍCULAS
+    // =========================================================
+
     public static void mostrarPeliculas() throws IOException {
+
         Usuario actual = SesionContext.getUsuarioActual();
 
         if (actual == null
@@ -81,7 +102,12 @@ public class Principal extends Application {
         );
     }
 
+    // =========================================================
+    // GÉNEROS
+    // =========================================================
+
     public static void mostrarGeneros() throws IOException {
+
         Usuario actual = SesionContext.getUsuarioActual();
 
         if (actual == null
@@ -98,6 +124,10 @@ public class Principal extends Application {
                 "Cine - Géneros"
         );
     }
+
+    // =========================================================
+    // CLIENTES
+    // =========================================================
 
     /**
      * US-1.4 - Gestión de clientes.
@@ -121,9 +151,38 @@ public class Principal extends Application {
         );
     }
 
-    // ==============================
-    // US-2.4 - VENTA DE BOLETOS
-    // ==============================
+    // =========================================================
+    // SALAS Y BUTACAS - US-2.1
+    // =========================================================
+
+    /**
+     * US-2.1 - Gestión de salas y butacas.
+     *
+     * Solo un administrador puede acceder al módulo
+     * de gestión de salas y butacas.
+     */
+    public static void mostrarSalas() throws IOException {
+
+        Usuario actual = SesionContext.getUsuarioActual();
+
+        if (actual == null
+                || !actual.isEstado()
+                || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
+
+            throw new IllegalStateException(
+                    "La gestión de salas requiere una sesión de administrador."
+            );
+        }
+
+        cambiarEscena(
+                "/org/cine/view/Salas.fxml",
+                "Cine - Salas y butacas"
+        );
+    }
+
+    // =========================================================
+    // VENTA DE BOLETOS - US-2.4
+    // =========================================================
 
     public static void mostrarVenta() throws IOException {
 
@@ -144,9 +203,9 @@ public class Principal extends Application {
         );
     }
 
-    // ==============================
-    // US-2.4 - FACTURA
-    // ==============================
+    // =========================================================
+    // FACTURA - US-2.4
+    // =========================================================
 
     public static void mostrarFactura(int id) throws IOException {
 
@@ -173,7 +232,9 @@ public class Principal extends Application {
                 new Scene(root, 1050, 700)
         );
 
-        stagePrincipal.setTitle("Cinema - Factura");
+        stagePrincipal.setTitle(
+                "Cinema - Factura"
+        );
 
         ((org.cine.controller.FacturaController)
                 loader.getController()).mostrar(id);
@@ -181,9 +242,9 @@ public class Principal extends Application {
         stagePrincipal.centerOnScreen();
     }
 
-    // ==============================
-    // US-2.2 - PROGRAMACIÓN
-    // ==============================
+    // =========================================================
+    // PROGRAMACIÓN - US-2.2
+    // =========================================================
 
     /**
      * US-2.2 - Programación de funciones.
@@ -210,18 +271,19 @@ public class Principal extends Application {
         );
     }
 
-    // ==============================
+    // =========================================================
     // CERRAR SESIÓN
-    // ==============================
+    // =========================================================
 
     public static void cerrarSesion() throws IOException {
+
         SesionContext.cerrarSesion();
         mostrarLogin();
     }
 
-    // ==============================
+    // =========================================================
     // CAMBIO DE ESCENA
-    // ==============================
+    // =========================================================
 
     public static void cambiarEscena(
             String ruta,
@@ -238,18 +300,33 @@ public class Principal extends Application {
         FXMLLoader loader = new FXMLLoader(recurso);
         Parent root = loader.load();
 
-        boolean usuarios = ruta.endsWith("/Usuarios.fxml");
-        boolean peliculas = ruta.endsWith("/Peliculas.fxml");
-        boolean generos = ruta.endsWith("/Generos.fxml");
-        boolean clientes = ruta.endsWith("/Clientes.fxml");
-        boolean venta = ruta.endsWith("/Venta.fxml");
-        boolean programacion = ruta.endsWith("/Programacion.fxml");
+        boolean usuarios =
+                ruta.endsWith("/Usuarios.fxml");
+
+        boolean peliculas =
+                ruta.endsWith("/Peliculas.fxml");
+
+        boolean generos =
+                ruta.endsWith("/Generos.fxml");
+
+        boolean clientes =
+                ruta.endsWith("/Clientes.fxml");
+
+        boolean salas =
+                ruta.endsWith("/Salas.fxml");
+
+        boolean venta =
+                ruta.endsWith("/Venta.fxml");
+
+        boolean programacion =
+                ruta.endsWith("/Programacion.fxml");
 
         boolean moduloGrande =
                 usuarios
                 || peliculas
                 || generos
                 || clientes
+                || salas
                 || venta
                 || programacion;
 
@@ -275,6 +352,10 @@ public class Principal extends Application {
         stagePrincipal.sizeToScene();
         stagePrincipal.centerOnScreen();
     }
+
+    // =========================================================
+    // MAIN
+    // =========================================================
 
     public static void main(String[] args) {
         launch(args);
