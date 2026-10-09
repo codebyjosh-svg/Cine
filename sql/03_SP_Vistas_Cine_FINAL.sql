@@ -85,6 +85,7 @@ DROP PROCEDURE IF EXISTS sp_agregarboleto;
 DROP PROCEDURE IF EXISTS sp_eliminarboleto;
 DROP PROCEDURE IF EXISTS sp_confirmarventa;
 DROP PROCEDURE IF EXISTS sp_anularventa;
+DROP PROCEDURE IF EXISTS sp_listarboletosventa;
 
 DROP PROCEDURE IF EXISTS sp_insertarcategoriaproducto;
 DROP PROCEDURE IF EXISTS sp_listarcategoriasproducto;
@@ -1023,6 +1024,31 @@ END $$
 -- ============================================================
 -- VENTAS Y BOLETOS
 -- ============================================================
+CREATE PROCEDURE sp_listarboletosventa(
+    IN _id_venta INT
+)
+BEGIN
+    SELECT
+        id_boleto,
+        id_venta,
+        id_funcion,
+        id_pelicula,
+        titulo,
+        id_sala,
+        nombre_sala,
+        id_butaca,
+        fila,
+        numero,
+        butaca,
+        fecha_inicio,
+        fecha_fin,
+        precio_unitario,
+        estado
+    FROM vw_lista_boletos
+    WHERE id_venta = _id_venta
+      AND estado IN ('reservado', 'vendido')
+    ORDER BY fila, numero, id_boleto;
+END $$
 
 CREATE PROCEDURE sp_abrirventa(
     IN _id_cliente INT,
