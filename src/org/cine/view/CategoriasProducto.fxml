@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cine.controller.CategoriaProductoController"
+            stylesheets="@style/generos.css"
+            styleClass="generos-root"
+            prefWidth="1100.0"
+            prefHeight="700.0"
+            minWidth="900.0"
+            minHeight="620.0">
+
+    <top>
+        <HBox alignment="CENTER_LEFT"
+              spacing="15.0"
+              prefHeight="64.0"
+              styleClass="top-bar">
+            <padding>
+                <Insets top="10.0" right="22.0" bottom="10.0" left="22.0"/>
+            </padding>
+
+            <VBox spacing="1.0">
+                <Label text="CINE" styleClass="brand-label"/>
+                <Label text="Sistema de Gestión" styleClass="brand-subtitle"/>
+            </VBox>
+
+            <Label text="Gestión de categorías de dulcería"
+                   styleClass="top-section-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="← Regresar al Dashboard"
+                    styleClass="back-button"
+                    onAction="#regresarDashboard"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="14.0"
+              fillWidth="true"
+              styleClass="content-container">
+
+            <VBox spacing="3.0" styleClass="page-heading">
+                <Label text="Categorías de productos"
+                       styleClass="page-title"/>
+                <Label text="Organiza los productos de dulcería en categorías."
+                       styleClass="page-subtitle"/>
+            </VBox>
+
+            <VBox spacing="12.0"
+                  styleClass="card"
+                  minHeight="205.0"
+                  maxHeight="225.0">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="2.0">
+                        <Label text="Información de la categoría"
+                               styleClass="section-title"/>
+                        <Label text="Ingresa un nombre y una descripción opcional."
+                               styleClass="section-subtitle"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <HBox alignment="CENTER_RIGHT" spacing="7.0">
+                        <Label text="Estado:" styleClass="state-caption"/>
+                        <Label fx:id="lblEstadoCategoria"
+                               text="Nueva - se guardará como Activa"
+                               styleClass="status-badge"/>
+                    </HBox>
+                </HBox>
+
+                <Separator/>
+
+                <GridPane hgap="18.0" vgap="6.0" maxHeight="90.0">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="42.0"/>
+                        <ColumnConstraints percentWidth="58.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="22.0"/>
+                        <RowConstraints minHeight="58.0"/>
+                    </rowConstraints>
+
+                    <VBox spacing="4.0"
+                          GridPane.columnIndex="0"
+                          GridPane.rowIndex="0">
+                        <Label text="NOMBRE *" styleClass="field-label"/>
+                        <TextField fx:id="txtNombreCategoria"
+                                   promptText="Nombre de la categoría"
+                                   styleClass="form-field"
+                                   prefHeight="32.0"/>
+                    </VBox>
+
+                    <VBox spacing="4.0"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="0"
+                          GridPane.rowSpan="2">
+                        <Label text="DESCRIPCIÓN" styleClass="field-label"/>
+                        <TextArea fx:id="txtDescripcionCategoria"
+                                  promptText="Descripción opcional"
+                                  wrapText="true"
+                                  prefHeight="58.0"
+                                  maxHeight="58.0"
+                                  styleClass="form-textarea"/>
+                    </VBox>
+
+                    <Label text="El nombre debe ser único y puede tener hasta 100 caracteres."
+                           styleClass="field-help"
+                           GridPane.columnIndex="0"
+                           GridPane.rowIndex="1"/>
+                </GridPane>
+
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <Button fx:id="btnGuardarCategoria"
+                            text="▣  Guardar"
+                            onAction="#guardarCategoria"
+                            styleClass="button-primary"/>
+                    <Button fx:id="btnEditarCategoria"
+                            text="✎  Editar"
+                            onAction="#editarCategoria"
+                            styleClass="button-edit"/>
+                    <Button fx:id="btnEliminarCategoria"
+                            text="▣  Eliminar"
+                            onAction="#eliminarCategoria"
+                            styleClass="button-danger"/>
+                    <Button fx:id="btnActivarCategoria"
+                            text="●  Activar"
+                            onAction="#activarCategoria"
+                            styleClass="button-success"/>
+                    <Button fx:id="btnDesactivarCategoria"
+                            text="●  Desactivar"
+                            onAction="#desactivarCategoria"
+                            styleClass="button-warning"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnLimpiarCategoria"
+                            text="↻  Limpiar"
+                            onAction="#limpiarFormulario"
+                            styleClass="button-secondary"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="10.0"
+                  styleClass="card table-card"
+                  VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="2.0">
+                        <Label text="Categorías registradas"
+                               styleClass="section-title"/>
+                        <Label text="Selecciona una fila para consultar o editar."
+                               styleClass="section-subtitle"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnActualizarCategorias"
+                            text="↻  Actualizar"
+                            onAction="#cargarCategorias"
+                            styleClass="button-secondary"/>
+                </HBox>
+
+                <Separator/>
+
+                <TableView fx:id="tbCategorias"
+                           onMouseClicked="#seleccionarCategoria"
+                           styleClass="generos-table"
+                           VBox.vgrow="ALWAYS"
+                           minHeight="250.0">
+                    <columns>
+                        <TableColumn fx:id="colIdCategoria"
+                                     text="ID"
+                                     prefWidth="75.0"
+                                     minWidth="55.0"/>
+                        <TableColumn fx:id="colNombreCategoria"
+                                     text="NOMBRE"
+                                     prefWidth="250.0"
+                                     minWidth="150.0"/>
+                        <TableColumn fx:id="colDescripcionCategoria"
+                                     text="DESCRIPCIÓN"
+                                     prefWidth="520.0"
+                                     minWidth="250.0"/>
+                        <TableColumn fx:id="colEstadoCategoria"
+                                     text="ESTADO"
+                                     prefWidth="140.0"
+                                     minWidth="100.0"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No hay categorías registradas."
+                               styleClass="empty-table-label"/>
+                    </placeholder>
+                </TableView>
+
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Las categorías nuevas se guardan activas."
+                           styleClass="table-help-label"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="Los cambios se reflejan al actualizar la lista."
+                           styleClass="table-help-label"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>
