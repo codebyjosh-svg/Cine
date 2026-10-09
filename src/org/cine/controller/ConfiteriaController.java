@@ -182,9 +182,11 @@ public class ConfiteriaController {
                     p.setInt(1,seleccionado.id);p.setInt(2,u.getIdUsuario());p.setInt(3,ventaId);p.setInt(4,q);p.executeUpdate();
                 }
                 c.commit();recargar();mensaje.setText("Venta #"+ventaId+" registrada. Total: Q "+importe);
+                FacturasConfiteria.mostrarFactura(ventaId);
             }catch(Exception ex){c.rollback();throw ex;}finally{c.setAutoCommit(true);}
         }catch(Exception e){error(e);}
     }
+    @FXML private void buscarFacturas(){ FacturasConfiteria.buscarFacturas(); }
     @FXML private void volver() throws IOException {Principal.mostrarDashboardSegunRol();}
     private void error(Exception e){mensaje.setText("Error: "+e.getMessage());e.printStackTrace();}
 }
