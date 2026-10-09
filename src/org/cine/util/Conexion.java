@@ -1,3 +1,4 @@
+
 package org.cine.util;
 
 import java.io.IOException;
@@ -14,13 +15,12 @@ public final class Conexion {
     private final Properties propiedades = new Properties();
 
     private Conexion() {
-
         try (InputStream entrada =
                 Conexion.class.getResourceAsStream("/db.properties")) {
 
             if (entrada == null) {
                 throw new IllegalStateException(
-                        "No se encontró el archivo db.properties."
+                        "No se encontro el archivo db.properties."
                 );
             }
 
@@ -28,7 +28,7 @@ public final class Conexion {
 
         } catch (IOException ex) {
             throw new IllegalStateException(
-                    "No se pudo leer db.properties.",
+                    "No se pudo leer el archivo db.properties.",
                     ex
             );
         }
@@ -42,21 +42,19 @@ public final class Conexion {
         return INSTANCIA;
     }
 
-    private String valor(
-            String clave,
-            String variable,
-            String predeterminado) {
-
-        String valor = System.getProperty("cine." + clave);
+    private String obtenerPropiedad(String clave) {
+        String valor = propiedades.getProperty(clave);
 
         if (valor == null) {
-            valor = System.getenv(variable);
+            throw new IllegalStateException(
+                    "Falta la propiedad " + clave
+                    + " en db.properties."
+            );
         }
 
-        if (valor == null) {
-            valor = propiedades.getProperty(
-                    clave,
-                    predeterminado
+        if (valor.isBlank() && !clave.equals("db.password")) {
+            throw new IllegalStateException(
+                    "La propiedad " + clave + " esta vacia."
             );
         }
 
@@ -65,41 +63,40 @@ public final class Conexion {
 
     public Connection getConnection() throws SQLException {
 
+        String url = obtenerPropiedad("db.url");
+        String usuario = obtenerPropiedad("db.user");
+        String password = obtenerPropiedad("db.password");
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
+            Connection conexion = DriverManager.getConnection(
+                    url,
+                    usuario,
+                    password
+            );
+
+            System.out.println(
+                    "Conexion a MySQL establecida correctamente."
+            );
+
+            return conexion;
+
         } catch (ClassNotFoundException ex) {
             throw new SQLException(
-                    "Falta MySQL Connector/J en las bibliotecas del proyecto.",
+                    "No se encontro el driver de MySQL. "
+                    + "Verifica MySQL Connector/J.",
                     ex
             );
+
+        } catch (SQLException ex) {
+            System.err.println(
+                    "Error al conectar con MySQL: "
+                    + ex.getMessage()
+            );
+
+            throw ex;
         }
-
-        String url = valor(
-                "db.url",
-                "CINE_DB_URL",
-                "jdbc:mysql://localhost:3306/cinedb_in4cm"
-                + "?useSSL=false"
-                + "&serverTimezone=America/Guatemala"
-        );
-
-        String user = valor(
-                "db.user",
-                "CINE_DB_USER",
-                "IN4CM"
-        );
-
-        String password = valor(
-                "db.password",
-                "CINE_DB_PASSWORD",
-                ""
-        );
-
-        return DriverManager.getConnection(
-                url,
-                user,
-                password
-        );
     }
 
     public Connection getConexion() throws SQLException {

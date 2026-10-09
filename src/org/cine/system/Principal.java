@@ -2,11 +2,13 @@ package org.cine.system;
 
 import java.io.IOException;
 import java.net.URL;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import org.cine.model.Usuario;
 import org.cine.service.NavegacionRol;
 import org.cine.service.SesionContext;
@@ -22,6 +24,10 @@ public class Principal extends Application {
         stage.show();
     }
 
+    // =========================================================
+    // LOGIN
+    // =========================================================
+
     public static void mostrarLogin() throws IOException {
         cambiarEscena(
                 "/org/cine/view/Login.fxml",
@@ -29,7 +35,12 @@ public class Principal extends Application {
         );
     }
 
+    // =========================================================
+    // DASHBOARD SEGÚN ROL
+    // =========================================================
+
     public static void mostrarDashboardSegunRol() throws IOException {
+
         if (!SesionContext.haySesionActiva()) {
             mostrarLogin();
             return;
@@ -45,7 +56,12 @@ public class Principal extends Application {
         );
     }
 
+    // =========================================================
+    // USUARIOS
+    // =========================================================
+
     public static void mostrarUsuarios() throws IOException {
+
         Usuario actual = SesionContext.getUsuarioActual();
 
         if (actual == null
@@ -63,7 +79,12 @@ public class Principal extends Application {
         );
     }
 
+    // =========================================================
+    // PELÍCULAS
+    // =========================================================
+
     public static void mostrarPeliculas() throws IOException {
+
         Usuario actual = SesionContext.getUsuarioActual();
 
         if (actual == null
@@ -81,7 +102,12 @@ public class Principal extends Application {
         );
     }
 
+    // =========================================================
+    // GÉNEROS
+    // =========================================================
+
     public static void mostrarGeneros() throws IOException {
+
         Usuario actual = SesionContext.getUsuarioActual();
 
         if (actual == null
@@ -98,6 +124,10 @@ public class Principal extends Application {
                 "Cine - Géneros"
         );
     }
+
+    // =========================================================
+    // CLIENTES
+    // =========================================================
 
     /**
      * US-1.4 - Gestión de clientes.
@@ -121,12 +151,19 @@ public class Principal extends Application {
         );
     }
 
+    // =========================================================
+    // SALAS Y BUTACAS - US-2.1
+    // =========================================================
+
     /**
      * US-2.1 - Gestión de salas y butacas.
+     *
+     * Solo un administrador puede acceder al módulo
+     * de gestión de salas y butacas.
      */
     public static void mostrarSalas() throws IOException {
 
-     Usuario actual = SesionContext.getUsuarioActual();
+        Usuario actual = SesionContext.getUsuarioActual();
 
         if (actual == null
                 || !actual.isEstado()
@@ -143,10 +180,110 @@ public class Principal extends Application {
         );
     }
 
+    // =========================================================
+    // VENTA DE BOLETOS - US-2.4
+    // =========================================================
+
+    public static void mostrarVenta() throws IOException {
+
+        String rol = SesionContext.getRolActual();
+
+        if (rol == null
+                || !("admin".equalsIgnoreCase(rol)
+                || "taquillero".equalsIgnoreCase(rol))) {
+
+            throw new IllegalStateException(
+                    "No autorizado para ventas."
+            );
+        }
+
+        cambiarEscena(
+                "/org/cine/view/Venta.fxml",
+                "Cinema - Venta de boletos"
+        );
+    }
+
+    // =========================================================
+    // FACTURA - US-2.4
+    // =========================================================
+
+    public static void mostrarFactura(int id) throws IOException {
+
+        String rol = SesionContext.getRolActual();
+
+        if (rol == null
+                || !("admin".equalsIgnoreCase(rol)
+                || "taquillero".equalsIgnoreCase(rol))) {
+
+            throw new IllegalStateException(
+                    "No autorizado para facturas."
+            );
+        }
+
+        FXMLLoader loader = new FXMLLoader(
+                Principal.class.getResource(
+                        "/org/cine/view/Factura.fxml"
+                )
+        );
+
+        Parent root = loader.load();
+
+        stagePrincipal.setScene(
+                new Scene(root, 1050, 700)
+        );
+
+        stagePrincipal.setTitle(
+                "Cinema - Factura"
+        );
+
+        ((org.cine.controller.FacturaController)
+                loader.getController()).mostrar(id);
+
+        stagePrincipal.centerOnScreen();
+    }
+
+    // =========================================================
+    // PROGRAMACIÓN - US-2.2
+    // =========================================================
+
+    /**
+     * US-2.2 - Programación de funciones.
+     *
+     * Solo un administrador puede acceder al módulo
+     * de programación de funciones.
+     */
+    public static void mostrarProgramacion() throws IOException {
+
+        Usuario actual = SesionContext.getUsuarioActual();
+
+        if (actual == null
+                || !actual.isEstado()
+                || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
+
+            throw new IllegalStateException(
+                    "La programación de funciones requiere una sesión de administrador."
+            );
+        }
+
+        cambiarEscena(
+                "/org/cine/view/Programacion.fxml",
+                "Cine - Programación de funciones"
+        );
+    }
+
+    // =========================================================
+    // CERRAR SESIÓN
+    // =========================================================
+
     public static void cerrarSesion() throws IOException {
+
         SesionContext.cerrarSesion();
         mostrarLogin();
     }
+
+    // =========================================================
+    // CAMBIO DE ESCENA
+    // =========================================================
 
     public static void cambiarEscena(
             String ruta,
@@ -163,18 +300,35 @@ public class Principal extends Application {
         FXMLLoader loader = new FXMLLoader(recurso);
         Parent root = loader.load();
 
-        boolean usuarios = ruta.endsWith("/Usuarios.fxml");
-        boolean peliculas = ruta.endsWith("/Peliculas.fxml");
-        boolean generos = ruta.endsWith("/Generos.fxml");
-        boolean clientes = ruta.endsWith("/Clientes.fxml");
-        boolean salas = ruta.endsWith("/Salas.fxml");
+        boolean usuarios =
+                ruta.endsWith("/Usuarios.fxml");
+
+        boolean peliculas =
+                ruta.endsWith("/Peliculas.fxml");
+
+        boolean generos =
+                ruta.endsWith("/Generos.fxml");
+
+        boolean clientes =
+                ruta.endsWith("/Clientes.fxml");
+
+        boolean salas =
+                ruta.endsWith("/Salas.fxml");
+
+        boolean venta =
+                ruta.endsWith("/Venta.fxml");
+
+        boolean programacion =
+                ruta.endsWith("/Programacion.fxml");
 
         boolean moduloGrande =
                 usuarios
                 || peliculas
                 || generos
                 || clientes
-                || salas;
+                || salas
+                || venta
+                || programacion;
 
         double ancho = moduloGrande ? 1100 : 860;
         double alto = moduloGrande ? 700 : 540;
@@ -198,6 +352,10 @@ public class Principal extends Application {
         stagePrincipal.sizeToScene();
         stagePrincipal.centerOnScreen();
     }
+
+    // =========================================================
+    // MAIN
+    // =========================================================
 
     public static void main(String[] args) {
         launch(args);

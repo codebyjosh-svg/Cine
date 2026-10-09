@@ -69,12 +69,35 @@ public class DashboardAdminController {
     }
 
     // ==============================
-    // SALAS Y BUTACAS
+    // SALAS Y BUTACAS - US-2.1
     // ==============================
 
     @FXML
     private void abrirSalas() throws IOException {
         Principal.mostrarSalas();
+    }
+
+    // ==============================
+    // VENTA DE BOLETOS - US-2.4
+    // ==============================
+
+    @FXML
+    private void abrirVenta() throws IOException {
+
+        System.out.println("=================================");
+        System.out.println("BOTON VENDER BOLETOS PRESIONADO");
+        System.out.println("=================================");
+
+        Principal.mostrarVenta();
+    }
+
+    // ==============================
+    // FUNCIONES - US-2.2
+    // ==============================
+
+    @FXML
+    private void abrirFunciones() throws IOException {
+        Principal.mostrarProgramacion();
     }
 
     // ==============================

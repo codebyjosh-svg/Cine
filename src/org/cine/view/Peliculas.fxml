@@ -105,122 +105,122 @@
                 <!-- ================================================= -->
 
                 <HBox spacing="12">
-   
-   
+
+
                     <!-- ============================== -->
                     <!-- CAMPOS -->
                     <!-- ============================== -->
-   
+
                     <VBox spacing="7" HBox.hgrow="ALWAYS">
-   
-   
+
+
                         <!-- TITULO / DIRECTOR / DURACION -->
-   
+
                         <HBox spacing="12">
-   
+
                             <VBox spacing="4" HBox.hgrow="ALWAYS">
-   
+
                                 <Label styleClass="field-label" text="Título *" />
-   
+
                                 <TextField fx:id="txtTitulo" promptText="Ingrese el título de la película" styleClass="form-field" />
-   
+
                             </VBox>
-   
-   
+
+
                             <VBox prefWidth="230" spacing="4">
-   
+
                                 <Label styleClass="field-label" text="Director *" />
-   
+
                                 <TextField fx:id="txtDirector" promptText="Nombre del director" styleClass="form-field" />
-   
+
                             </VBox>
-   
-   
+
+
                             <VBox prefWidth="150" spacing="4">
-   
+
                                 <Label styleClass="field-label" text="Duración (min) *" />
-   
+
                                 <TextField fx:id="txtDuracion" promptText="Minutos" styleClass="form-field" />
-   
+
                             </VBox>
-   
+
                         </HBox>
-   
-   
+
+
                         <!-- CLASIFICACION / IDIOMA / FECHA / GENERO -->
-   
+
                         <HBox spacing="12">
-   
-   
+
+
                             <VBox prefWidth="180" spacing="4">
-   
+
                                 <Label styleClass="field-label" text="Clasificación *" />
-   
+
                                 <ComboBox fx:id="cmbClasificacion" maxWidth="Infinity" promptText="Seleccione" styleClass="form-combo" />
-   
+
                             </VBox>
-   
-   
+
+
                             <VBox prefWidth="180" spacing="4">
-   
+
                                 <Label styleClass="field-label" text="Idioma *" />
-   
+
                                 <TextField fx:id="txtIdioma" promptText="Ej. Español" styleClass="form-field" />
-   
+
                             </VBox>
-   
-   
+
+
                             <VBox prefWidth="205" spacing="4">
-   
+
                                 <Label styleClass="field-label" text="Fecha de estreno *" />
-   
+
                                 <DatePicker fx:id="dpFechaEstreno" maxWidth="Infinity" promptText="Seleccione una fecha" styleClass="form-date" />
-   
+
                             </VBox>
-   
-   
+
+
                             <VBox spacing="4" HBox.hgrow="ALWAYS">
-   
+
                                 <Label styleClass="field-label" text="Género *" />
-   
+
                                 <ComboBox fx:id="cmbGenero" maxWidth="Infinity" promptText="Seleccione un género" styleClass="form-combo" />
-   
+
                             </VBox>
-   
+
                         </HBox>
-   
-   
+
+
                         <!-- SINOPSIS -->
-   
+
                         <VBox spacing="4">
-   
+
                             <Label styleClass="field-label" text="Sinopsis" />
-   
+
                             <TextArea fx:id="txtSinopsis" maxHeight="52" minHeight="52" prefHeight="52" promptText="Escriba una breve descripción de la película..." styleClass="form-textarea" wrapText="true" />
-         
-                  
+
+
                                   <!-- ================================================= -->
                          <!-- BOTONES -->
                          <!-- ================================================= -->
-         
+
                                   <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="1015.0" spacing="7">
-            
+
                                                         <Button onAction="#guardar" styleClass="button-primary" text="Guardar película" />
-         
+
                                                <Button onAction="#editar" styleClass="button-edit" text="Editar" />
-         
+
                                       <Button onAction="#eliminar" styleClass="button-danger" text="Eliminar" />
-         
+
                                       <Button onAction="#activar" styleClass="button-success" text="Activar" />
-         
+
                                       <Button onAction="#desactivar" styleClass="button-warning" text="Desactivar" />
-         
+
                                       <Button onAction="#limpiar" styleClass="button-secondary" text="Limpiar" />
-         
+
                                   </HBox>
-   
+
                         </VBox>
-   
+
                     </VBox>
 
 

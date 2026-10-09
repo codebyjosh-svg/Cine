@@ -1,5 +1,8 @@
 package org.cine.model;
 
+/**
+ * Sala utilizada como opción de programación, con su estado y formato.
+ */
 public class Sala {
 
     private int idSala;
@@ -52,6 +55,6 @@ public class Sala {
 
     @Override
     public String toString() {
-        return nombreSala;
+        return nombreSala + " · " + formato;
     }
 }
