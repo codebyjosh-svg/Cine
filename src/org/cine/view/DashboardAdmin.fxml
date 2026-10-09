@@ -65,7 +65,6 @@
 
                     <VBox spacing="3">
 
-                    <VBox spacing="3">
 
                         <!-- DASHBOARD -->
 
@@ -604,7 +603,6 @@
                             </VBox>
 
 
-                            <Label text="3 módulos disponibles"
                             <Label text="5 módulos disponibles"
                                    styleClass="available-badge"/>
 
@@ -795,15 +793,6 @@
 
                             <VBox GridPane.columnIndex="1"
                                   GridPane.rowIndex="1"
-                                  styleClass="module-disabled">
-
-                                <HBox alignment="CENTER_LEFT">
-
-                                    <Label text="F"
-                                           styleClass="module-letter"/>
-
-                                    <Label text="EN DESARROLLO"
-                                           styleClass="development-label"/>
                                   styleClass="module-active"
                                   pickOnBounds="true"
                                   onMouseClicked="#abrirFunciones">
@@ -822,21 +811,6 @@
                                 </HBox>
 
                                 <Label text="Funciones"
-                                       styleClass="module-title"/>
-
-                                <Label text="Programación de funciones y horarios."
-                                       wrapText="true"
-                                       styleClass="module-description"/>
-
-                                <Button text="Próximamente"
-                                        disable="true"
-                                        maxWidth="Infinity"
-                                        mnemonicParsing="false"
-                                        styleClass="module-button-disabled"/>
-
-                            </VBox>
-
-
                                        styleClass="module-title"
                                        mouseTransparent="true"/>
 
@@ -916,15 +890,6 @@
 
                             <VBox GridPane.columnIndex="1"
                                   GridPane.rowIndex="2"
-                                  styleClass="module-disabled">
-
-                                <HBox alignment="CENTER_LEFT">
-
-                                    <Label text="V"
-                                           styleClass="module-letter"/>
-
-                                    <Label text="EN DESARROLLO"
-                                           styleClass="development-label"/>
                                   styleClass="module-active"
                                   pickOnBounds="true"
                                   onMouseClicked="#abrirVenta">
@@ -943,21 +908,6 @@
                                 </HBox>
 
                                 <Label text="Ventas"
-                                       styleClass="module-title"/>
-
-                                <Label text="Gestión de ventas y boletos."
-                                       wrapText="true"
-                                       styleClass="module-description"/>
-
-                                <Button text="Próximamente"
-                                        disable="true"
-                                        maxWidth="Infinity"
-                                        mnemonicParsing="false"
-                                        styleClass="module-button-disabled"/>
-
-                            </VBox>
-
-
                                        styleClass="module-title"
                                        mouseTransparent="true"/>
 
