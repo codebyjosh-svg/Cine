@@ -14,7 +14,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.property.SimpleStringProperty;
+import java.io.IOException;
 
+import org.cine.system.Principal;
 import org.cine.dao.GeneroDAO;
 import org.cine.dao.impl.GeneroDAOImpl;
 import org.cine.model.Genero;
@@ -396,4 +398,9 @@ public class GeneroController {
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
+    
+    @FXML
+private void regresarDashboard() throws IOException {
+    Principal.mostrarDashboardSegunRol();
+}
 }

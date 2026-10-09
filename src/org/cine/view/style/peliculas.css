@@ -3,6 +3,10 @@
     -fx-font-family: "Segoe UI";
 }
 
+/* =========================================
+   BARRA SUPERIOR
+   ========================================= */
+
 .top-bar {
     -fx-background-color: #17243a;
 }
@@ -36,6 +40,13 @@
     -fx-background-color: #405575;
 }
 
+
+/* =========================================
+   SCROLL PRINCIPAL
+   Se mantiene transparente.
+   La pantalla no depende de este scroll.
+   ========================================= */
+
 .main-scroll {
     -fx-background-color: transparent;
     -fx-background: transparent;
@@ -46,8 +57,13 @@
     -fx-background-color: #f4f7fb;
 }
 
+
+/* =========================================
+   CONTENIDO
+   ========================================= */
+
 .content-container {
-    -fx-padding: 18px 24px 24px 24px;
+    -fx-padding: 14px 24px 18px 24px;
 }
 
 .page-heading {
@@ -65,12 +81,17 @@
     -fx-font-size: 13px;
 }
 
+
+/* =========================================
+   TARJETAS
+   ========================================= */
+
 .card {
     -fx-background-color: white;
     -fx-background-radius: 10px;
     -fx-border-color: #dbe3ef;
     -fx-border-radius: 10px;
-    -fx-padding: 16px;
+    -fx-padding: 14px;
 }
 
 .section-title {
@@ -89,9 +110,14 @@
     -fx-text-fill: #2161d1;
     -fx-font-size: 10px;
     -fx-font-weight: bold;
-    -fx-padding: 7px 11px;
+    -fx-padding: 6px 10px;
     -fx-background-radius: 5px;
 }
+
+
+/* =========================================
+   CAMPOS
+   ========================================= */
 
 .field-label {
     -fx-text-fill: #15233b;
@@ -106,7 +132,7 @@
     -fx-border-color: #cbd8e8;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
-    -fx-padding: 9px;
+    -fx-padding: 8px;
     -fx-text-fill: #1c2b43;
 }
 
@@ -129,12 +155,17 @@
     -fx-border-color: #2c6be5;
 }
 
+
+/* =========================================
+   POSTER
+   ========================================= */
+
 .poster-card {
     -fx-background-color: #f5f8fd;
     -fx-border-color: #d8e3f2;
     -fx-border-radius: 8px;
     -fx-background-radius: 8px;
-    -fx-padding: 12px;
+    -fx-padding: 9px;
 }
 
 .poster-title {
@@ -156,9 +187,14 @@
 
 .image-name {
     -fx-text-fill: #687890;
-    -fx-font-size: 10px;
+    -fx-font-size: 9px;
     -fx-alignment: center;
 }
+
+
+/* =========================================
+   BOTONES
+   ========================================= */
 
 .button-primary,
 .button-edit,
@@ -169,7 +205,7 @@
 .button-link-danger {
     -fx-font-weight: bold;
     -fx-background-radius: 6px;
-    -fx-padding: 9px 13px;
+    -fx-padding: 8px 12px;
     -fx-cursor: hand;
 }
 
@@ -230,7 +266,7 @@
 .button-link-danger {
     -fx-background-color: transparent;
     -fx-text-fill: #dc2626;
-    -fx-padding: 9px 6px;
+    -fx-padding: 8px 6px;
 }
 
 .button-link-danger:hover {
@@ -246,6 +282,11 @@
 .button-link-danger:disabled {
     -fx-opacity: 0.55;
 }
+
+
+/* =========================================
+   TABLA DE PELÍCULAS
+   ========================================= */
 
 .movies-table {
     -fx-background-color: white;
@@ -266,13 +307,14 @@
 
 .movies-table .column-header .label {
     -fx-text-fill: white;
-    -fx-font-size: 10px;
+    -fx-font-size: 9px;
     -fx-font-weight: bold;
 }
 
 .movies-table .table-row-cell {
     -fx-background-color: white;
     -fx-border-color: transparent transparent #edf1f6 transparent;
+    -fx-cell-size: 24px;
 }
 
 .movies-table .table-row-cell:filled:selected {
@@ -285,9 +327,15 @@
 
 .movies-table .table-cell {
     -fx-text-fill: #243650;
-    -fx-font-size: 11px;
+    -fx-font-size: 10px;
+    -fx-padding: 3px 5px;
     -fx-alignment: CENTER_LEFT;
 }
+
+
+/* =========================================
+   MENSAJES DE TABLA
+   ========================================= */
 
 .empty-table-label {
     -fx-text-fill: #8390a3;
@@ -295,8 +343,13 @@
 
 .table-help-label {
     -fx-text-fill: #718097;
-    -fx-font-size: 10px;
+    -fx-font-size: 9px;
 }
+
+
+/* =========================================
+   FOOTER
+   ========================================= */
 
 .footer-container {
     -fx-background-color: #17243a;
