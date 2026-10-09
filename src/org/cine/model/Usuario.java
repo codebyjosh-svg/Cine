@@ -34,27 +34,81 @@ public class Usuario {
         this.fechaRegistro = fechaRegistro;
     }
 
-    public int getIdUsuario() { return idUsuario; }
-    public void setIdUsuario(int idUsuario) { this.idUsuario = idUsuario; }
-    public String getNombreUsuario() { return nombreUsuario; }
-    public void setNombreUsuario(String nombreUsuario) { this.nombreUsuario = nombreUsuario; }
-    public String getApellidoUsuario() { return apellidoUsuario; }
-    public void setApellidoUsuario(String apellidoUsuario) { this.apellidoUsuario = apellidoUsuario; }
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
-    public String getCorreoElectronico() { return correoElectronico; }
-    public void setCorreoElectronico(String correoElectronico) { this.correoElectronico = correoElectronico; }
-    public String getContrasenaHash() { return contrasenaHash; }
-    public void setContrasenaHash(String contrasenaHash) { this.contrasenaHash = contrasenaHash; }
-    public int getIdRol() { return idRol; }
-    public void setIdRol(int idRol) { this.idRol = idRol; }
-    public String getNombreRol() { return nombreRol; }
-    public void setNombreRol(String nombreRol) { this.nombreRol = nombreRol; }
-    public Integer getIdCliente() { return idCliente; }
-    public void setIdCliente(Integer idCliente) { this.idCliente = idCliente; }
-    public boolean isEstado() { return estado; }
-    public void setEstado(boolean estado) { this.estado = estado; }
-    public LocalDateTime getFechaRegistro() { return fechaRegistro; }
-    public void setFechaRegistro(LocalDateTime fechaRegistro) { this.fechaRegistro = fechaRegistro; }
-    public String getNombreCompleto() { return nombreUsuario + " " + apellidoUsuario; }
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+    public String getApellidoUsuario() {
+        return apellidoUsuario;
+    }
+    public void setApellidoUsuario(String apellidoUsuario) {
+        this.apellidoUsuario = apellidoUsuario;
+    }
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
+    }
+    public String getContrasenaHash() {
+        return contrasenaHash;
+    }
+    public void setContrasenaHash(String contrasenaHash) {
+        this.contrasenaHash = contrasenaHash;
+    }
+    public int getIdRol() {
+        return idRol;
+    }
+    public void setIdRol(int idRol) {
+        this.idRol = idRol;
+    }
+    public String getNombreRol() {
+        return nombreRol;
+    }
+    public void setNombreRol(String nombreRol) {
+        this.nombreRol = nombreRol;
+    }
+    public Integer getIdCliente() {
+        return idCliente;
+    }
+    public void setIdCliente(Integer idCliente) {
+        this.idCliente = idCliente;
+    }
+    public boolean isEstado() {
+        return estado;
+    }
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+    public LocalDateTime getFechaRegistro() {
+        return fechaRegistro;
+    }
+    public void setFechaRegistro(LocalDateTime fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+    public boolean getEstado() {
+        return estado;
+    }
+
+    public String getEstadoTexto() {
+        return estado ? "Activo" : "Inactivo";
+    }
+
+    public String getNombreCompleto() {
+        return nombreUsuario + " " + apellidoUsuario;
+    }
 }
