@@ -398,7 +398,7 @@ public class GeneroController {
         alerta.setContentText(mensaje);
         alerta.showAndWait();
     }
-    
+
     @FXML
 private void regresarDashboard() throws IOException {
     Principal.mostrarDashboardSegunRol();

@@ -121,6 +121,31 @@ public class Principal extends Application {
         );
     }
 
+    /**
+     * US-2.2 - Programación de funciones.
+     *
+     * Solo un administrador puede acceder al módulo
+     * de programación de funciones.
+     */
+    public static void mostrarProgramacion() throws IOException {
+
+        Usuario actual = SesionContext.getUsuarioActual();
+
+        if (actual == null
+                || !actual.isEstado()
+                || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
+
+            throw new IllegalStateException(
+                    "La programación de funciones requiere una sesión de administrador."
+            );
+        }
+
+        cambiarEscena(
+                "/org/cine/view/Programacion.fxml",
+                "Cine - Programación de funciones"
+        );
+    }
+
     public static void cerrarSesion() throws IOException {
         SesionContext.cerrarSesion();
         mostrarLogin();

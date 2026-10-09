@@ -696,30 +696,31 @@
 
                             <VBox GridPane.columnIndex="1"
                                   GridPane.rowIndex="1"
-                                  styleClass="module-disabled">
+                                  styleClass="module-active"
+                                  pickOnBounds="true"
+                                  onMouseClicked="#abrirFunciones">
 
-                                <HBox alignment="CENTER_LEFT">
+                                <HBox alignment="CENTER_LEFT"
+                                      mouseTransparent="true">
 
                                     <Label text="F"
-                                           styleClass="module-letter"/>
+                                           styleClass="module-letter"
+                                           mouseTransparent="true"/>
 
-                                    <Label text="EN DESARROLLO"
-                                           styleClass="development-label"/>
+                                    <Label text="DISPONIBLE"
+                                           styleClass="available-label"
+                                           mouseTransparent="true"/>
 
                                 </HBox>
 
                                 <Label text="Funciones"
-                                       styleClass="module-title"/>
+                                       styleClass="module-title"
+                                       mouseTransparent="true"/>
 
                                 <Label text="Programación de funciones y horarios."
                                        wrapText="true"
-                                       styleClass="module-description"/>
-
-                                <Button text="Próximamente"
-                                        disable="true"
-                                        maxWidth="Infinity"
-                                        mnemonicParsing="false"
-                                        styleClass="module-button-disabled"/>
+                                       styleClass="module-description"
+                                       mouseTransparent="true"/>
 
                             </VBox>
 
