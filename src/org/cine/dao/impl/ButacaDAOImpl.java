@@ -190,8 +190,7 @@ public class ButacaDAOImpl implements ButacaDAO {
             ultimoError = "La sala seleccionada no existe.";
         } else {
             ultimoError = "No se pudo " + operacion + ": " + e.getMessage();
-        
+
 }
         }
 }
-        

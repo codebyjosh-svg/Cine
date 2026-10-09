@@ -1,0 +1,38 @@
+OK 1 - Hay un vendedor activo para la prueba
+OK 2 - Stock igual al mínimo aparece en la alerta
+OK 3 - Stock menor al mínimo aparece en la alerta
+OK 4 - Stock mayor al mínimo queda fuera de la alerta
+OK 5 - Stock cero genera alerta aunque el mínimo sea cero
+OK 6 - Producto inactivo queda fuera de la alerta
+OK 7 - Venta sin cliente es rechazada
+OK 8 - Carrito vacío no puede confirmarse
+OK 9 - Producto inactivo no se agrega al carrito
+OK 10 - Producto agotado no se agrega al carrito
+OK 11 - Cantidad cero es rechazada
+OK 12 - Agregar 1x tres veces produce una línea con cantidad 3
+OK 13 - La línea conserva el precio original al incrementar cantidad
+OK 14 - Subtotal de productos es cantidad por precio exacto
+OK 15 - Agregar al carrito no descuenta ni reserva stock
+OK 16 - Cantidad acumulada superior al stock es rechazada
+OK 17 - Agregado rechazado conserva la cantidad anterior
+OK 18 - Guardar cantidad reemplaza el valor en la misma línea
+OK 19 - Edición de cantidad superior al stock es rechazada
+OK 20 - Cantidad negativa es rechazada
+OK 21 - Quitar una línea conserva las demás líneas
+OK 22 - Total general combina boletos y dulcería sin duplicar importes
+OK 23 - Confirmar descuenta exactamente la cantidad vendida
+OK 24 - Se registra una sola salida por venta y producto
+OK 25 - La venta mixta confirma su boleto
+OK 26 - La factura conserva la fecha DATETIME sin desplazarla por la zona horaria de Java
+OK 27 - La factura contiene el boleto y una línea de dulcería
+OK 28 - Las líneas de factura suman el total persistido
+OK 29 - Una venta confirmada no se confirma dos veces
+OK 30 - Doble confirmación rechazada no vuelve a descontar stock
+OK 31 - Prevalidación detecta stock reducido por otro vendedor
+OK 32 - El SP vuelve a validar existencias al confirmar
+OK 33 - Fallo en el segundo producto revierte el descuento del primero
+OK 34 - Venta rechazada permanece abierta sin movimientos parciales
+OK 35 - Stock exactamente suficiente puede consumirse hasta cero
+OK 36 - Ambas ventas prevalidaron la última unidad
+OK 37 - Dos confirmaciones simultáneas venden la última unidad una sola vez
+RESULTADO: 37 comprobaciones correctas (T3.3.11 / T3.3.12).

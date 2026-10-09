@@ -1,463 +1,357 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Priority?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.cell.PropertyValueFactory?>
-<?import javafx.collections.FXCollections?>
-<?import java.lang.String?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-
-<BorderPane xmlns="http://javafx.com/javafx/21"
+<BorderPane prefWidth="1180"
+            prefHeight="720"
+            styleClass="cine-root"
+            stylesheets="@style/operaciones.css"
+            xmlns="http://javafx.com/javafx/21"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="org.cine.controller.VentaController"
-            stylesheets="@style/venta.css"
-            styleClass="venta-root">
+            fx:controller="org.cine.controller.VentaController">
 
-    <!-- ===================================================== -->
-    <!-- ENCABEZADO -->
-    <!-- ===================================================== -->
+    <left>
 
-    <top>
+        <VBox spacing="16"
+              prefWidth="190"
+              minWidth="190"
+              maxWidth="190"
+              styleClass="operacion-sidebar">
 
-        <VBox styleClass="header">
+            <Label text="CINEMA"
+                   styleClass="marca"/>
+
+            <Label text="ATENCIÓN AL CLIENTE"
+                   styleClass="sidebar-caption"/>
+
+            <Label text="Venta de dulcería"
+                   styleClass="sidebar-activo"
+                   wrapText="true"
+                   maxWidth="Infinity"/>
+
+            <Label text="1. Seleccione al cliente.&#10;2. Agregue productos.&#10;3. Confirme la venta."
+                   styleClass="sidebar-texto"
+                   wrapText="true"/>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Label text="Los boletos de una venta abierta se conservan al agregar dulcería."
+                   styleClass="sidebar-texto"
+                   wrapText="true"/>
+
+        </VBox>
+
+    </left>
+
+
+    <center>
+
+        <VBox spacing="12">
 
             <padding>
-                <Insets top="8"
-                        right="14"
-                        bottom="8"
-                        left="14"/>
+                <Insets top="22"
+                        right="22"
+                        bottom="22"
+                        left="22"/>
             </padding>
+
+
+            <!-- ENCABEZADO -->
 
             <HBox alignment="CENTER_LEFT"
                   spacing="12">
 
-                <Label text="CINEMA"
-                       styleClass="header-title"/>
+                <VBox spacing="4">
 
-                <Label text="Venta de boletos"
-                       styleClass="header-section"/>
+                    <Label text="Ventas · Dulcería"
+                           styleClass="titulo"/>
+
+                    <Label fx:id="lblVenta"
+                           text="Nueva venta"
+                           styleClass="subtitulo"/>
+
+                </VBox>
 
                 <Region HBox.hgrow="ALWAYS"/>
 
-                <Label text="TAQUILLERO"
-                       styleClass="header-role"/>
+                <Button fx:id="btnNueva"
+                        text="Nueva venta"
+                        onAction="#nueva"
+                        styleClass="boton-secundario"/>
 
-                <Label fx:id="lblEstado"
-                       text="Sin venta abierta"
-                       styleClass="header-status"/>
-
-                <Button text="Regresar al Dashboard"
+                <Button fx:id="btnVolver"
+                        text="Volver"
                         onAction="#volver"
-                        styleClass="header-button"/>
+                        styleClass="boton-secundario"/>
 
             </HBox>
 
-        </VBox>
 
-    </top>
-
-
-    <!-- ===================================================== -->
-    <!-- CONTENIDO PRINCIPAL -->
-    <!-- ===================================================== -->
-
-    <center>
-
-        <HBox spacing="10"
-              styleClass="main-content">
-
-            <padding>
-                <Insets top="10"
-                        right="10"
-                        bottom="6"
-                        left="10"/>
-            </padding>
-
-
-            <!-- ================================================= -->
-            <!-- PANEL IZQUIERDO - CLIENTE / FUNCIÓN / BUTACAS -->
-            <!-- ================================================= -->
-
-            <VBox spacing="8"
-                  styleClass="left-panel"
-                  HBox.hgrow="ALWAYS">
-
-                <!-- DATOS DE LA VENTA -->
-
-                <HBox spacing="8"
-                      alignment="CENTER_LEFT"
-                      styleClass="selection-bar">
-
-                    <!-- CLIENTE -->
-
-                    <VBox spacing="3"
-                          styleClass="field-group">
-
-                        <Label text="CLIENTE *"
-                               styleClass="field-label"/>
-
-                        <HBox spacing="5">
-
-                            <ComboBox fx:id="cbCliente"
-                                      prefWidth="230"
-                                      promptText="Cliente obligatorio"
-                                      styleClass="combo"/>
-
-                            <Button fx:id="btnNuevoCliente"
-                                    text="+ Nuevo cliente"
-                                    onAction="#abrirNuevoCliente"
-                                    styleClass="new-client-button"/>
-
-                        </HBox>
-
-                    </VBox>
-
-
-                    <!-- FUNCIÓN -->
-
-                    <VBox spacing="3"
-                          styleClass="field-group"
-                          HBox.hgrow="ALWAYS">
-
-                        <Label text="FUNCIÓN *"
-                               styleClass="field-label"/>
-
-                        <ComboBox fx:id="cbFuncion"
-                                  maxWidth="Infinity"
-                                  promptText="Seleccionar función"
-                                  styleClass="combo"/>
-
-                    </VBox>
-
-
-                    <!-- MÉTODO DE PAGO -->
-
-                    <VBox spacing="3"
-                          styleClass="field-group">
-
-                        <Label text="MÉTODO DE PAGO "/>
-                  
-
-                                            <ComboBox fx:id="cbMetodoPago"
-                                  prefWidth="160.0"
-                                  promptText="Método de pago"/>
-
-            </VBox>
-
-        </HBox>
-
-
-        <!-- INFORMACIÓN DE FUNCIÓN -->
-
-        <HBox alignment="CENTER_RIGHT"
-                      spacing="8"
-                      styleClass="function-info">
-
-            <Label text="Sala 4"
-                           styleClass="info-badge"/>
-
-            <Label text="12:15 hrs"
-                           styleClass="info-badge"/>
-
-            <Label text="Q45.00"
-                           styleClass="price-badge"/>
-
-        </HBox>
-
-
-        <!-- BUTACAS -->
-
-        <VBox spacing="7"
-                      styleClass="seat-panel"
-                      VBox.vgrow="ALWAYS">
+            <!-- CLIENTE -->
 
             <HBox alignment="CENTER_LEFT"
-                          spacing="8">
+                  spacing="12"
+                  styleClass="tarjeta-compacta">
 
-                <Label text="●"
-                               styleClass="available-dot"/>
+                <Label text="Cliente"
+                       styleClass="campo-etiqueta"/>
 
-                <Label text="SELECCIÓN DE BUTACAS"
-                               styleClass="section-title"/>
+                <ComboBox fx:id="cmbCliente"
+                          promptText="Seleccione un cliente activo"
+                          maxWidth="Infinity"
+                          HBox.hgrow="ALWAYS"/>
 
-                <Label text="(SALA 4)"
-                               styleClass="section-title-secondary"/>
+                <Button fx:id="btnActualizar"
+                        text="Actualizar"
+                        onAction="#actualizar"
+                        styleClass="boton-secundario"/>
+
+            </HBox>
+
+
+            <!-- RETOMAR VENTA -->
+
+            <HBox alignment="CENTER_LEFT"
+                  spacing="10">
+
+                <Label text="Retomar venta abierta #"
+                       styleClass="subtitulo"/>
+
+                <TextField fx:id="txtIdVenta"
+                           promptText="Número"
+                           prefWidth="100"
+                           maxWidth="100"/>
+
+                <Button fx:id="btnRetomar"
+                        text="Retomar"
+                        onAction="#retomar"
+                        styleClass="boton-secundario"/>
 
                 <Region HBox.hgrow="ALWAYS"/>
 
-                <Label text="Haga clic sobre una butaca para agregarla"
-                               styleClass="helper-text"/>
+                <Label fx:id="lblBoletos"
+                       text="0 boletos en esta venta"
+                       styleClass="subtitulo"/>
 
             </HBox>
 
 
-            <!-- PANTALLA -->
+            <!-- MENSAJE -->
 
-            <HBox alignment="CENTER"
-                          styleClass="screen-container">
+            <Label fx:id="lblMensaje"
+                   text="Cargando productos..."
+                   wrapText="true"
+                   minHeight="42"
+                   maxWidth="Infinity"
+                   styleClass="mensaje"/>
 
-                <Label text="P A N T A L L A"
-                               styleClass="screen-label"/>
+
+            <!-- PRODUCTOS Y CARRITO -->
+
+            <HBox spacing="16"
+                  VBox.vgrow="ALWAYS">
+
+
+                <!-- PRODUCTOS -->
+
+                <VBox spacing="10"
+                      prefWidth="450"
+                      minWidth="320"
+                      HBox.hgrow="ALWAYS">
+
+                    <Label text="Productos disponibles"
+                           styleClass="seccion"/>
+
+                    <TextField fx:id="txtFiltro"
+                               promptText="Buscar por nombre o categoría"/>
+
+                    <TableView fx:id="tblProductos"
+                               VBox.vgrow="ALWAYS"
+                               minHeight="125">
+
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
+
+                        <columns>
+
+                            <TableColumn fx:id="colProducto"
+                                         text="Producto"
+                                         prefWidth="155"/>
+
+                            <TableColumn fx:id="colCategoria"
+                                         text="Categoría"
+                                         prefWidth="105"/>
+
+                            <TableColumn fx:id="colPrecio"
+                                         text="Precio"
+                                         prefWidth="80"/>
+
+                            <TableColumn fx:id="colStock"
+                                         text="Stock"
+                                         prefWidth="60"/>
+
+                        </columns>
+
+                    </TableView>
+
+
+                    <HBox spacing="8"
+                          alignment="CENTER_LEFT">
+
+                        <Label text="Cantidad"
+                               styleClass="campo-etiqueta"/>
+
+                        <Spinner fx:id="spnCantidad"
+                                 prefWidth="88"
+                                 maxWidth="88"
+                                 editable="false"/>
+
+                        <Button fx:id="btnAgregar"
+                                text="Agregar al carrito"
+                                onAction="#agregar"
+                                styleClass="boton-primario"
+                                HBox.hgrow="ALWAYS"
+                                maxWidth="Infinity"/>
+
+                    </HBox>
+
+                </VBox>
+
+
+                <!-- CARRITO -->
+
+                <VBox spacing="10"
+                      prefWidth="450"
+                      minWidth="320"
+                      HBox.hgrow="ALWAYS">
+
+                    <Label text="Carrito de dulcería"
+                           styleClass="seccion"/>
+
+                    <Label text="Agregar 1x acumula la cantidad en la misma línea."
+                           styleClass="subtitulo"
+                           minHeight="34"/>
+
+                    <TableView fx:id="tblCarrito"
+                               VBox.vgrow="ALWAYS"
+                               minHeight="125">
+
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
+
+                        <columns>
+
+                            <TableColumn fx:id="colCarritoProducto"
+                                         text="Producto"
+                                         prefWidth="165"/>
+
+                            <TableColumn fx:id="colCarritoCantidad"
+                                         text="Cant."
+                                         prefWidth="50"/>
+
+                            <TableColumn fx:id="colCarritoPrecio"
+                                         text="Precio"
+                                         prefWidth="85"/>
+
+                            <TableColumn fx:id="colCarritoSubtotal"
+                                         text="Subtotal"
+                                         prefWidth="100"/>
+
+                        </columns>
+
+                    </TableView>
+
+
+                    <HBox spacing="8"
+                          alignment="CENTER_LEFT">
+
+                        <Spinner fx:id="spnCantidadCarrito"
+                                 prefWidth="88"
+                                 maxWidth="88"
+                                 editable="false"/>
+
+                        <Button fx:id="btnCantidad"
+                                text="Guardar cantidad"
+                                onAction="#guardarCantidad"
+                                styleClass="boton-secundario"/>
+
+                        <Button fx:id="btnQuitar"
+                                text="Quitar"
+                                onAction="#quitar"
+                                styleClass="boton-peligro"/>
+
+                    </HBox>
+
+                </VBox>
 
             </HBox>
 
 
-            <!-- BUTACAS DINÁMICAS -->
+            <!-- TOTALES -->
 
-            <ScrollPane fitToWidth="true"
-                                fitToHeight="true"
-                                hbarPolicy="NEVER"
-                                vbarPolicy="AS_NEEDED"
-                                styleClass="seat-scroll"
-                                VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT"
+                  spacing="18"
+                  styleClass="tarjeta-compacta">
 
-                <content>
+                <VBox spacing="4">
 
-                    <FlowPane fx:id="panelButacas"
-                                      alignment="CENTER"
-                                      hgap="8"
-                                      vgap="8"
-                                      prefWrapLength="500"
-                                      styleClass="seat-container"/>
+                    <Label text="SUBTOTAL BOLETOS"
+                           styleClass="kpi-etiqueta"/>
 
-                </content>
+                    <Label fx:id="lblSubtotalBoletos"
+                           text="Q 0.00"
+                           styleClass="importe"/>
 
-            </ScrollPane>
+                </VBox>
 
 
-            <!-- LEYENDA -->
+                <VBox spacing="4">
 
-            <HBox alignment="CENTER"
-                          spacing="18"
-                          styleClass="legend">
+                    <Label text="SUBTOTAL DULCERÍA"
+                           styleClass="kpi-etiqueta"/>
 
-                <HBox spacing="5"
-                              alignment="CENTER">
+                    <Label fx:id="lblSubtotalProductos"
+                           text="Q 0.00"
+                           styleClass="importe"/>
 
-                    <Label text="●"
-                                   styleClass="legend-available"/>
-
-                    <Label text="Disponible"
-                                   styleClass="legend-text"/>
-
-                </HBox>
+                </VBox>
 
 
-                <HBox spacing="5"
-                              alignment="CENTER">
+                <VBox spacing="4">
 
-                    <Label text="●"
-                                   styleClass="legend-selected"/>
+                    <Label text="TOTAL GENERAL"
+                           styleClass="kpi-etiqueta"/>
 
-                    <Label text="Seleccionada"
-                                   styleClass="legend-text"/>
+                    <Label fx:id="lblTotal"
+                           text="Q 0.00"
+                           styleClass="total"/>
 
-                </HBox>
+                </VBox>
 
-
-                <HBox spacing="5"
-                              alignment="CENTER">
-
-                    <Label text="●"
-                                   styleClass="legend-occupied"/>
-
-                    <Label text="Ocupada"
-                                   styleClass="legend-text"/>
-
-                </HBox>
-
-            </HBox>
-
-        </VBox>
-
-    </VBox>
-
-
-    <!-- ================================================= -->
-    <!-- PANEL DERECHO - CARRITO -->
-    <!-- ================================================= -->
-
-    <VBox prefWidth="320"
-                  spacing="8"
-                  styleClass="cart-panel">
-
-        <HBox alignment="CENTER_LEFT">
-
-            <VBox spacing="2">
-
-                <Label text="BOLETOS DEL CARRITO"
-                               styleClass="cart-title"/>
-
-                <Label text="Cliente seleccionado"
-                               styleClass="cart-subtitle"/>
-
-            </VBox>
-
-            <Region HBox.hgrow="ALWAYS"/>
-
-            <Label text="0 ITEMS"
-                           styleClass="items-badge"/>
-
-        </HBox>
-
-
-        <!-- TABLA / LISTADO -->
-
-        <VBox spacing="4"
-                      VBox.vgrow="ALWAYS">
-
-            <HBox styleClass="cart-header">
-
-                <Label text="DETALLE BUTACA"
-                               styleClass="cart-column"
-                               HBox.hgrow="ALWAYS"/>
-
-                <Label text="UBICACIÓN"
-                               styleClass="cart-column-location"/>
-
-                <Label text="PRECIO"
-                               styleClass="cart-column-price"/>
-
-            </HBox>
-
-
-            <ListView fx:id="listaBoletos"
-                              VBox.vgrow="ALWAYS"
-                              styleClass="cart-list"/>
-
-        </VBox>
-
-
-        <!-- RESUMEN -->
-
-        <VBox spacing="5"
-                      styleClass="cart-summary">
-
-            <HBox>
-
-                <Label text="Cantidad seleccionada:"
-                               styleClass="summary-label"/>
 
                 <Region HBox.hgrow="ALWAYS"/>
 
-                <Label text="0 boletos"
-                               styleClass="summary-value"/>
 
-            </HBox>
+                <Button fx:id="btnVerFactura"
+                        text="Ver factura"
+                        onAction="#verFactura"
+                        styleClass="boton-secundario"
+                        disable="true"/>
 
-
-            <HBox>
-
-                <Label text="Total por boleto:"
-                               styleClass="summary-label"/>
-
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <Label text="Q0.00"
-                               styleClass="summary-value"/>
-
-            </HBox>
-
-
-            <HBox>
-
-                <Label text="TOTAL A PAGAR"
-                               styleClass="total-label"/>
-
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <Label fx:id="lblTotal"
-                               text="Q0.00"
-                               styleClass="total-value"/>
-
-            </HBox>
-
-        </VBox>
-
-    </VBox>
-
-</HBox>
-
-    </center>
-
-
-    <!-- ===================================================== -->
-    <!-- PIE -->
-    <!-- ===================================================== -->
-
-    <bottom>
-
-        <VBox spacing="5"
-              styleClass="bottom-panel">
-
-            <padding>
-                <Insets top="5"
-                        right="10"
-                        bottom="7"
-                        left="10"/>
-            </padding>
-
-
-            <HBox spacing="7"
-                  alignment="CENTER_LEFT">
-
-                <Button fx:id="btnAgregar"
-                        text="+ Agregar butacas"
-                        onAction="#agregar"
-                        styleClass="action-button"/>
-
-                <Button fx:id="btnQuitar"
-                        text="Quitar boleto"
-                        onAction="#quitar"
-                        styleClass="action-button"/>
-
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <Button fx:id="btnCancelar"
-                        text="Cancelar"
-                        onAction="#cancelar"
-                        styleClass="cancel-button"/>
-
-                <Button text="Reimprimir factura"
-                        onAction="#reimprimir"
-                        styleClass="dark-button"/>
-
-                <Button text="Volver"
-                        onAction="#volver"
-                        styleClass="dark-button"/>
 
                 <Button fx:id="btnConfirmar"
-                        text="✓ Confirmar venta"
+                        text="Confirmar venta"
                         onAction="#confirmar"
-                        styleClass="confirm-button"/>
-
-            </HBox>
-
-
-            <HBox alignment="CENTER_LEFT">
-
-                <Label text="Total: Q0.00"
-                       styleClass="footer-total"/>
-
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <Label text="Sistema de ventas CINEMA"
-                       styleClass="footer-text"/>
+                        styleClass="boton-primario"/>
 
             </HBox>
 
         </VBox>
 
-    </bottom>
+    </center>
 
 </BorderPane>

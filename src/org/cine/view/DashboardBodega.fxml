@@ -11,6 +11,7 @@
                 <Label text="Sesión iniciada correctamente" styleClass="subtitle" />
                 <Label fx:id="lblUsuario" styleClass="user" />
                 <Label fx:id="lblRol" styleClass="role" />
+                <Button fx:id="btnStockCritico" text="Productos con stock crítico" onAction="#abrirStockCritico" maxWidth="Infinity"/>
                 <Button fx:id="btnCerrarSesion" mnemonicParsing="false" onAction="#cerrarSesion" text="Cerrar sesión" styleClass="logout-button" />
             </children>
         </VBox>

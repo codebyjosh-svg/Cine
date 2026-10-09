@@ -83,11 +83,6 @@ public class DashboardAdminController {
 
     @FXML
     private void abrirVenta() throws IOException {
-
-        System.out.println("=================================");
-        System.out.println("BOTON VENDER BOLETOS PRESIONADO");
-        System.out.println("=================================");
-
         Principal.mostrarVenta();
     }
 
@@ -98,6 +93,24 @@ public class DashboardAdminController {
     @FXML
     private void abrirFunciones() throws IOException {
         Principal.mostrarProgramacion();
+    }
+
+    // ==============================
+    // STOCK CRÍTICO - US-3.3
+    // ==============================
+
+    @FXML
+    private void abrirStockCritico() throws IOException {
+        Principal.mostrarStockCritico();
+    }
+
+    // ==============================
+    // VENTAS - US-3.3
+    // ==============================
+
+    @FXML
+    private void abrirVentas() throws IOException {
+        Principal.mostrarVentas();
     }
 
     // ==============================

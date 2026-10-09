@@ -52,6 +52,7 @@
 
                     </HBox>
 
+
                     <Label text="MENÚ PRINCIPAL"
                            styleClass="menu-title">
 
@@ -60,6 +61,9 @@
                         </VBox.margin>
 
                     </Label>
+
+
+                    <VBox spacing="3">
 
                     <VBox spacing="3">
 
@@ -138,6 +142,40 @@
 
                         </Button>
 
+
+                        <HBox alignment="CENTER_LEFT"
+                              prefHeight="36"
+                              styleClass="menu-disabled">
+
+                            <padding>
+                                <Insets left="10"/>
+                            </padding>
+
+                            <Label text="▣"
+                                   styleClass="menu-icon"/>
+
+                            <Label text="Salas"
+                                   styleClass="menu-text"/>
+
+                        </HBox>
+
+
+                        <HBox alignment="CENTER_LEFT"
+                              prefHeight="36"
+                              styleClass="menu-disabled">
+
+                            <padding>
+                                <Insets left="10"/>
+                            </padding>
+
+                            <Label text="◷"
+                                   styleClass="menu-icon"/>
+
+                            <Label text="Funciones"
+                                   styleClass="menu-text"/>
+
+                        </HBox>
+
                         <!-- SALAS Y BUTACAS -->
 
                         <Button maxWidth="Infinity"
@@ -193,6 +231,12 @@
                                    styleClass="menu-text"/>
 
                         </HBox>
+
+
+                        <Button fx:id="btnStockCritico" text="Stock crítico" onAction="#abrirStockCritico" maxWidth="Infinity" mnemonicParsing="false" alignment="CENTER_LEFT" styleClass="menu-button"/>
+
+
+                        <Button fx:id="btnVentas" text="Ventas" onAction="#abrirVentas" maxWidth="Infinity" mnemonicParsing="false" alignment="CENTER_LEFT" styleClass="menu-button"/>
 
                         <!-- CONFITERÍA -->
 
@@ -255,6 +299,7 @@
 
             </top>
 
+
             <bottom>
 
                 <VBox spacing="8">
@@ -265,6 +310,7 @@
                                 bottom="16"
                                 left="16"/>
                     </padding>
+
 
                     <HBox alignment="CENTER_LEFT"
                           prefHeight="36"
@@ -282,6 +328,7 @@
 
                     </HBox>
 
+
                     <Button text="Cerrar sesión"
                             onAction="#cerrarSesion"
                             maxWidth="Infinity"
@@ -297,9 +344,11 @@
 
     </left>
 
+
     <center>
 
         <BorderPane styleClass="main-area">
+
 
             <top>
 
@@ -311,6 +360,7 @@
                                 bottom="18"
                                 left="24"/>
                     </padding>
+
 
                     <left>
 
@@ -325,6 +375,7 @@
                         </VBox>
 
                     </left>
+
 
                     <right>
 
@@ -344,6 +395,7 @@
 
                             </VBox>
 
+
                             <StackPane prefWidth="38"
                                        prefHeight="38"
                                        styleClass="avatar">
@@ -352,6 +404,7 @@
                                        styleClass="avatar-text"/>
 
                             </StackPane>
+
 
                             <StackPane prefWidth="34"
                                        prefHeight="34"
@@ -370,6 +423,7 @@
 
             </top>
 
+
             <bottom>
 
                 <BorderPane styleClass="footer">
@@ -381,12 +435,14 @@
                                 left="24"/>
                     </padding>
 
+
                     <left>
 
                         <Label text="CINEMA | Sistema de Gestión de Cine"
                                styleClass="footer-text"/>
 
                     </left>
+
 
                     <right>
 
@@ -398,6 +454,7 @@
                 </BorderPane>
 
             </bottom>
+
 
             <center>
 
@@ -546,6 +603,8 @@
 
                             </VBox>
 
+
+                            <Label text="3 módulos disponibles"
                             <Label text="5 módulos disponibles"
                                    styleClass="available-badge"/>
 
@@ -565,6 +624,7 @@
                                 <ColumnConstraints percentWidth="33.34"/>
 
                             </columnConstraints>
+
 
                             <!-- USUARIOS -->
 
@@ -598,6 +658,8 @@
 
                             </VBox>
 
+
+                            <!-- PELICULAS -->
                             <!-- PELÍCULAS -->
 
                             <VBox GridPane.columnIndex="1"
@@ -630,6 +692,8 @@
 
                             </VBox>
 
+
+                            <!-- GENEROS -->
                             <!-- GÉNEROS -->
 
                             <VBox GridPane.columnIndex="2"
@@ -661,6 +725,39 @@
                                        mouseTransparent="true"/>
 
                             </VBox>
+
+
+                            <!-- SALAS -->
+
+                            <VBox GridPane.columnIndex="0"
+                                  GridPane.rowIndex="1"
+                                  styleClass="module-disabled">
+
+                                <HBox alignment="CENTER_LEFT">
+
+                                    <Label text="S"
+                                           styleClass="module-letter"/>
+
+                                    <Label text="EN DESARROLLO"
+                                           styleClass="development-label"/>
+
+                                </HBox>
+
+                                <Label text="Salas"
+                                       styleClass="module-title"/>
+
+                                <Label text="Gestión de salas del cine."
+                                       wrapText="true"
+                                       styleClass="module-description"/>
+
+                                <Button text="Próximamente"
+                                        disable="true"
+                                        maxWidth="Infinity"
+                                        mnemonicParsing="false"
+                                        styleClass="module-button-disabled"/>
+
+                            </VBox>
+
 
                             <!-- SALAS Y BUTACAS - US-2.1 -->
 
@@ -698,6 +795,15 @@
 
                             <VBox GridPane.columnIndex="1"
                                   GridPane.rowIndex="1"
+                                  styleClass="module-disabled">
+
+                                <HBox alignment="CENTER_LEFT">
+
+                                    <Label text="F"
+                                           styleClass="module-letter"/>
+
+                                    <Label text="EN DESARROLLO"
+                                           styleClass="development-label"/>
                                   styleClass="module-active"
                                   pickOnBounds="true"
                                   onMouseClicked="#abrirFunciones">
@@ -716,6 +822,21 @@
                                 </HBox>
 
                                 <Label text="Funciones"
+                                       styleClass="module-title"/>
+
+                                <Label text="Programación de funciones y horarios."
+                                       wrapText="true"
+                                       styleClass="module-description"/>
+
+                                <Button text="Próximamente"
+                                        disable="true"
+                                        maxWidth="Infinity"
+                                        mnemonicParsing="false"
+                                        styleClass="module-button-disabled"/>
+
+                            </VBox>
+
+
                                        styleClass="module-title"
                                        mouseTransparent="true"/>
 
@@ -757,6 +878,8 @@
 
                             </VBox>
 
+
+                            <!-- CONFITERIA -->
                             <!-- CONFITERÍA -->
 
                             <VBox GridPane.columnIndex="0"
@@ -788,10 +911,20 @@
 
                             </VBox>
 
+
                             <!-- VENTAS -->
 
                             <VBox GridPane.columnIndex="1"
                                   GridPane.rowIndex="2"
+                                  styleClass="module-disabled">
+
+                                <HBox alignment="CENTER_LEFT">
+
+                                    <Label text="V"
+                                           styleClass="module-letter"/>
+
+                                    <Label text="EN DESARROLLO"
+                                           styleClass="development-label"/>
                                   styleClass="module-active"
                                   pickOnBounds="true"
                                   onMouseClicked="#abrirVenta">
@@ -810,6 +943,21 @@
                                 </HBox>
 
                                 <Label text="Ventas"
+                                       styleClass="module-title"/>
+
+                                <Label text="Gestión de ventas y boletos."
+                                       wrapText="true"
+                                       styleClass="module-description"/>
+
+                                <Button text="Próximamente"
+                                        disable="true"
+                                        maxWidth="Infinity"
+                                        mnemonicParsing="false"
+                                        styleClass="module-button-disabled"/>
+
+                            </VBox>
+
+
                                        styleClass="module-title"
                                        mouseTransparent="true"/>
 
@@ -888,6 +1036,7 @@
                                 </VBox>
 
                             </HBox>
+
 
                             <HBox alignment="CENTER_LEFT"
                                   spacing="12"

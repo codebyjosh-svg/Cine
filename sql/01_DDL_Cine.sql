@@ -1,5 +1,6 @@
 -- ============================================================
 -- 01_DDL_Cine.sql
+-- Tablas, relaciones y vistas del cine. Ejecutar antes de 02 y 03.
 -- Sistema de Gestion Integral para Cine
 -- Base: cinedb_in4cm
 -- 14 tablas - cobertura Sprints 1, 2 y 3
@@ -38,7 +39,8 @@ CREATE TABLE clientes (
     telefono VARCHAR(20) NULL,
     estado TINYINT NOT NULL DEFAULT 1,
     fecha_registro TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT chk_cliente_estado CHECK (estado IN (0,1))
+    CONSTRAINT chk_cliente_estado CHECK (estado IN (0,1)),
+    CONSTRAINT chk_clientes_correo_formato CHECK ((COALESCE(CHAR_LENGTH(correo_electronico) BETWEEN 3 AND 120 AND CHAR_LENGTH(SUBSTRING_INDEX(correo_electronico, '@', 1)) <= 64 AND REGEXP_LIKE(correo_electronico, '^[A-Za-z0-9_%+-]+([.][A-Za-z0-9_%+-]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?([.][A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*[.][A-Za-z]{2,63}$', 'c'), 0) = 1))
 ) ENGINE=InnoDB;
 
 CREATE TABLE usuarios (
@@ -65,7 +67,8 @@ CREATE TABLE usuarios (
         ON DELETE RESTRICT
         ON UPDATE CASCADE,
 
-    CONSTRAINT chk_usuario_estado CHECK (estado IN (0,1))
+    CONSTRAINT chk_usuario_estado CHECK (estado IN (0,1)),
+    CONSTRAINT chk_usuarios_correo_formato CHECK ((COALESCE(CHAR_LENGTH(correo_electronico) BETWEEN 3 AND 120 AND CHAR_LENGTH(SUBSTRING_INDEX(correo_electronico, '@', 1)) <= 64 AND REGEXP_LIKE(correo_electronico, '^[A-Za-z0-9_%+-]+([.][A-Za-z0-9_%+-]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?([.][A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*[.][A-Za-z]{2,63}$', 'c'), 0) = 1))
 ) ENGINE=InnoDB;
 
 CREATE TABLE generos (
@@ -328,9 +331,10 @@ CREATE TABLE detalle_venta_productos (
         ON DELETE RESTRICT
         ON UPDATE CASCADE,
 
+    CONSTRAINT uq_venta_producto UNIQUE (id_venta, id_producto),
     CONSTRAINT chk_detalle_cantidad CHECK (cantidad > 0),
     CONSTRAINT chk_detalle_precio CHECK (precio_unitario >= 0),
-    CONSTRAINT chk_detalle_subtotal CHECK (subtotal >= 0)
+    CONSTRAINT chk_detalle_subtotal CHECK (subtotal >= 0 AND subtotal = cantidad * precio_unitario)
 ) ENGINE=InnoDB;
 
 CREATE INDEX idx_detalle_venta
@@ -374,7 +378,7 @@ CREATE INDEX idx_movimientos_producto
 -- VISTAS BASE
 -- ============================================================
 
-CREATE VIEW vw_lista_clientes AS
+CREATE OR REPLACE VIEW vw_lista_clientes AS
 SELECT
     c.id_cliente,
     c.cui,
@@ -388,7 +392,7 @@ SELECT
     c.fecha_registro
 FROM clientes c;
 
-CREATE VIEW vw_lista_generos AS
+CREATE OR REPLACE VIEW vw_lista_generos AS
 SELECT
     id_genero,
     nombre_genero,
@@ -396,7 +400,7 @@ SELECT
     estado
 FROM generos;
 
-CREATE VIEW vw_lista_peliculas AS
+CREATE OR REPLACE VIEW vw_lista_peliculas AS
 SELECT
     p.id_pelicula,
     p.titulo,
@@ -414,7 +418,7 @@ FROM peliculas p
 INNER JOIN generos g
     ON g.id_genero = p.id_genero;
 
-CREATE VIEW vw_lista_salas AS
+CREATE OR REPLACE VIEW vw_lista_salas AS
 SELECT
     s.id_sala,
     s.nombre_sala,
@@ -428,7 +432,7 @@ SELECT
     ) AS capacidad
 FROM salas s;
 
-CREATE VIEW vw_lista_funciones AS
+CREATE OR REPLACE VIEW vw_lista_funciones AS
 SELECT
     f.id_funcion,
     f.id_pelicula,
@@ -484,7 +488,7 @@ INNER JOIN generos g
 INNER JOIN salas s
     ON s.id_sala = f.id_sala;
 
-CREATE VIEW vw_cartelera AS
+CREATE OR REPLACE VIEW vw_cartelera AS
 SELECT
     lf.*
 FROM vw_lista_funciones lf
@@ -503,7 +507,7 @@ WHERE lf.estado = 'programada'
         AND s.estado = 1
   );
 
-CREATE VIEW vw_lista_productos AS
+CREATE OR REPLACE VIEW vw_lista_productos AS
 SELECT
     p.id_producto,
     p.id_categoria_producto,
@@ -518,13 +522,13 @@ FROM productos p
 INNER JOIN categorias_producto c
     ON c.id_categoria_producto = p.id_categoria_producto;
 
-CREATE VIEW vw_stock_critico AS
+CREATE OR REPLACE VIEW vw_stock_critico AS
 SELECT *
 FROM vw_lista_productos
 WHERE estado = 1
   AND stock <= stock_minimo;
 
-CREATE VIEW vw_lista_boletos AS
+CREATE OR REPLACE VIEW vw_lista_boletos AS
 SELECT
     b.id_boleto,
     b.id_venta,
@@ -551,7 +555,7 @@ INNER JOIN salas s
 INNER JOIN butacas bu
     ON bu.id_butaca = b.id_butaca;
 
-CREATE VIEW vw_lista_ventas AS
+CREATE OR REPLACE VIEW vw_lista_ventas AS
 SELECT
     v.id_venta,
     v.fecha_venta,
@@ -593,7 +597,7 @@ INNER JOIN clientes c
 INNER JOIN usuarios u
     ON u.id_usuario = v.id_usuario;
 
-CREATE VIEW vw_movimientos_inventario AS
+CREATE OR REPLACE VIEW vw_movimientos_inventario AS
 SELECT
     m.id_movimiento,
     m.id_producto,
@@ -611,7 +615,7 @@ INNER JOIN productos p
 INNER JOIN usuarios u
     ON u.id_usuario = m.id_usuario;
 
-CREATE VIEW vw_factura_ventas AS
+CREATE OR REPLACE VIEW vw_factura_ventas AS
 SELECT
     v.id_venta,
     v.fecha_venta,
@@ -628,7 +632,7 @@ INNER JOIN clientes c
 INNER JOIN usuarios u
     ON u.id_usuario = v.id_usuario;
 
-CREATE VIEW vw_reporte_ventas_diarias AS
+CREATE OR REPLACE VIEW vw_reporte_ventas_diarias AS
 SELECT
     DATE(fecha_venta) AS fecha,
     COUNT(*) AS cantidad_ventas,

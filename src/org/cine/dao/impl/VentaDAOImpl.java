@@ -1,5 +1,6 @@
 package org.cine.dao.impl;
 
+import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,30 +8,61 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.math.BigDecimal;
 
 import org.cine.dao.VentaDAO;
 import org.cine.model.Boleto;
+import org.cine.model.ClienteVinculo;
+import org.cine.model.FacturaVenta;
+import org.cine.model.LineaFactura;
+import org.cine.model.LineaVentaProducto;
+import org.cine.model.Producto;
 import org.cine.model.Venta;
+import org.cine.model.VentaResumen;
 import org.cine.util.Conexion;
 
-public class VentaDAOImpl implements VentaDAO {
+/**
+ * Implementación JDBC del DAO de ventas.
+ *
+ * Integra:
+ * - Clientes
+ * - Funciones
+ * - Butacas
+ * - Boletos
+ * - Ventas
+ * - Productos de dulcería
+ * - Confirmación
+ * - Cancelación
+ * - Facturación
+ */
+public final class VentaDAOImpl implements VentaDAO {
+
+    // =========================================================
+    // CONEXIÓN
+    // =========================================================
 
     private Connection con() throws SQLException {
-        return Conexion.getInstance().getConnection();
+        return Conexion.getInstancia().getConnection();
     }
+
+    // =========================================================
+    // CLIENTES
+    // =========================================================
 
     @Override
     public List<Opcion> clientes() throws SQLException {
 
-        List<Opcion> l = new ArrayList<>();
+        List<Opcion> lista = new ArrayList<>();
 
         try (
-                Connection c = con(); CallableStatement s
-                = c.prepareCall("{call sp_listarclientesactivos()}"); ResultSet rs = s.executeQuery()) {
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall("{call sp_listarclientesactivos()}");
+                ResultSet rs = cs.executeQuery()
+        ) {
 
             while (rs.next()) {
-                l.add(
+
+                lista.add(
                         new Opcion(
                                 rs.getInt("id_cliente"),
                                 rs.getString("nombre_cliente")
@@ -41,7 +73,38 @@ public class VentaDAOImpl implements VentaDAO {
             }
         }
 
-        return l;
+        return lista;
+    }
+
+    @Override
+    public List<ClienteVinculo> listarClientesActivos()
+            throws SQLException {
+
+        List<ClienteVinculo> lista = new ArrayList<>();
+
+        try (
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall("{call sp_listarclientesactivos()}");
+                ResultSet rs = cs.executeQuery()
+        ) {
+
+            while (rs.next()) {
+
+                lista.add(
+                        new ClienteVinculo(
+                                rs.getInt("id_cliente"),
+                                rs.getString("nombre_cliente")
+                                + " "
+                                + rs.getString("apellido_cliente"),
+                                rs.getString("correo_electronico"),
+                                true
+                        )
+                );
+            }
+        }
+
+        return lista;
     }
 
     @Override
@@ -53,55 +116,39 @@ public class VentaDAOImpl implements VentaDAO {
             String telefono
     ) throws SQLException {
 
-        String nombreCompleto
-                = nombre.trim()
-                + " "
-                + apellido.trim();
+        String nombreCompleto =
+                nombre.trim() + " " + apellido.trim();
 
-        try (Connection c = con(); CallableStatement s
-                = c.prepareCall(
-                        "{call sp_insertarcliente(?,?,?,?,?)}"
-                )) {
+        try (
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall(
+                                "{call sp_insertarcliente(?,?,?,?,?)}"
+                        )
+        ) {
 
             if (cui == null || cui.isBlank()) {
-                s.setNull(1, java.sql.Types.CHAR);
+                cs.setNull(1, java.sql.Types.CHAR);
             } else {
-                s.setString(1, cui.trim());
+                cs.setString(1, cui.trim());
             }
 
-            s.setString(
-                    2,
-                    nombre.trim()
-            );
-
-            s.setString(
-                    3,
-                    apellido.trim()
-            );
-
-            s.setString(
-                    4,
-                    correo.trim()
-            );
+            cs.setString(2, nombre.trim());
+            cs.setString(3, apellido.trim());
+            cs.setString(4, correo.trim());
 
             if (telefono == null || telefono.isBlank()) {
-                s.setNull(5, java.sql.Types.VARCHAR);
+                cs.setNull(5, java.sql.Types.VARCHAR);
             } else {
-                s.setString(
-                        5,
-                        telefono.trim()
-                );
+                cs.setString(5, telefono.trim());
             }
 
-            try (ResultSet rs = s.executeQuery()) {
+            try (ResultSet rs = cs.executeQuery()) {
 
                 if (rs.next()) {
 
-                    int idCliente
-                            = rs.getInt("id_cliente");
-
                     return new Opcion(
-                            idCliente,
+                            rs.getInt("id_cliente"),
                             nombreCompleto
                     );
                 }
@@ -113,13 +160,17 @@ public class VentaDAOImpl implements VentaDAO {
         );
     }
 
+    // =========================================================
+    // FUNCIONES
+    // =========================================================
+
     @Override
     public List<Funcion> funciones() throws SQLException {
 
-        List<Funcion> l = new ArrayList<>();
+        List<Funcion> lista = new ArrayList<>();
 
-        String q
-                = "SELECT "
+        String sql =
+                "SELECT "
                 + "f.id_funcion, "
                 + "p.titulo, "
                 + "s.nombre_sala, "
@@ -137,11 +188,15 @@ public class VentaDAOImpl implements VentaDAO {
                 + "ORDER BY f.fecha_inicio";
 
         try (
-                Connection c = con(); PreparedStatement s = c.prepareStatement(q); ResultSet rs = s.executeQuery()) {
+                Connection cn = con();
+                PreparedStatement ps =
+                        cn.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery()
+        ) {
 
             while (rs.next()) {
 
-                l.add(
+                lista.add(
                         new Funcion(
                                 rs.getInt("id_funcion"),
                                 rs.getString("titulo")
@@ -155,34 +210,43 @@ public class VentaDAOImpl implements VentaDAO {
             }
         }
 
-        return l;
+        return lista;
     }
 
-    @Override
-    public List<Butaca> butacas(int f) throws SQLException {
+    // =========================================================
+    // BUTACAS
+    // =========================================================
 
-        List<Butaca> l = new ArrayList<>();
+    @Override
+    public List<Butaca> butacas(int idFuncion)
+            throws SQLException {
+
+        List<Butaca> lista = new ArrayList<>();
 
         try (
-                Connection c = con(); CallableStatement s
-                = c.prepareCall("{call sp_listarbutacasfuncion(?)}")) {
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall(
+                                "{call sp_listarbutacasfuncion(?)}"
+                        )
+        ) {
 
-            s.setInt(1, f);
+            cs.setInt(1, idFuncion);
 
-            try (ResultSet rs = s.executeQuery()) {
+            try (ResultSet rs = cs.executeQuery()) {
 
                 while (rs.next()) {
 
-                    String disponibilidad
-                            = rs.getString("disponibilidad");
+                    String disponibilidad =
+                            rs.getString("disponibilidad");
 
-                    boolean disponible
-                            = disponibilidad != null
+                    boolean disponible =
+                            disponibilidad != null
                             && "DISPONIBLE".equalsIgnoreCase(
                                     disponibilidad.trim()
                             );
 
-                    l.add(
+                    lista.add(
                             new Butaca(
                                     rs.getInt("id_butaca"),
                                     rs.getString("fila")
@@ -194,19 +258,32 @@ public class VentaDAOImpl implements VentaDAO {
             }
         }
 
-        return l;
+        return lista;
     }
 
-    private int id(String call, int... args) throws SQLException {
+    // =========================================================
+    // MÉTODOS AUXILIARES
+    // =========================================================
+
+    /**
+     * Ejecuta un procedimiento que devuelve un ID.
+     */
+    private int obtenerId(
+            String procedimiento,
+            int... parametros
+    ) throws SQLException {
 
         try (
-                Connection c = con(); CallableStatement s = c.prepareCall(call)) {
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall(procedimiento)
+        ) {
 
-            for (int i = 0; i < args.length; i++) {
-                s.setInt(i + 1, args[i]);
+            for (int i = 0; i < parametros.length; i++) {
+                cs.setInt(i + 1, parametros[i]);
             }
 
-            try (ResultSet rs = s.executeQuery()) {
+            try (ResultSet rs = cs.executeQuery()) {
 
                 if (rs.next()) {
                     return rs.getInt(1);
@@ -214,33 +291,65 @@ public class VentaDAOImpl implements VentaDAO {
             }
         }
 
-        throw new SQLException("No devolvió ID");
+        throw new SQLException(
+                "El procedimiento no devolvió un ID."
+        );
     }
 
-    private void ejecutar(String call, int... args)
-            throws SQLException {
+    /**
+     * Ejecuta un procedimiento que no necesita devolver datos.
+     */
+    private void ejecutar(
+            String procedimiento,
+            int... parametros
+    ) throws SQLException {
 
         try (
-                Connection c = con(); CallableStatement s = c.prepareCall(call)) {
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall(procedimiento)
+        ) {
 
-            for (int i = 0; i < args.length; i++) {
-                s.setInt(i + 1, args[i]);
+            for (int i = 0; i < parametros.length; i++) {
+                cs.setInt(i + 1, parametros[i]);
             }
 
-            s.execute();
+            cs.execute();
         }
     }
 
-    @Override
-    public int abrir(int cliente, int usuario)
-            throws SQLException {
+    // =========================================================
+    // VENTAS
+    // =========================================================
 
-        return id(
+    @Override
+    public int abrir(
+            int cliente,
+            int usuario
+    ) throws SQLException {
+
+        return obtenerId(
                 "{call sp_abrirventa(?,?)}",
                 cliente,
                 usuario
         );
     }
+
+    @Override
+    public int abrirVenta(
+            int idCliente,
+            int idUsuario
+    ) throws SQLException {
+
+        return abrir(
+                idCliente,
+                idUsuario
+        );
+    }
+
+    // =========================================================
+    // BOLETOS
+    // =========================================================
 
     @Override
     public void agregar(
@@ -249,7 +358,7 @@ public class VentaDAOImpl implements VentaDAO {
             int butaca
     ) throws SQLException {
 
-        id(
+        obtenerId(
                 "{call sp_agregarboleto(?,?,?)}",
                 venta,
                 funcion,
@@ -271,48 +380,209 @@ public class VentaDAOImpl implements VentaDAO {
     }
 
     @Override
-    public void cancelar(int venta)
-            throws SQLException {
+    public List<Boleto> boletos(
+            int venta
+    ) throws SQLException {
 
-        ejecutar(
-                "{call sp_eliminarventaabierta(?)}",
-                venta
-        );
-    }
-
-    @Override
-    public List<Boleto> boletos(int venta)
-            throws SQLException {
-
-        List<Boleto> l = new ArrayList<>();
+        List<Boleto> lista = new ArrayList<>();
 
         try (
-                Connection c = con(); CallableStatement s
-                = c.prepareCall("{call sp_listarboletosventa(?)}")) {
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall(
+                                "{call sp_listarboletosventa(?)}"
+                        )
+        ) {
 
-            s.setInt(1, venta);
+            cs.setInt(1, venta);
 
-            try (ResultSet rs = s.executeQuery()) {
+            try (ResultSet rs = cs.executeQuery()) {
 
                 while (rs.next()) {
 
-                    l.add(
+                    lista.add(
                             new Boleto(
                                     rs.getInt("id_boleto"),
                                     rs.getInt("id_butaca"),
                                     rs.getString("butaca"),
-                                    rs.getBigDecimal("precio_unitario")
+                                    rs.getBigDecimal(
+                                            "precio_unitario"
+                                    )
                             )
                     );
                 }
             }
         }
 
-        return l;
+        return lista;
     }
 
-    private Venta map(ResultSet rs)
+    // =========================================================
+    // PRODUCTOS / DULCERÍA
+    // =========================================================
+
+    @Override
+    public List<Producto> listarProductosDisponibles()
             throws SQLException {
+
+        List<Producto> lista = new ArrayList<>();
+
+        try (
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall(
+                                "{call sp_listarproductosdisponibles()}"
+                        );
+                ResultSet rs = cs.executeQuery()
+        ) {
+
+            while (rs.next()) {
+
+                lista.add(
+                        new Producto(
+                                rs.getInt("id_producto"),
+                                rs.getString("nombre_producto"),
+                                rs.getString("nombre_categoria"),
+                                rs.getBigDecimal("precio"),
+                                rs.getInt("stock"),
+                                rs.getInt("stock_minimo"),
+                                rs.getBoolean("estado")
+                        )
+                );
+            }
+        }
+
+        return lista;
+    }
+
+    @Override
+    public List<LineaVentaProducto> listarProductosVenta(
+            int idVenta
+    ) throws SQLException {
+
+        List<LineaVentaProducto> lista =
+                new ArrayList<>();
+
+        try (
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall(
+                                "{call sp_listarproductosventa(?)}"
+                        )
+        ) {
+
+            cs.setInt(1, idVenta);
+
+            try (ResultSet rs = cs.executeQuery()) {
+
+                while (rs.next()) {
+
+                    lista.add(
+                            new LineaVentaProducto(
+                                    rs.getInt("id_producto"),
+                                    rs.getString(
+                                            "nombre_producto"
+                                    ),
+                                    rs.getInt("cantidad"),
+                                    rs.getBigDecimal(
+                                            "precio_unitario"
+                                    )
+                            )
+                    );
+                }
+            }
+        }
+
+        return lista;
+    }
+
+    @Override
+    public void agregarProducto(
+            int idVenta,
+            int idProducto,
+            int cantidad
+    ) throws SQLException {
+
+        ejecutar(
+                "{call sp_agregarproductoventa(?,?,?)}",
+                idVenta,
+                idProducto,
+                cantidad
+        );
+    }
+
+    @Override
+    public void cambiarCantidad(
+            int idVenta,
+            int idProducto,
+            int cantidad
+    ) throws SQLException {
+
+        ejecutar(
+                "{call sp_actualizarcantidadproducto(?,?,?)}",
+                idVenta,
+                idProducto,
+                cantidad
+        );
+    }
+
+    @Override
+    public void quitarProducto(
+            int idVenta,
+            int idProducto
+    ) throws SQLException {
+
+        ejecutar(
+                "{call sp_quitarproductoventa(?,?)}",
+                idVenta,
+                idProducto
+        );
+    }
+
+    @Override
+    public void validarStock(
+            int idVenta
+    ) throws SQLException {
+
+        try (
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall(
+                                "{call sp_validarstockventa(?)}"
+                        )
+        ) {
+
+            cs.setInt(1, idVenta);
+
+            try (ResultSet rs = cs.executeQuery()) {
+
+                if (rs.next()) {
+
+                    throw new SQLException(
+                            "Stock insuficiente o producto "
+                            + "inactivo: "
+                            + rs.getString(
+                                    "nombre_producto"
+                            )
+                            + ". Cantidad solicitada: "
+                            + rs.getInt("cantidad")
+                            + "; disponible: "
+                            + rs.getInt("stock")
+                            + ".",
+                            "45000"
+                    );
+                }
+            }
+        }
+    }
+
+    // =========================================================
+    // CONSULTAR VENTA
+    // =========================================================
+
+    private Venta mapVenta(
+            ResultSet rs
+    ) throws SQLException {
 
         return new Venta(
                 rs.getInt("id_venta"),
@@ -323,162 +593,304 @@ public class VentaDAOImpl implements VentaDAO {
     }
 
     @Override
-    public Venta confirmar(int venta, String metodoPago) throws SQLException {
-        try (
-                Connection c = con(); CallableStatement s = c.prepareCall("{call sp_confirmarventa(?,?)}")) {
-            s.setInt(1, venta);
-            s.setString(2, metodoPago);
+    public Venta consultar(
+            int id
+    ) throws SQLException {
 
-            try (ResultSet rs = s.executeQuery()) {
+        try (
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall(
+                                "{call sp_buscarventa(?)}"
+                        )
+        ) {
+
+            cs.setInt(1, id);
+
+            try (ResultSet rs = cs.executeQuery()) {
+
                 if (rs.next()) {
-                    return map(rs);
+                    return mapVenta(rs);
                 }
             }
         }
 
-        throw new SQLException("Venta no confirmada");
+        throw new SQLException(
+                "No existe la venta #" + id + "."
+        );
     }
 
     @Override
-    public Venta consultar(int venta)
-            throws SQLException {
+    public VentaResumen buscarVenta(
+            int idVenta
+    ) throws SQLException {
 
         try (
-                Connection c = con(); CallableStatement s
-                = c.prepareCall("{call sp_buscarventa(?)}")) {
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall(
+                                "{call sp_buscarventa(?)}"
+                        )
+        ) {
 
-            s.setInt(1, venta);
+            cs.setInt(1, idVenta);
 
-            try (ResultSet rs = s.executeQuery()) {
+            try (ResultSet rs = cs.executeQuery()) {
 
-                if (rs.next()) {
-                    return map(rs);
+                if (!rs.next()) {
+
+                    throw new SQLException(
+                            "No existe la venta #"
+                            + idVenta
+                            + "."
+                    );
                 }
+
+                return new VentaResumen(
+                        rs.getInt("id_venta"),
+                        rs.getInt("id_cliente"),
+                        rs.getInt("id_usuario"),
+                        rs.getString("cliente"),
+                        rs.getString("taquillero"),
+                        rs.getObject(
+                                "fecha_venta",
+                                java.time.LocalDateTime.class
+                        ),
+                        rs.getString("estado"),
+                        rs.getInt("cantidad_boletos"),
+                        rs.getBigDecimal("total_boletos"),
+                        rs.getBigDecimal("total_productos"),
+                        rs.getBigDecimal("total_venta")
+                );
             }
         }
-
-        throw new SQLException("Venta no encontrada");
     }
 
     @Override
     public List<Venta> ventas()
             throws SQLException {
 
-        List<Venta> l = new ArrayList<>();
+        List<Venta> lista =
+                new ArrayList<>();
 
         try (
-                Connection c = con(); CallableStatement s
-                = c.prepareCall("{call sp_listarventas()}"); ResultSet rs = s.executeQuery()) {
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall(
+                                "{call sp_listarventas()}"
+                        );
+                ResultSet rs = cs.executeQuery()
+        ) {
 
             while (rs.next()) {
-                l.add(map(rs));
+                lista.add(
+                        mapVenta(rs)
+                );
             }
         }
 
-        return l;
+        return lista;
+    }
+
+    // =========================================================
+    // CONFIRMAR VENTA
+    // =========================================================
+
+    @Override
+    public Venta confirmar(
+            int venta,
+            String metodoPago
+    ) throws SQLException {
+
+        // Primero se valida el stock de dulcería.
+        validarStock(venta);
+
+        try (
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall(
+                                "{call sp_confirmarventa(?,?)}"
+                        )
+        ) {
+
+            cs.setInt(1, venta);
+
+            if (metodoPago == null
+                    || metodoPago.isBlank()) {
+
+                cs.setString(
+                        2,
+                        "EFECTIVO"
+                );
+
+            } else {
+
+                cs.setString(
+                        2,
+                        metodoPago
+                );
+            }
+
+            try (ResultSet rs = cs.executeQuery()) {
+
+                if (rs.next()) {
+                    return mapVenta(rs);
+                }
+            }
+        }
+
+        // Si el SP no devuelve la venta,
+        // la consultamos después de confirmarla.
+        return consultar(venta);
     }
 
     @Override
-    public List<String> factura(int venta) throws SQLException {
+    public void confirmarVenta(
+            int idVenta
+    ) throws SQLException {
 
-        List<String> l = new ArrayList<>();
+        confirmar(
+                idVenta,
+                "EFECTIVO"
+        );
+    }
+
+    // =========================================================
+    // CANCELAR
+    // =========================================================
+
+    @Override
+    public void cancelar(
+            int id
+    ) throws SQLException {
+
+        ejecutar(
+                "{call sp_eliminarventaabierta(?)}",
+                id
+        );
+    }
+
+    // =========================================================
+    // FACTURA
+    // =========================================================
+
+    @Override
+    public FacturaVenta obtenerFactura(
+            int idVenta
+    ) throws SQLException {
+
+        VentaResumen venta =
+                buscarVenta(idVenta);
+
+        if (!"confirmada".equalsIgnoreCase(
+                venta.estado()
+        )) {
+
+            throw new SQLException(
+                    "La factura requiere una venta confirmada."
+            );
+        }
+
+        List<LineaFactura> lineas =
+                new ArrayList<>();
 
         try (
-                Connection c = con(); CallableStatement s = c.prepareCall("{call sp_verfactura(?)}")) {
+                Connection cn = con();
+                CallableStatement cs =
+                        cn.prepareCall(
+                                "{call sp_verfactura(?)}"
+                        )
+        ) {
 
-            s.setInt(1, venta);
+            cs.setInt(1, idVenta);
 
-            boolean hayResultados = s.execute();
-            int numeroResultado = 0;
+            try (ResultSet rs = cs.executeQuery()) {
 
-            while (true) {
+                while (rs.next()) {
 
-                if (hayResultados) {
-
-                    try (ResultSet rs = s.getResultSet()) {
-
-                        // RESULTADO 0 = ENCABEZADO
-                        if (numeroResultado == 0) {
-
-                            // No necesitamos agregar el encabezado
-                            // porque la pantalla de factura ya muestra
-                            // el ID de la venta.
-                            while (rs.next()) {
-                                // Se consume el ResultSet para poder
-                                // avanzar al siguiente.
-                            }
-                        } // RESULTADO 1 = BOLETOS
-                        else if (numeroResultado == 1) {
-
-                            while (rs.next()) {
-
-                                String pelicula
-                                        = rs.getString("pelicula");
-
-                                String sala
-                                        = rs.getString("nombre_sala");
-
-                                String butaca
-                                        = rs.getString("butaca");
-
-                                BigDecimal precio
-                                        = rs.getBigDecimal("precio_unitario");
-
-                                l.add(
-                                        "BOLETO | "
-                                        + pelicula
-                                        + " | "
-                                        + sala
-                                        + " | Butaca "
-                                        + butaca
-                                        + " | Q"
-                                        + precio
-                                );
-                            }
-                        } // RESULTADO 2 = PRODUCTOS
-                        else if (numeroResultado == 2) {
-
-                            while (rs.next()) {
-
-                                String producto
-                                        = rs.getString("nombre_producto");
-
-                                int cantidad
-                                        = rs.getInt("cantidad");
-
-                                BigDecimal precio
-                                        = rs.getBigDecimal("precio_unitario");
-
-                                BigDecimal subtotal
-                                        = rs.getBigDecimal("subtotal");
-
-                                l.add(
-                                        "PRODUCTO | "
-                                        + producto
-                                        + " | "
-                                        + cantidad
-                                        + " x Q"
-                                        + precio
-                                        + " = Q"
-                                        + subtotal
-                                );
-                            }
-                        }
-                    }
-
-                    numeroResultado++;
-                } else {
-
-                    if (s.getUpdateCount() == -1) {
-                        break;
-                    }
+                    lineas.add(
+                            new LineaFactura(
+                                    rs.getString(
+                                            "tipo_articulo"
+                                    ),
+                                    rs.getString(
+                                            "descripcion"
+                                    ),
+                                    rs.getInt(
+                                            "cantidad"
+                                    ),
+                                    rs.getBigDecimal(
+                                            "precio_unitario"
+                                    ),
+                                    rs.getBigDecimal(
+                                            "subtotal"
+                                    )
+                            )
+                    );
                 }
-
-                hayResultados = s.getMoreResults();
             }
         }
 
-        return l;
+        return new FacturaVenta(
+                venta,
+                lineas
+        );
     }
-    
+
+    // =========================================================
+    // FACTURA COMO LISTA DE TEXTO
+    // =========================================================
+
+    @Override
+    public List<String> factura(
+            int id
+    ) throws SQLException {
+
+        FacturaVenta resultado =
+                obtenerFactura(id);
+
+        List<String> lista =
+                new ArrayList<>();
+
+        for (LineaFactura linea
+                : resultado.lineas()) {
+
+            StringBuilder texto =
+                    new StringBuilder();
+
+            texto.append(
+                    linea.tipoArticulo()
+            );
+
+            texto.append(" | ");
+
+            texto.append(
+                    linea.descripcion()
+            );
+
+            texto.append(" | ");
+
+            texto.append(
+                    linea.cantidad()
+            );
+
+            texto.append(" x Q");
+
+            texto.append(
+                    linea.precioUnitario()
+            );
+
+            texto.append(" = Q");
+
+            texto.append(
+                    linea.subtotal()
+            );
+
+            lista.add(
+                    texto.toString()
+            );
+        }
+
+        return lista;
+    }
 }
