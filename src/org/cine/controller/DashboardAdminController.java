@@ -21,8 +21,14 @@ public class DashboardAdminController {
         Usuario usuario = SesionContext.getUsuarioActual();
 
         if (usuario != null) {
-            lblUsuario.setText(usuario.getNombreCompleto());
-            lblRol.setText(usuario.getNombreRol());
+
+            if (lblUsuario != null) {
+                lblUsuario.setText(usuario.getNombreCompleto());
+            }
+
+            if (lblRol != null) {
+                lblRol.setText(usuario.getNombreRol());
+            }
         }
     }
 
@@ -54,20 +60,65 @@ public class DashboardAdminController {
     }
 
     // ==============================
+    // CLIENTES
+    // ==============================
+
+    @FXML
+    private void abrirClientes() throws IOException {
+        Principal.mostrarClientes();
+    }
+
+    // ==============================
+    // SALAS Y BUTACAS - US-2.1
+    // ==============================
+
+    @FXML
+    private void abrirSalas() throws IOException {
+        Principal.mostrarSalas();
+    }
+
+    // ==============================
+    // VENTA DE BOLETOS - US-2.4
+    // ==============================
+
+    @FXML
+    private void abrirVenta() throws IOException {
+        Principal.mostrarVenta();
+    }
+
+    // ==============================
+    // FUNCIONES - US-2.2
+    // ==============================
+
+    @FXML
+    private void abrirFunciones() throws IOException {
+        Principal.mostrarProgramacion();
+    }
+
+    // ==============================
+    // STOCK CRÍTICO - US-3.3
+    // ==============================
+
+    @FXML
+    private void abrirStockCritico() throws IOException {
+        Principal.mostrarStockCritico();
+    }
+
+    // ==============================
+    // VENTAS - US-3.3
+    // ==============================
+
+    @FXML
+    private void abrirVentas() throws IOException {
+        Principal.mostrarVentas();
+    }
+
+    // ==============================
     // CERRAR SESIÓN
     // ==============================
 
     @FXML
     private void cerrarSesion() throws IOException {
         Principal.cerrarSesion();
-    }
-    @FXML
-    private void abrirStockCritico() throws IOException {
-        Principal.mostrarStockCritico();
-    }
-
-    @FXML
-    private void abrirVentas() throws IOException {
-        Principal.mostrarVentas();
     }
 }

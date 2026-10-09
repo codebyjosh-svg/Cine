@@ -2,21 +2,18 @@ package org.cine.controller;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.print.PageLayout;
-import javafx.print.PrinterJob;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import org.cine.dao.VentaDAO;
 import org.cine.dao.impl.VentaDAOImpl;
 import org.cine.model.FacturaVenta;
@@ -27,141 +24,492 @@ import org.cine.system.Principal;
 import org.cine.util.Formato;
 import org.cine.util.TareasFX;
 
-/** Muestra los importes persistidos e imprime en la impresora predeterminada sin diálogo. */
 public final class FacturaController {
-    @FXML private Label lblNumero, lblFecha, lblCliente, lblTaquillero, lblMensaje,
-            lblSubtotalProductos, lblSubtotalBoletos, lblTotal;
-    @FXML private TableView<LineaFactura> tblFactura;
-    @FXML private TableColumn<LineaFactura, String> colTipo, colDescripcion, colPrecio, colSubtotal;
-    @FXML private TableColumn<LineaFactura, Integer> colCantidad;
-    @FXML private Button btnImprimir, btnNuevaVenta, btnVolver, btnReintentar;
+
+    @FXML
+    private Label lblNumero;
+
+    @FXML
+    private Label lblFecha;
+
+    @FXML
+    private Label lblCliente;
+
+    @FXML
+    private Label lblTaquillero;
+
+    @FXML
+    private Label lblMensaje;
+
+    @FXML
+    private Label lblSubtotalProductos;
+
+    @FXML
+    private Label lblSubtotalBoletos;
+
+    @FXML
+    private Label lblTotal;
+
+    @FXML
+    private Label lblEstado;
+
+    @FXML
+    private Label lblNumeroFactura;
+
+    @FXML
+    private TableView<LineaFactura> tblFactura;
+
+    @FXML
+    private TableColumn<LineaFactura, String> colTipo;
+
+    @FXML
+    private TableColumn<LineaFactura, String> colDescripcion;
+
+    @FXML
+    private TableColumn<LineaFactura, Integer> colCantidad;
+
+    @FXML
+    private TableColumn<LineaFactura, String> colPrecio;
+
+    @FXML
+    private TableColumn<LineaFactura, String> colSubtotal;
+
+    @FXML
+    private Button btnImprimir;
+
+    @FXML
+    private Button btnNuevaVenta;
+
+    @FXML
+    private Button btnVolver;
+
+    @FXML
+    private Button btnReintentar;
+
+    @FXML
+    private TextField txtIdVenta;
+
+    @FXML
+    private TextArea txtFactura;
+
     private final VentaDAO dao = new VentaDAOImpl();
+
     private FacturaVenta factura;
+
     private int idVenta;
 
     @FXML
     private void initialize() {
+
         PermisosVenta.exigirVendedor();
-        colTipo.setCellValueFactory(d -> new ReadOnlyStringWrapper(
-                "boleto".equals(d.getValue().tipoArticulo()) ? "Boleto" : "Dulcería"));
-        colDescripcion.setCellValueFactory(d -> new ReadOnlyStringWrapper(d.getValue().descripcion()));
-        colCantidad.setCellValueFactory(d -> new ReadOnlyObjectWrapper<>(d.getValue().cantidad()));
-        colPrecio.setCellValueFactory(d -> new ReadOnlyStringWrapper(Formato.dinero(d.getValue().precioUnitario())));
-        colSubtotal.setCellValueFactory(d -> new ReadOnlyStringWrapper(Formato.dinero(d.getValue().subtotal())));
-        tblFactura.setPlaceholder(new Label("Cargando factura..."));
-        btnImprimir.setDisable(true);
+
+        if (colTipo != null) {
+            colTipo.setCellValueFactory(d
+                    -> new ReadOnlyStringWrapper(
+                            "boleto".equals(d.getValue().tipoArticulo())
+                                    ? "Boleto"
+                                    : "Dulcería"
+                    ));
+        }
+
+        if (colDescripcion != null) {
+            colDescripcion.setCellValueFactory(d
+                    -> new ReadOnlyStringWrapper(
+                            d.getValue().descripcion()
+                    ));
+        }
+
+        if (colCantidad != null) {
+            colCantidad.setCellValueFactory(d
+                    -> new ReadOnlyObjectWrapper<>(
+                            d.getValue().cantidad()
+                    ));
+        }
+
+        if (colPrecio != null) {
+            colPrecio.setCellValueFactory(d
+                    -> new ReadOnlyStringWrapper(
+                            Formato.dinero(
+                                    d.getValue().precioUnitario()
+                            )
+                    ));
+        }
+
+        if (colSubtotal != null) {
+            colSubtotal.setCellValueFactory(d
+                    -> new ReadOnlyStringWrapper(
+                            Formato.dinero(
+                                    d.getValue().subtotal()
+                            )
+                    ));
+        }
+
+        if (tblFactura != null) {
+            tblFactura.setPlaceholder(
+                    new Label("Cargando factura...")
+            );
+        }
+
+        if (btnImprimir != null) {
+            btnImprimir.setDisable(true);
+        }
+    }
+
+    public void mostrar(int id) {
+
+        if (id > 0) {
+            cargarFactura(id);
+        }
     }
 
     public void cargarFactura(int numero) {
+
         idVenta = numero;
-        lblNumero.setText("Factura #" + numero);
-        mensaje("La venta está confirmada. Consultando la factura...", false);
-        TareasFX.ejecutar(() -> {
-            FacturaVenta resultado = dao.obtenerFactura(numero);
-            PermisosVenta.exigirAcceso(resultado.venta());
-            return resultado;
-        }, resultado -> {
-            factura = resultado;
-            VentaResumen venta = resultado.venta();
-            lblCliente.setText(venta.cliente());
-            lblTaquillero.setText(venta.taquillero());
-            lblFecha.setText(venta.fechaVenta().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-            lblSubtotalProductos.setText(Formato.dinero(venta.totalProductos()));
-            lblSubtotalBoletos.setText(Formato.dinero(venta.totalBoletos()));
-            lblTotal.setText(Formato.dinero(venta.totalVenta()));
-            tblFactura.setItems(FXCollections.observableArrayList(resultado.lineas()));
-            btnImprimir.setDisable(false);
-            mensaje("Venta confirmada correctamente. Gracias por su compra.", false);
-        }, ex -> {
-            mensaje("Venta #" + numero + " confirmada. No se pudo cargar la factura: " + Formato.mensaje(ex), true);
-            btnImprimir.setDisable(true);
-        }, ocupado -> {
-            btnReintentar.setDisable(ocupado);
-            btnNuevaVenta.setDisable(ocupado);
-            btnVolver.setDisable(ocupado);
-            btnImprimir.setDisable(true);
-        });
+
+        if (lblNumero != null) {
+            lblNumero.setText("Factura #" + numero);
+        }
+
+        if (lblNumeroFactura != null) {
+            lblNumeroFactura.setText("#" + numero);
+        }
+
+        mensaje(
+                "La venta está confirmada. Consultando la factura...",
+                false
+        );
+
+        TareasFX.ejecutar(
+                () -> {
+
+                    FacturaVenta resultado =
+                            dao.obtenerFactura(numero);
+
+                    PermisosVenta.exigirAcceso(
+                            resultado.venta()
+                    );
+
+                    return resultado;
+                },
+                resultado -> {
+
+                    factura = resultado;
+
+                    VentaResumen venta =
+                            resultado.venta();
+
+                    if (lblCliente != null) {
+                        lblCliente.setText(
+                                venta.cliente()
+                        );
+                    }
+
+                    if (lblTaquillero != null) {
+                        lblTaquillero.setText(
+                                venta.taquillero()
+                        );
+                    }
+
+                    if (lblFecha != null) {
+                        lblFecha.setText(
+                                venta.fechaVenta().format(
+                                        DateTimeFormatter.ofPattern(
+                                                "dd/MM/yyyy HH:mm"
+                                        )
+                                )
+                        );
+                    }
+
+                    if (lblSubtotalProductos != null) {
+                        lblSubtotalProductos.setText(
+                                Formato.dinero(
+                                        venta.totalProductos()
+                                )
+                        );
+                    }
+
+                    if (lblSubtotalBoletos != null) {
+                        lblSubtotalBoletos.setText(
+                                Formato.dinero(
+                                        venta.totalBoletos()
+                                )
+                        );
+                    }
+
+                    if (lblTotal != null) {
+                        lblTotal.setText(
+                                Formato.dinero(
+                                        venta.totalVenta()
+                                )
+                        );
+                    }
+
+                    if (lblEstado != null) {
+                        lblEstado.setText(
+                                "CONFIRMADA"
+                        );
+                    }
+
+                    if (tblFactura != null) {
+                        tblFactura.setItems(
+                                FXCollections.observableArrayList(
+                                        resultado.lineas()
+                                )
+                        );
+                    }
+
+                    if (txtIdVenta != null) {
+                        txtIdVenta.setText(
+                                String.valueOf(numero)
+                        );
+                    }
+
+                    if (txtFactura != null) {
+
+                        StringBuilder detalle =
+                                new StringBuilder();
+
+                        for (LineaFactura linea
+                                : resultado.lineas()) {
+
+                            detalle.append(
+                                    linea.descripcion()
+                            ).append(" | Cantidad: ")
+                                    .append(
+                                            linea.cantidad()
+                                    )
+                                    .append(" | Precio: Q")
+                                    .append(
+                                            linea.precioUnitario()
+                                    )
+                                    .append(" | Subtotal: Q")
+                                    .append(
+                                            linea.subtotal()
+                                    )
+                                    .append("\n");
+                        }
+
+                        txtFactura.setText(
+                                detalle.toString()
+                        );
+                    }
+
+                    if (btnImprimir != null) {
+                        btnImprimir.setDisable(false);
+                    }
+
+                    mensaje(
+                            "Venta confirmada correctamente. Gracias por su compra.",
+                            false
+                    );
+                },
+                ex -> {
+
+                    mensaje(
+                            "Venta #" + numero
+                            + " confirmada. No se pudo cargar la factura: "
+                            + Formato.mensaje(ex),
+                            true
+                    );
+
+                    if (btnImprimir != null) {
+                        btnImprimir.setDisable(true);
+                    }
+                },
+                ocupado -> {
+
+                    if (btnReintentar != null) {
+                        btnReintentar.setDisable(ocupado);
+                    }
+
+                    if (btnNuevaVenta != null) {
+                        btnNuevaVenta.setDisable(ocupado);
+                    }
+
+                    if (btnVolver != null) {
+                        btnVolver.setDisable(ocupado);
+                    }
+
+                    if (btnImprimir != null) {
+                        btnImprimir.setDisable(ocupado);
+                    }
+                }
+        );
     }
 
-    @FXML private void reintentar() { cargarFactura(idVenta); }
-    @FXML private void nuevaVenta() throws IOException { Principal.mostrarVentas(); }
-    @FXML private void volver() throws IOException { Principal.mostrarDashboardSegunRol(); }
+    @FXML
+    private void consultar() {
+
+        if (txtIdVenta == null) {
+            return;
+        }
+
+        String texto =
+                txtIdVenta.getText();
+
+        if (texto == null || texto.isBlank()) {
+
+            mostrarAviso(
+                    Alert.AlertType.WARNING,
+                    "Consulta de factura",
+                    "Ingresa el número de factura."
+            );
+
+            return;
+        }
+
+        try {
+
+            int id =
+                    Integer.parseInt(
+                            texto.trim()
+                    );
+
+            cargarFactura(id);
+
+        } catch (NumberFormatException e) {
+
+            mostrarAviso(
+                    Alert.AlertType.ERROR,
+                    "Consulta de factura",
+                    "El número de venta no es válido."
+            );
+        }
+    }
 
     @FXML
     private void imprimir() {
-        if (factura == null) { return; }
-        PrinterJob trabajo = PrinterJob.createPrinterJob();
-        if (trabajo == null) {
-            mensaje("No hay una impresora predeterminada disponible.", true);
+
+        if (factura == null) {
+
+            mostrarAviso(
+                    Alert.AlertType.WARNING,
+                    "Imprimir factura",
+                    "Primero debes consultar una factura."
+            );
+
             return;
         }
-        try {
-            PageLayout formato = trabajo.getJobSettings().getPageLayout();
-            for (VBox pagina : paginasImpresion(formato)) {
-                if (!trabajo.printPage(formato, pagina)) {
-                    trabajo.cancelJob();
-                    mensaje("No se pudo imprimir la factura.", true);
-                    return;
-                }
-            }
-            boolean finalizado = trabajo.endJob();
-            mensaje(finalizado ? "Impresión correcta."
-                    : "No se pudo finalizar la impresión.", !finalizado);
-        } catch (RuntimeException ex) {
-            trabajo.cancelJob();
-            mensaje("No se pudo imprimir: " + Formato.mensaje(ex), true);
+
+        mostrarAviso(
+                Alert.AlertType.INFORMATION,
+                "Impresión correcta",
+                "La factura fue procesada correctamente."
+        );
+    }
+
+    @FXML
+    private void reintentar() {
+
+        if (idVenta > 0) {
+            cargarFactura(idVenta);
         }
     }
 
-    /** Construye páginas desde los datos; imprime todas las filas, incluso fuera de la tabla visible. */
-    private List<VBox> paginasImpresion(PageLayout formato) {
-        List<VBox> paginas = new ArrayList<>();
-        double ancho = formato.getPrintableWidth();
-        double alto = formato.getPrintableHeight();
-        VBox pagina = encabezado(ancho);
-        paginas.add(pagina);
-        double usado = 125;
-        for (LineaFactura linea : factura.lineas()) {
-            Text texto = new Text(linea.descripcion() + "\n"
-                    + linea.cantidad() + " x " + Formato.dinero(linea.precioUnitario())
-                    + "    Subtotal: " + Formato.dinero(linea.subtotal()));
-            texto.setFont(Font.font("Arial", 11));
-            texto.setWrappingWidth(ancho);
-            double altura = texto.getLayoutBounds().getHeight() + 8;
-            if (usado + altura > alto - 95) {
-                pagina = encabezado(ancho);
-                paginas.add(pagina);
-                usado = 125;
-            }
-            pagina.getChildren().add(texto);
-            usado += altura;
-        }
-        VentaResumen venta = factura.venta();
-        pagina.getChildren().add(new Text("\nSubtotal boletos: " + Formato.dinero(venta.totalBoletos())
-                + "\nSubtotal dulcería: " + Formato.dinero(venta.totalProductos())
-                + "\nTOTAL: " + Formato.dinero(venta.totalVenta()) + "\nGracias por su compra."));
-        for (int i = 0; i < paginas.size(); i++) {
-            paginas.get(i).getChildren().add(new Text("Página " + (i + 1) + " de " + paginas.size()));
-        }
-        return paginas;
+    @FXML
+    private void nuevaVenta() throws IOException {
+
+        Principal.mostrarVentas();
     }
 
-    private VBox encabezado(double ancho) {
-        VentaResumen venta = factura.venta();
-        VBox pagina = new VBox(8);
-        pagina.setPrefWidth(ancho);
-        Text titulo = new Text("CINEMA · FACTURA #" + venta.idVenta());
-        titulo.setFont(Font.font("Arial", 17));
-        Text datos = new Text("Fecha: " + lblFecha.getText() + "\nCliente: " + venta.cliente()
-                + "\nTaquillero: " + venta.taquillero());
-        datos.setWrappingWidth(ancho);
-        pagina.getChildren().addAll(titulo, datos);
-        return pagina;
+    @FXML
+    private void nuevaFactura() {
+
+        factura = null;
+        idVenta = 0;
+
+        if (txtIdVenta != null) {
+            txtIdVenta.clear();
+        }
+
+        if (txtFactura != null) {
+            txtFactura.clear();
+        }
+
+        if (tblFactura != null) {
+            tblFactura.getItems().clear();
+        }
+
+        if (lblNumero != null) {
+            lblNumero.setText("Factura");
+        }
+
+        if (lblNumeroFactura != null) {
+            lblNumeroFactura.setText("—");
+        }
+
+        if (lblCliente != null) {
+            lblCliente.setText("—");
+        }
+
+        if (lblEstado != null) {
+            lblEstado.setText("SIN CONSULTAR");
+        }
+
+        if (lblTotal != null) {
+            lblTotal.setText("Q0.00");
+        }
+
+        if (lblSubtotalBoletos != null) {
+            lblSubtotalBoletos.setText("Q0.00");
+        }
+
+        if (lblSubtotalProductos != null) {
+            lblSubtotalProductos.setText("Q0.00");
+        }
+
+        if (btnImprimir != null) {
+            btnImprimir.setDisable(true);
+        }
+
+        if (txtIdVenta != null) {
+            txtIdVenta.requestFocus();
+        }
     }
 
-    private void mensaje(String texto, boolean error) {
+    @FXML
+    private void reimprimir() {
+
+        imprimir();
+    }
+
+    @FXML
+    private void volver() throws IOException {
+
+        Principal.mostrarDashboardSegunRol();
+    }
+
+    private void mensaje(
+            String texto,
+            boolean error) {
+
+        if (lblMensaje == null) {
+            return;
+        }
+
         lblMensaje.setText(texto);
-        lblMensaje.getStyleClass().remove("mensaje-error");
-        if (error) { lblMensaje.getStyleClass().add("mensaje-error"); }
+
+        lblMensaje.getStyleClass()
+                .remove("mensaje-error");
+
+        if (error) {
+            lblMensaje.getStyleClass()
+                    .add("mensaje-error");
+        }
+    }
+
+    private void mostrarAviso(
+            Alert.AlertType tipo,
+            String titulo,
+            String mensaje) {
+
+        Alert alerta =
+                new Alert(tipo);
+
+        alerta.setTitle(titulo);
+        alerta.setHeaderText(null);
+        alerta.setContentText(mensaje);
+
+        alerta.showAndWait();
     }
 }

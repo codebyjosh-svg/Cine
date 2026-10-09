@@ -1,91 +1,357 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<BorderPane prefWidth="1180" prefHeight="720" styleClass="cine-root"
-            stylesheets="@style/operaciones.css" xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cine.controller.VentaController">
+
+<BorderPane prefWidth="1180"
+            prefHeight="720"
+            styleClass="cine-root"
+            stylesheets="@style/operaciones.css"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cine.controller.VentaController">
+
     <left>
-        <VBox spacing="16" prefWidth="190" minWidth="190" maxWidth="190" styleClass="operacion-sidebar">
-            <Label text="CINEMA" styleClass="marca"/>
-            <Label text="ATENCIÓN AL CLIENTE" styleClass="sidebar-caption"/>
-            <Label text="Venta de dulcería" styleClass="sidebar-activo" wrapText="true" maxWidth="Infinity"/>
-            <Label text="1. Seleccione al cliente.&#10;2. Agregue productos.&#10;3. Confirme la venta." styleClass="sidebar-texto" wrapText="true"/>
+
+        <VBox spacing="16"
+              prefWidth="190"
+              minWidth="190"
+              maxWidth="190"
+              styleClass="operacion-sidebar">
+
+            <Label text="CINEMA"
+                   styleClass="marca"/>
+
+            <Label text="ATENCIÓN AL CLIENTE"
+                   styleClass="sidebar-caption"/>
+
+            <Label text="Venta de dulcería"
+                   styleClass="sidebar-activo"
+                   wrapText="true"
+                   maxWidth="Infinity"/>
+
+            <Label text="1. Seleccione al cliente.&#10;2. Agregue productos.&#10;3. Confirme la venta."
+                   styleClass="sidebar-texto"
+                   wrapText="true"/>
+
             <Region VBox.vgrow="ALWAYS"/>
-            <Label text="Los boletos de una venta abierta se conservan al agregar dulcería." styleClass="sidebar-texto" wrapText="true"/>
+
+            <Label text="Los boletos de una venta abierta se conservan al agregar dulcería."
+                   styleClass="sidebar-texto"
+                   wrapText="true"/>
+
         </VBox>
+
     </left>
+
+
     <center>
+
         <VBox spacing="12">
-            <padding><Insets top="22" right="22" bottom="22" left="22"/></padding>
-            <HBox alignment="CENTER_LEFT" spacing="12">
+
+            <padding>
+                <Insets top="22"
+                        right="22"
+                        bottom="22"
+                        left="22"/>
+            </padding>
+
+
+            <!-- ENCABEZADO -->
+
+            <HBox alignment="CENTER_LEFT"
+                  spacing="12">
+
                 <VBox spacing="4">
-                    <Label text="Ventas · Dulcería" styleClass="titulo"/>
-                    <Label fx:id="lblVenta" text="Nueva venta" styleClass="subtitulo"/>
+
+                    <Label text="Ventas · Dulcería"
+                           styleClass="titulo"/>
+
+                    <Label fx:id="lblVenta"
+                           text="Nueva venta"
+                           styleClass="subtitulo"/>
+
                 </VBox>
+
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button fx:id="btnNueva" text="Nueva venta" onAction="#nueva" styleClass="boton-secundario"/>
-                <Button fx:id="btnVolver" text="Volver" onAction="#volver" styleClass="boton-secundario"/>
+
+                <Button fx:id="btnNueva"
+                        text="Nueva venta"
+                        onAction="#nueva"
+                        styleClass="boton-secundario"/>
+
+                <Button fx:id="btnVolver"
+                        text="Volver"
+                        onAction="#volver"
+                        styleClass="boton-secundario"/>
+
             </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="12" styleClass="tarjeta-compacta">
-                <Label text="Cliente" styleClass="campo-etiqueta"/>
-                <ComboBox fx:id="cmbCliente" promptText="Seleccione un cliente activo" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-                <Button fx:id="btnActualizar" text="Actualizar" onAction="#actualizar" styleClass="boton-secundario"/>
+
+
+            <!-- CLIENTE -->
+
+            <HBox alignment="CENTER_LEFT"
+                  spacing="12"
+                  styleClass="tarjeta-compacta">
+
+                <Label text="Cliente"
+                       styleClass="campo-etiqueta"/>
+
+                <ComboBox fx:id="cmbCliente"
+                          promptText="Seleccione un cliente activo"
+                          maxWidth="Infinity"
+                          HBox.hgrow="ALWAYS"/>
+
+                <Button fx:id="btnActualizar"
+                        text="Actualizar"
+                        onAction="#actualizar"
+                        styleClass="boton-secundario"/>
+
             </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="10">
-                <Label text="Retomar venta abierta #" styleClass="subtitulo"/>
-                <TextField fx:id="txtIdVenta" promptText="Número" prefWidth="100" maxWidth="100"/>
-                <Button fx:id="btnRetomar" text="Retomar" onAction="#retomar" styleClass="boton-secundario"/>
+
+
+            <!-- RETOMAR VENTA -->
+
+            <HBox alignment="CENTER_LEFT"
+                  spacing="10">
+
+                <Label text="Retomar venta abierta #"
+                       styleClass="subtitulo"/>
+
+                <TextField fx:id="txtIdVenta"
+                           promptText="Número"
+                           prefWidth="100"
+                           maxWidth="100"/>
+
+                <Button fx:id="btnRetomar"
+                        text="Retomar"
+                        onAction="#retomar"
+                        styleClass="boton-secundario"/>
+
                 <Region HBox.hgrow="ALWAYS"/>
-                <Label fx:id="lblBoletos" text="0 boletos en esta venta" styleClass="subtitulo"/>
+
+                <Label fx:id="lblBoletos"
+                       text="0 boletos en esta venta"
+                       styleClass="subtitulo"/>
+
             </HBox>
-            <Label fx:id="lblMensaje" text="Cargando productos..." wrapText="true" minHeight="42" maxWidth="Infinity" styleClass="mensaje"/>
-            <HBox spacing="16" VBox.vgrow="ALWAYS">
-                <VBox spacing="10" prefWidth="450" minWidth="320" HBox.hgrow="ALWAYS">
-                    <Label text="Productos disponibles" styleClass="seccion"/>
-                    <TextField fx:id="txtFiltro" promptText="Buscar por nombre o categoría"/>
-                    <TableView fx:id="tblProductos" VBox.vgrow="ALWAYS" minHeight="125">
-                        <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+
+
+            <!-- MENSAJE -->
+
+            <Label fx:id="lblMensaje"
+                   text="Cargando productos..."
+                   wrapText="true"
+                   minHeight="42"
+                   maxWidth="Infinity"
+                   styleClass="mensaje"/>
+
+
+            <!-- PRODUCTOS Y CARRITO -->
+
+            <HBox spacing="16"
+                  VBox.vgrow="ALWAYS">
+
+
+                <!-- PRODUCTOS -->
+
+                <VBox spacing="10"
+                      prefWidth="450"
+                      minWidth="320"
+                      HBox.hgrow="ALWAYS">
+
+                    <Label text="Productos disponibles"
+                           styleClass="seccion"/>
+
+                    <TextField fx:id="txtFiltro"
+                               promptText="Buscar por nombre o categoría"/>
+
+                    <TableView fx:id="tblProductos"
+                               VBox.vgrow="ALWAYS"
+                               minHeight="125">
+
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
+
                         <columns>
-                            <TableColumn fx:id="colProducto" text="Producto" prefWidth="155"/>
-                            <TableColumn fx:id="colCategoria" text="Categoría" prefWidth="105"/>
-                            <TableColumn fx:id="colPrecio" text="Precio" prefWidth="80"/>
-                            <TableColumn fx:id="colStock" text="Stock" prefWidth="60"/>
+
+                            <TableColumn fx:id="colProducto"
+                                         text="Producto"
+                                         prefWidth="155"/>
+
+                            <TableColumn fx:id="colCategoria"
+                                         text="Categoría"
+                                         prefWidth="105"/>
+
+                            <TableColumn fx:id="colPrecio"
+                                         text="Precio"
+                                         prefWidth="80"/>
+
+                            <TableColumn fx:id="colStock"
+                                         text="Stock"
+                                         prefWidth="60"/>
+
                         </columns>
+
                     </TableView>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Label text="Cantidad" styleClass="campo-etiqueta"/>
-                        <Spinner fx:id="spnCantidad" prefWidth="88" maxWidth="88" editable="false"/>
-                        <Button fx:id="btnAgregar" text="Agregar al carrito" onAction="#agregar" styleClass="boton-primario" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+
+
+                    <HBox spacing="8"
+                          alignment="CENTER_LEFT">
+
+                        <Label text="Cantidad"
+                               styleClass="campo-etiqueta"/>
+
+                        <Spinner fx:id="spnCantidad"
+                                 prefWidth="88"
+                                 maxWidth="88"
+                                 editable="false"/>
+
+                        <Button fx:id="btnAgregar"
+                                text="Agregar al carrito"
+                                onAction="#agregar"
+                                styleClass="boton-primario"
+                                HBox.hgrow="ALWAYS"
+                                maxWidth="Infinity"/>
+
                     </HBox>
+
                 </VBox>
-                <VBox spacing="10" prefWidth="450" minWidth="320" HBox.hgrow="ALWAYS">
-                    <Label text="Carrito de dulcería" styleClass="seccion"/>
-                    <Label text="Agregar 1x acumula la cantidad en la misma línea." styleClass="subtitulo" minHeight="34"/>
-                    <TableView fx:id="tblCarrito" VBox.vgrow="ALWAYS" minHeight="125">
-                        <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+
+
+                <!-- CARRITO -->
+
+                <VBox spacing="10"
+                      prefWidth="450"
+                      minWidth="320"
+                      HBox.hgrow="ALWAYS">
+
+                    <Label text="Carrito de dulcería"
+                           styleClass="seccion"/>
+
+                    <Label text="Agregar 1x acumula la cantidad en la misma línea."
+                           styleClass="subtitulo"
+                           minHeight="34"/>
+
+                    <TableView fx:id="tblCarrito"
+                               VBox.vgrow="ALWAYS"
+                               minHeight="125">
+
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
+
                         <columns>
-                            <TableColumn fx:id="colCarritoProducto" text="Producto" prefWidth="165"/>
-                            <TableColumn fx:id="colCarritoCantidad" text="Cant." prefWidth="50"/>
-                            <TableColumn fx:id="colCarritoPrecio" text="Precio" prefWidth="85"/>
-                            <TableColumn fx:id="colCarritoSubtotal" text="Subtotal" prefWidth="100"/>
+
+                            <TableColumn fx:id="colCarritoProducto"
+                                         text="Producto"
+                                         prefWidth="165"/>
+
+                            <TableColumn fx:id="colCarritoCantidad"
+                                         text="Cant."
+                                         prefWidth="50"/>
+
+                            <TableColumn fx:id="colCarritoPrecio"
+                                         text="Precio"
+                                         prefWidth="85"/>
+
+                            <TableColumn fx:id="colCarritoSubtotal"
+                                         text="Subtotal"
+                                         prefWidth="100"/>
+
                         </columns>
+
                     </TableView>
-                    <HBox spacing="8" alignment="CENTER_LEFT">
-                        <Spinner fx:id="spnCantidadCarrito" prefWidth="88" maxWidth="88" editable="false"/>
-                        <Button fx:id="btnCantidad" text="Guardar cantidad" onAction="#guardarCantidad" styleClass="boton-secundario"/>
-                        <Button fx:id="btnQuitar" text="Quitar" onAction="#quitar" styleClass="boton-peligro"/>
+
+
+                    <HBox spacing="8"
+                          alignment="CENTER_LEFT">
+
+                        <Spinner fx:id="spnCantidadCarrito"
+                                 prefWidth="88"
+                                 maxWidth="88"
+                                 editable="false"/>
+
+                        <Button fx:id="btnCantidad"
+                                text="Guardar cantidad"
+                                onAction="#guardarCantidad"
+                                styleClass="boton-secundario"/>
+
+                        <Button fx:id="btnQuitar"
+                                text="Quitar"
+                                onAction="#quitar"
+                                styleClass="boton-peligro"/>
+
                     </HBox>
+
                 </VBox>
+
             </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="18" styleClass="tarjeta-compacta">
-                <VBox spacing="4"><Label text="SUBTOTAL BOLETOS" styleClass="kpi-etiqueta"/><Label fx:id="lblSubtotalBoletos" text="Q 0.00" styleClass="importe"/></VBox>
-                <VBox spacing="4"><Label text="SUBTOTAL DULCERÍA" styleClass="kpi-etiqueta"/><Label fx:id="lblSubtotalProductos" text="Q 0.00" styleClass="importe"/></VBox>
-                <VBox spacing="4"><Label text="TOTAL GENERAL" styleClass="kpi-etiqueta"/><Label fx:id="lblTotal" text="Q 0.00" styleClass="total"/></VBox>
+
+
+            <!-- TOTALES -->
+
+            <HBox alignment="CENTER_LEFT"
+                  spacing="18"
+                  styleClass="tarjeta-compacta">
+
+                <VBox spacing="4">
+
+                    <Label text="SUBTOTAL BOLETOS"
+                           styleClass="kpi-etiqueta"/>
+
+                    <Label fx:id="lblSubtotalBoletos"
+                           text="Q 0.00"
+                           styleClass="importe"/>
+
+                </VBox>
+
+
+                <VBox spacing="4">
+
+                    <Label text="SUBTOTAL DULCERÍA"
+                           styleClass="kpi-etiqueta"/>
+
+                    <Label fx:id="lblSubtotalProductos"
+                           text="Q 0.00"
+                           styleClass="importe"/>
+
+                </VBox>
+
+
+                <VBox spacing="4">
+
+                    <Label text="TOTAL GENERAL"
+                           styleClass="kpi-etiqueta"/>
+
+                    <Label fx:id="lblTotal"
+                           text="Q 0.00"
+                           styleClass="total"/>
+
+                </VBox>
+
+
                 <Region HBox.hgrow="ALWAYS"/>
-                <Button fx:id="btnVerFactura" text="Ver factura" onAction="#verFactura" styleClass="boton-secundario" disable="true"/>
-                <Button fx:id="btnConfirmar" text="Confirmar venta" onAction="#confirmar" styleClass="boton-primario"/>
+
+
+                <Button fx:id="btnVerFactura"
+                        text="Ver factura"
+                        onAction="#verFactura"
+                        styleClass="boton-secundario"
+                        disable="true"/>
+
+
+                <Button fx:id="btnConfirmar"
+                        text="Confirmar venta"
+                        onAction="#confirmar"
+                        styleClass="boton-primario"/>
+
             </HBox>
+
         </VBox>
+
     </center>
+
 </BorderPane>

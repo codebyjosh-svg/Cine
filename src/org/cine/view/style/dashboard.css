@@ -1,8 +1,94 @@
-/* Estilo de las pantallas por rol conservadas en el ZIP original. */
-.root { -fx-background-color: #f4f6fb; -fx-font-family: "Segoe UI"; }
-.dashboard-card { -fx-background-color: white; -fx-background-radius: 14px; -fx-border-color: #dfe5ee; -fx-border-radius: 14px; -fx-padding: 22px; }
-.title { -fx-text-fill: #101827; -fx-font-size: 24px; -fx-font-weight: bold; }
-.subtitle, .role { -fx-text-fill: #66758b; -fx-font-size: 13px; }
-.user { -fx-text-fill: #2858df; -fx-font-size: 17px; -fx-font-weight: bold; }
-.button { -fx-background-color: #2858df; -fx-text-fill: white; -fx-background-radius: 7px; -fx-padding: 10px 20px; -fx-cursor: hand; }
-.logout-button { -fx-background-color: #fff0f1; -fx-text-fill: #a62032; }
+/* =========================================================
+   ESTILOS GENERALES DEL DASHBOARD
+   ========================================================= */
+
+.root {
+    -fx-background-color: #f4f6fb;
+    -fx-font-family: "Segoe UI";
+}
+
+/* =========================================================
+   TARJETA PRINCIPAL
+   ========================================================= */
+
+.dashboard-card {
+    -fx-background-color: white;
+    -fx-background-radius: 14px;
+    -fx-border-color: #dfe5ee;
+    -fx-border-radius: 14px;
+    -fx-padding: 22px;
+}
+
+/* =========================================================
+   TEXTOS
+   ========================================================= */
+
+.title {
+    -fx-text-fill: #101827;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.subtitle,
+.role {
+    -fx-text-fill: #66758b;
+    -fx-font-size: 13px;
+}
+
+.user {
+    -fx-text-fill: #2858df;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+/* =========================================================
+   BOTONES GENERALES
+   ========================================================= */
+
+.button {
+    -fx-background-color: #2858df;
+    -fx-text-fill: white;
+    -fx-background-radius: 7px;
+    -fx-padding: 10px 20px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+/* =========================================================
+   CERRAR SESIÓN
+   ========================================================= */
+
+.logout-button {
+    -fx-background-color: #fff0f1;
+    -fx-text-fill: #a62032;
+    -fx-pref-width: 180px;
+    -fx-pref-height: 40px;
+    -fx-background-radius: 8px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.logout-button:hover {
+    -fx-background-color: #ffe1e4;
+}
+
+/* =========================================================
+   BOTÓN DE FUNCIONES
+   ========================================================= */
+
+.functions-button {
+    -fx-pref-width: 180px;
+    -fx-pref-height: 40px;
+    -fx-background-radius: 8px;
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.functions-button:hover {
+    -fx-background-color: #1d4ed8;
+}

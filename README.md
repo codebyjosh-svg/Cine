@@ -1,5 +1,13 @@
 # Cinema - Sistema de Gestión Integral para Cine
 
+Para ejecutar esta copia en NetBeans, consulta `LEEME_JAVAFX_CORREGIDO.txt`.
+Las bibliotecas están incluidas en `lib/` con rutas relativas; la clase
+principal es `org.cine.system.Lanzador` y no necesita opciones de VM.
+
+El módulo de programación está disponible en **Administrador → Funciones**.
+Consulta `TAREAS_US_2_2_JAVA.md` para las tareas Java implementadas, el uso
+y las pruebas. Las tareas SQL T2.2.1 y T2.2.2 permanecen pendientes.
+
 ## Descripción
 
 Cinema es un sistema de escritorio desarrollado para gestionar los principales procesos administrativos y operativos de un cine.
