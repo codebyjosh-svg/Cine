@@ -46,16 +46,7 @@ public class Principal extends Application {
     }
 
     public static void mostrarUsuarios() throws IOException {
-        Usuario actual = SesionContext.getUsuarioActual();
-
-        if (actual == null
-                || !actual.isEstado()
-                || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
-
-            throw new IllegalStateException(
-                    "La gestión de usuarios requiere una sesión de administrador."
-            );
-        }
+        validarAdministrador("usuarios");
 
         cambiarEscena(
                 "/org/cine/view/Usuarios.fxml",
@@ -64,16 +55,7 @@ public class Principal extends Application {
     }
 
     public static void mostrarPeliculas() throws IOException {
-        Usuario actual = SesionContext.getUsuarioActual();
-
-        if (actual == null
-                || !actual.isEstado()
-                || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
-
-            throw new IllegalStateException(
-                    "La gestión de películas requiere una sesión de administrador."
-            );
-        }
+        validarAdministrador("películas");
 
         cambiarEscena(
                 "/org/cine/view/Peliculas.fxml",
@@ -82,16 +64,7 @@ public class Principal extends Application {
     }
 
     public static void mostrarGeneros() throws IOException {
-        Usuario actual = SesionContext.getUsuarioActual();
-
-        if (actual == null
-                || !actual.isEstado()
-                || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
-
-            throw new IllegalStateException(
-                    "La gestión de géneros requiere una sesión de administrador."
-            );
-        }
+        validarAdministrador("géneros");
 
         cambiarEscena(
                 "/org/cine/view/Generos.fxml",
@@ -99,11 +72,34 @@ public class Principal extends Application {
         );
     }
 
-    /**
-     * US-1.4 - Gestión de clientes.
-     */
     public static void mostrarClientes() throws IOException {
+        validarAdministrador("clientes");
 
+        cambiarEscena(
+                "/org/cine/view/Clientes.fxml",
+                "Cine - Clientes"
+        );
+    }
+
+    public static void mostrarProductos() throws IOException {
+        validarAdministrador("productos");
+
+        cambiarEscena(
+                "/org/cine/view/Productos.fxml",
+                "Cine - Productos de dulcería"
+        );
+    }
+
+    public static void mostrarCategoriasProducto() throws IOException {
+        validarAdministrador("categorías de productos");
+
+        cambiarEscena(
+                "/org/cine/view/CategoriasProducto.fxml",
+                "Cine - Categorías de productos"
+        );
+    }
+
+    private static void validarAdministrador(String modulo) {
         Usuario actual = SesionContext.getUsuarioActual();
 
         if (actual == null
@@ -111,14 +107,10 @@ public class Principal extends Application {
                 || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
 
             throw new IllegalStateException(
-                    "La gestión de clientes requiere una sesión de administrador."
+                    "La gestión de " + modulo
+                    + " requiere una sesión de administrador."
             );
         }
-
-        cambiarEscena(
-                "/org/cine/view/Clientes.fxml",
-                "Cine - Clientes"
-        );
     }
 
     public static void cerrarSesion() throws IOException {
@@ -129,6 +121,18 @@ public class Principal extends Application {
     public static void cambiarEscena(
             String ruta,
             String titulo) throws IOException {
+
+        if (stagePrincipal == null) {
+            throw new IllegalStateException(
+                    "La ventana principal todavía no está inicializada."
+            );
+        }
+
+        if (ruta == null || ruta.isBlank()) {
+            throw new IOException(
+                    "No se indicó la ruta de la vista."
+            );
+        }
 
         URL recurso = Principal.class.getResource(ruta);
 
@@ -145,21 +149,25 @@ public class Principal extends Application {
         boolean peliculas = ruta.endsWith("/Peliculas.fxml");
         boolean generos = ruta.endsWith("/Generos.fxml");
         boolean clientes = ruta.endsWith("/Clientes.fxml");
+        boolean productos = ruta.endsWith("/Productos.fxml");
+        boolean categoriasProducto =
+                ruta.endsWith("/CategoriasProducto.fxml");
 
         boolean moduloGrande =
                 usuarios
                 || peliculas
                 || generos
-                || clientes;
+                || clientes
+                || productos
+                || categoriasProducto;
 
-        double ancho = moduloGrande ? 1100 : 860;
+        double ancho = productos
+                ? 1150
+                : moduloGrande ? 1100 : 860;
+
         double alto = moduloGrande ? 700 : 540;
 
-        Scene scene = new Scene(
-                root,
-                ancho,
-                alto
-        );
+        Scene scene = new Scene(root, ancho, alto);
 
         stagePrincipal.setMinWidth(
                 moduloGrande ? 1000 : 860

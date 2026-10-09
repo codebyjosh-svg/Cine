@@ -17,11 +17,9 @@ public class DashboardAdminController {
 
     @FXML
     private void initialize() {
-
         Usuario usuario = SesionContext.getUsuarioActual();
 
         if (usuario != null) {
-
             if (lblUsuario != null) {
                 lblUsuario.setText(usuario.getNombreCompleto());
             }
@@ -32,45 +30,35 @@ public class DashboardAdminController {
         }
     }
 
-    // ==============================
-    // USUARIOS
-    // ==============================
-
     @FXML
     private void abrirUsuarios() throws IOException {
         Principal.mostrarUsuarios();
     }
-
-    // ==============================
-    // PELÍCULAS
-    // ==============================
 
     @FXML
     private void abrirPeliculas() throws IOException {
         Principal.mostrarPeliculas();
     }
 
-    // ==============================
-    // GÉNEROS
-    // ==============================
-
     @FXML
     private void abrirGeneros() throws IOException {
         Principal.mostrarGeneros();
     }
-
-    // ==============================
-    // CLIENTES
-    // ==============================
 
     @FXML
     private void abrirClientes() throws IOException {
         Principal.mostrarClientes();
     }
 
-    // ==============================
-    // CERRAR SESIÓN
-    // ==============================
+    @FXML
+    private void abrirProductos() throws IOException {
+        Principal.mostrarProductos();
+    }
+
+    @FXML
+    private void abrirCategoriasProducto() throws IOException {
+        Principal.mostrarCategoriasProducto();
+    }
 
     @FXML
     private void cerrarSesion() throws IOException {
