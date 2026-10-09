@@ -138,23 +138,24 @@
 
                         </Button>
 
-                        <!-- SALAS -->
+                        <!-- SALAS Y BUTACAS -->
 
-                        <HBox alignment="CENTER_LEFT"
-                              prefHeight="36"
-                              styleClass="menu-disabled">
+                        <Button maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                alignment="CENTER_LEFT"
+                                contentDisplay="LEFT"
+                                graphicTextGap="10"
+                                onAction="#abrirSalas"
+                                styleClass="menu-button">
 
-                            <padding>
-                                <Insets left="10"/>
-                            </padding>
+                            <graphic>
+                                <Label text="S"
+                                       styleClass="menu-icon"/>
+                            </graphic>
 
-                            <Label text="▣"
-                                   styleClass="menu-icon"/>
+                            <text>Salas y butacas</text>
 
-                            <Label text="Salas"
-                                   styleClass="menu-text"/>
-
-                        </HBox>
+                        </Button>
 
                         <!-- FUNCIONES -->
 
@@ -661,34 +662,35 @@
 
                             </VBox>
 
-                            <!-- SALAS -->
+                            <!-- SALAS Y BUTACAS - US-2.1 -->
 
                             <VBox GridPane.columnIndex="0"
                                   GridPane.rowIndex="1"
-                                  styleClass="module-disabled">
+                                  styleClass="module-active"
+                                  pickOnBounds="true"
+                                  onMouseClicked="#abrirSalas">
 
-                                <HBox alignment="CENTER_LEFT">
+                                <HBox alignment="CENTER_LEFT"
+                                      mouseTransparent="true">
 
                                     <Label text="S"
-                                           styleClass="module-letter"/>
+                                           styleClass="module-letter"
+                                           mouseTransparent="true"/>
 
-                                    <Label text="EN DESARROLLO"
-                                           styleClass="development-label"/>
+                                    <Label text="DISPONIBLE"
+                                           styleClass="available-label"
+                                           mouseTransparent="true"/>
 
                                 </HBox>
 
-                                <Label text="Salas"
-                                       styleClass="module-title"/>
+                                <Label text="Salas y butacas"
+                                       styleClass="module-title"
+                                       mouseTransparent="true"/>
 
-                                <Label text="Gestión de salas del cine."
+                                <Label text="Administrar salas, formatos, butacas y estados."
                                        wrapText="true"
-                                       styleClass="module-description"/>
-
-                                <Button text="Próximamente"
-                                        disable="true"
-                                        maxWidth="Infinity"
-                                        mnemonicParsing="false"
-                                        styleClass="module-button-disabled"/>
+                                       styleClass="module-description"
+                                       mouseTransparent="true"/>
 
                             </VBox>
 
