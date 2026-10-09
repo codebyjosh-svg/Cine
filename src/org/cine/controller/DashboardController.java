@@ -26,6 +26,9 @@ public class DashboardController {
     }
 
     @FXML
+    private void abrirConfiteria() throws IOException { Principal.mostrarConfiteria(); }
+
+    @FXML
     private void cerrarSesion() throws IOException {
         Principal.cerrarSesion();
     }

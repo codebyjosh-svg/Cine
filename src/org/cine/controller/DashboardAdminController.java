@@ -101,6 +101,11 @@ public class DashboardAdminController {
     }
 
     @FXML
+    private void abrirConfiteria() throws IOException {
+        Principal.mostrarConfiteria();
+    }
+
+    @FXML
     private void abrirReportes() throws IOException {
         Principal.mostrarReportes();
     }

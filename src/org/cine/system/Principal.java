@@ -338,6 +338,14 @@ public class Principal extends Application {
         );
     }
 
+    // CONFITERIA - productos, stock y ventas
+    public static void mostrarConfiteria() throws IOException {
+        if (SesionContext.getUsuarioActual() == null) {
+            throw new IllegalStateException("Inicia sesión para entrar a confitería.");
+        }
+        cambiarEscena("/org/cine/view/Confiteria.fxml", "Cinema - Confitería");
+    }
+
     // REPORTES - US-3.4
     public static void mostrarReportes() throws IOException {
         Usuario actual=SesionContext.getUsuarioActual();

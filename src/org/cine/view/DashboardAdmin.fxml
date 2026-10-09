@@ -187,21 +187,7 @@
 
                         <!-- CONFITERÍA -->
 
-                        <HBox alignment="CENTER_LEFT"
-                              prefHeight="36"
-                              styleClass="menu-disabled">
-
-                            <padding>
-                                <Insets left="10"/>
-                            </padding>
-
-                            <Label text="▤"
-                                   styleClass="menu-icon"/>
-
-                            <Label text="Confitería"
-                                   styleClass="menu-text"/>
-
-                        </HBox>
+                        <Button maxWidth="Infinity" alignment="CENTER_LEFT" onAction="#abrirConfiteria" text="Confitería" styleClass="menu-button"/>
 
                         <!-- VENTAS -->
 
@@ -746,11 +732,7 @@
                                        wrapText="true"
                                        styleClass="module-description"/>
 
-                                <Button text="Próximamente"
-                                        disable="true"
-                                        maxWidth="Infinity"
-                                        mnemonicParsing="false"
-                                        styleClass="module-button-disabled"/>
+                                <Button text="Abrir confitería" onAction="#abrirConfiteria" maxWidth="Infinity" styleClass="module-button"/>
 
                             </VBox>
 

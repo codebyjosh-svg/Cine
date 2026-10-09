@@ -35,6 +35,8 @@
             prefHeight="50"
             styleClass="importante"/>
 
+    <Button text="Confitería y venta de comida" onAction="#abrirConfiteria" prefWidth="280" prefHeight="50" styleClass="importante"/>
+
     <Button text="Cerrar sesión"
             onAction="#cerrarSesion"
             prefWidth="280"
