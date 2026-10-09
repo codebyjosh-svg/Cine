@@ -69,6 +69,15 @@ public class DashboardAdminController {
     }
 
     // ==============================
+    // SALAS Y BUTACAS
+    // ==============================
+
+    @FXML
+    private void abrirSalas() throws IOException {
+        Principal.mostrarSalas();
+    }
+
+    // ==============================
     // CERRAR SESIÓN
     // ==============================
 

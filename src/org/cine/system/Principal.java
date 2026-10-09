@@ -121,6 +121,28 @@ public class Principal extends Application {
         );
     }
 
+    /**
+     * US-2.1 - Gestión de salas y butacas.
+     */
+    public static void mostrarSalas() throws IOException {
+
+     Usuario actual = SesionContext.getUsuarioActual();
+
+        if (actual == null
+                || !actual.isEstado()
+                || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
+
+            throw new IllegalStateException(
+                    "La gestión de salas requiere una sesión de administrador."
+            );
+        }
+
+        cambiarEscena(
+                "/org/cine/view/Salas.fxml",
+                "Cine - Salas y butacas"
+        );
+    }
+
     public static void cerrarSesion() throws IOException {
         SesionContext.cerrarSesion();
         mostrarLogin();
@@ -145,12 +167,14 @@ public class Principal extends Application {
         boolean peliculas = ruta.endsWith("/Peliculas.fxml");
         boolean generos = ruta.endsWith("/Generos.fxml");
         boolean clientes = ruta.endsWith("/Clientes.fxml");
+        boolean salas = ruta.endsWith("/Salas.fxml");
 
         boolean moduloGrande =
                 usuarios
                 || peliculas
                 || generos
-                || clientes;
+                || clientes
+                || salas;
 
         double ancho = moduloGrande ? 1100 : 860;
         double alto = moduloGrande ? 700 : 540;
