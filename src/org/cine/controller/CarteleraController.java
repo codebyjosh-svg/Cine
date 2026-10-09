@@ -3,11 +3,17 @@ package org.cine.controller;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -28,8 +34,8 @@ import org.cine.model.CarteleraItem;
 /**
  * Controlador de la pantalla de Cartelera.
  *
- * Se encarga de cargar y mostrar las funciones disponibles
- * obtenidas desde la base de datos.
+ * Permite consultar las funciones disponibles,
+ * aplicar filtros y seleccionar una función.
  *
  * @author Joshua
  */
@@ -42,10 +48,10 @@ public class CarteleraController {
     private DatePicker dpFecha;
 
     @FXML
-    private ComboBox<?> cbGenero;
+    private ComboBox<String> cbGenero;
 
     @FXML
-    private ComboBox<?> cbSala;
+    private ComboBox<String> cbSala;
 
     @FXML
     private Button btnVolver;
@@ -69,43 +75,69 @@ public class CarteleraController {
             DateTimeFormatter.ofPattern("HH:mm");
 
     /**
+     * Lista completa obtenida desde la base de datos.
+     */
+    private List<CarteleraItem> carteleraCompleta =
+            new ArrayList<>();
+
+    /**
+     * Función actualmente seleccionada.
+     *
+     * Esta variable será utilizada posteriormente
+     * por T2.3.10 para continuar al flujo de venta.
+     */
+    private CarteleraItem funcionSeleccionada;
+
+    /**
+     * Tarjeta actualmente seleccionada.
+     */
+    private VBox tarjetaSeleccionada;
+
+    /**
+     * Botón de la tarjeta seleccionada.
+     */
+    private Button botonSeleccionado;
+
+    /**
      * Inicializa la pantalla.
      */
     @FXML
     public void initialize() {
+
         cargarCartelera();
     }
 
     /**
-     * Carga las funciones disponibles desde la base de datos
-     * y las muestra en la cartelera.
+     * Obtiene las funciones desde la base de datos.
      */
     private void cargarCartelera() {
 
         try {
 
-            List<CarteleraItem> lista =
+            carteleraCompleta =
                     carteleraDAO.listarCartelera();
 
-            gridCartelera.getChildren().clear();
-
-            if (lista == null || lista.isEmpty()) {
-                mostrarSinResultados();
-                return;
+            if (carteleraCompleta == null) {
+                carteleraCompleta =
+                        new ArrayList<>();
             }
 
-            for (CarteleraItem item : lista) {
-                gridCartelera.getChildren()
-                        .add(crearTarjeta(item));
-            }
+            cargarOpcionesFiltros();
+
+            mostrarFunciones(
+                    carteleraCompleta
+            );
 
         } catch (SQLException ex) {
 
-            gridCartelera.getChildren().clear();
+            gridCartelera
+                    .getChildren()
+                    .clear();
 
-            Label error = new Label(
-                    "No se pudo cargar la cartelera."
-            );
+            Label error =
+                    new Label(
+                            "No se pudo cargar la cartelera."
+                    );
 
             error.setStyle(
                     "-fx-text-fill: #b91c1c;"
@@ -113,27 +145,260 @@ public class CarteleraController {
                     + "-fx-font-weight: bold;"
             );
 
-            gridCartelera.getChildren().add(error);
+            gridCartelera
+                    .getChildren()
+                    .add(error);
 
             ex.printStackTrace();
         }
     }
 
     /**
-     * Crea visualmente una tarjeta de cartelera
-     * utilizando los datos reales de la base de datos.
+     * Carga los géneros y salas disponibles
+     * en los ComboBox.
+     */
+    private void cargarOpcionesFiltros() {
+
+        Set<String> generos =
+                new LinkedHashSet<>();
+
+        Set<String> salas =
+                new LinkedHashSet<>();
+
+        for (CarteleraItem item :
+                carteleraCompleta) {
+
+            if (item.getGenero() != null
+                    && !item.getGenero().isBlank()) {
+
+                generos.add(
+                        item.getGenero()
+                );
+            }
+
+            if (item.getNombreSala() != null
+                    && !item.getNombreSala().isBlank()) {
+
+                salas.add(
+                        item.getNombreSala()
+                );
+            }
+        }
+
+        cbGenero.getItems().clear();
+
+        cbGenero
+                .getItems()
+                .add("Todos los géneros");
+
+        cbGenero
+                .getItems()
+                .addAll(
+                        generos.stream()
+                                .sorted(
+                                        String.CASE_INSENSITIVE_ORDER
+                                )
+                                .collect(
+                                        Collectors.toList()
+                                )
+                );
+
+        cbGenero
+                .getSelectionModel()
+                .selectFirst();
+
+
+        cbSala.getItems().clear();
+
+        cbSala
+                .getItems()
+                .add("Todas las salas");
+
+        cbSala
+                .getItems()
+                .addAll(
+                        salas.stream()
+                                .sorted(
+                                        String.CASE_INSENSITIVE_ORDER
+                                )
+                                .collect(
+                                        Collectors.toList()
+                                )
+                );
+
+        cbSala
+                .getSelectionModel()
+                .selectFirst();
+    }
+
+    /**
+     * Aplica los filtros seleccionados.
+     *
+     * Los filtros pueden utilizarse individualmente
+     * o combinados entre sí.
+     */
+    @FXML
+    public void handleFiltrar() {
+
+        String texto =
+                txtBuscar.getText() == null
+                ? ""
+                : txtBuscar.getText()
+                        .trim()
+                        .toLowerCase();
+
+        LocalDate fecha =
+                dpFecha.getValue();
+
+        String genero =
+                cbGenero.getValue();
+
+        String sala =
+                cbSala.getValue();
+
+        List<CarteleraItem> resultados =
+                carteleraCompleta
+                        .stream()
+                        .filter(item -> {
+
+                            boolean coincideTitulo =
+                                    texto.isBlank()
+                                    || (
+                                        item.getTituloPelicula()
+                                                != null
+                                        && item.getTituloPelicula()
+                                                .toLowerCase()
+                                                .contains(texto)
+                                    );
+
+                            boolean coincideFecha =
+                                    fecha == null
+                                    || fecha.equals(
+                                            item.getFecha()
+                                    );
+
+                            boolean coincideGenero =
+                                    genero == null
+                                    || genero.equals(
+                                            "Todos los géneros"
+                                    )
+                                    || (
+                                        item.getGenero()
+                                                != null
+                                        && item.getGenero()
+                                                .equalsIgnoreCase(
+                                                        genero
+                                                )
+                                    );
+
+                            boolean coincideSala =
+                                    sala == null
+                                    || sala.equals(
+                                            "Todas las salas"
+                                    )
+                                    || (
+                                        item.getNombreSala()
+                                                != null
+                                        && item.getNombreSala()
+                                                .equalsIgnoreCase(
+                                                        sala
+                                                )
+                                    );
+
+                            return coincideTitulo
+                                    && coincideFecha
+                                    && coincideGenero
+                                    && coincideSala;
+                        })
+                        .collect(
+                                Collectors.toList()
+                        );
+
+        limpiarSeleccion();
+
+        mostrarFunciones(resultados);
+    }
+
+    /**
+     * Limpia todos los filtros y vuelve a mostrar
+     * todas las funciones.
+     */
+    @FXML
+    public void handleLimpiar() {
+
+        txtBuscar.clear();
+
+        dpFecha.setValue(null);
+
+        if (!cbGenero.getItems().isEmpty()) {
+
+            cbGenero
+                    .getSelectionModel()
+                    .selectFirst();
+        }
+
+        if (!cbSala.getItems().isEmpty()) {
+
+            cbSala
+                    .getSelectionModel()
+                    .selectFirst();
+        }
+
+        limpiarSeleccion();
+
+        mostrarFunciones(
+                carteleraCompleta
+        );
+    }
+
+    /**
+     * Muestra una lista de funciones en el TilePane.
+     *
+     * @param lista funciones a mostrar
+     */
+    private void mostrarFunciones(
+            List<CarteleraItem> lista) {
+
+        gridCartelera
+                .getChildren()
+                .clear();
+
+        if (lista == null
+                || lista.isEmpty()) {
+
+            mostrarSinResultados();
+
+            return;
+        }
+
+        for (CarteleraItem item : lista) {
+
+            gridCartelera
+                    .getChildren()
+                    .add(
+                            crearTarjeta(item)
+                    );
+        }
+    }
+
+    /**
+     * Crea una tarjeta visual para una función.
      *
      * @param item función de cartelera
-     * @return tarjeta visual
+     * @return tarjeta creada
      */
-    private VBox crearTarjeta(CarteleraItem item) {
+    private VBox crearTarjeta(
+            CarteleraItem item) {
 
-        VBox tarjeta = new VBox(0);
+        VBox tarjeta =
+                new VBox(0);
 
         tarjeta.setPrefWidth(275);
         tarjeta.setMaxWidth(275);
 
-        tarjeta.getStyleClass().add("movie-card");
+        tarjeta
+                .getStyleClass()
+                .add("movie-card");
 
         /*
          * ==============================
@@ -155,7 +420,8 @@ public class CarteleraController {
         poster.setFitHeight(185);
         poster.setPreserveRatio(true);
 
-        poster.getStyleClass()
+        poster
+                .getStyleClass()
                 .add("movie-poster");
 
         cargarPoster(
@@ -173,19 +439,16 @@ public class CarteleraController {
          * ==============================
          */
 
-        HBox badges = new HBox(4);
+        HBox badges =
+                new HBox(4);
 
         badges.setPadding(
                 new Insets(6)
         );
 
-        badges.setStyle(
-                "-fx-alignment: top-right;"
-        );
-
         StackPane.setAlignment(
                 badges,
-                javafx.geometry.Pos.TOP_RIGHT
+                Pos.TOP_RIGHT
         );
 
         Label clasificacion =
@@ -198,7 +461,9 @@ public class CarteleraController {
 
         clasificacion
                 .getStyleClass()
-                .add("classification-badge");
+                .add(
+                        "classification-badge"
+                );
 
         Label genero =
                 new Label(
@@ -211,7 +476,8 @@ public class CarteleraController {
                 .getStyleClass()
                 .add("genre-badge");
 
-        badges.getChildren()
+        badges
+                .getChildren()
                 .addAll(
                         clasificacion,
                         genero
@@ -242,7 +508,7 @@ public class CarteleraController {
                 new HBox();
 
         tituloPrecio.setAlignment(
-                javafx.geometry.Pos.CENTER_LEFT
+                Pos.CENTER_LEFT
         );
 
         Label titulo =
@@ -277,7 +543,8 @@ public class CarteleraController {
                 .getStyleClass()
                 .add("movie-price");
 
-        tituloPrecio.getChildren()
+        tituloPrecio
+                .getChildren()
                 .addAll(
                         titulo,
                         espacio,
@@ -360,7 +627,7 @@ public class CarteleraController {
                 .add("availability-badge");
 
         /*
-         * ID DE FUNCIÓN
+         * ID
          */
 
         Label idFuncion =
@@ -377,7 +644,7 @@ public class CarteleraController {
                 new HBox(5);
 
         estadoFila.setAlignment(
-                javafx.geometry.Pos.CENTER_LEFT
+                Pos.CENTER_LEFT
         );
 
         Region espacioEstado =
@@ -388,7 +655,8 @@ public class CarteleraController {
                 javafx.scene.layout.Priority.ALWAYS
         );
 
-        estadoFila.getChildren()
+        estadoFila
+                .getChildren()
                 .addAll(
                         asientos,
                         espacioEstado,
@@ -396,7 +664,9 @@ public class CarteleraController {
                 );
 
         /*
-         * BOTÓN
+         * ==============================
+         * BOTÓN SELECCIONAR
+         * ==============================
          */
 
         Button verFuncion =
@@ -404,14 +674,30 @@ public class CarteleraController {
                         "Ver función"
                 );
 
-        verFuncion
-                .setMaxWidth(
-                        Double.MAX_VALUE
-                );
+        verFuncion.setMaxWidth(
+                Double.MAX_VALUE
+        );
 
         verFuncion
                 .getStyleClass()
-                .add("button-ver-funcion");
+                .add(
+                        "button-ver-funcion"
+                );
+
+        verFuncion.setOnAction(
+                evento ->
+                        seleccionarFuncion(
+                                item,
+                                tarjeta,
+                                verFuncion
+                        )
+        );
+
+        /*
+         * ==============================
+         * AGREGAR ELEMENTOS
+         * ==============================
+         */
 
         informacion
                 .getChildren()
@@ -435,16 +721,116 @@ public class CarteleraController {
     }
 
     /**
+     * Selecciona una función sin enviarla todavía
+     * al proceso de venta.
+     *
+     * @param item función seleccionada
+     * @param tarjeta tarjeta visual
+     * @param boton botón de selección
+     */
+    private void seleccionarFuncion(
+            CarteleraItem item,
+            VBox tarjeta,
+            Button boton) {
+
+        /*
+         * Quitar selección anterior.
+         */
+
+        if (tarjetaSeleccionada != null) {
+
+            tarjetaSeleccionada
+                    .getStyleClass()
+                    .remove(
+                            "movie-card-selected"
+                    );
+        }
+
+        if (botonSeleccionado != null) {
+
+            botonSeleccionado
+                    .setText(
+                            "Ver función"
+                    );
+        }
+
+        /*
+         * Guardar nueva selección.
+         */
+
+        funcionSeleccionada = item;
+
+        tarjetaSeleccionada = tarjeta;
+
+        botonSeleccionado = boton;
+
+        /*
+         * Marcar visualmente.
+         */
+
+        tarjetaSeleccionada
+                .getStyleClass()
+                .add(
+                        "movie-card-selected"
+                );
+
+        botonSeleccionado
+                .setText(
+                        "Función seleccionada"
+                );
+
+        System.out.println(
+                "Función seleccionada: "
+                + item.getIdFuncion()
+        );
+    }
+
+    /**
+     * Elimina la selección actual.
+     */
+    private void limpiarSeleccion() {
+
+        if (tarjetaSeleccionada != null) {
+
+            tarjetaSeleccionada
+                    .getStyleClass()
+                    .remove(
+                            "movie-card-selected"
+                    );
+        }
+
+        if (botonSeleccionado != null) {
+
+            botonSeleccionado
+                    .setText(
+                            "Ver función"
+                    );
+        }
+
+        tarjetaSeleccionada = null;
+
+        botonSeleccionado = null;
+
+        funcionSeleccionada = null;
+    }
+
+    /**
+     * Obtiene la función actualmente seleccionada.
+     *
+     * Será utilizada en T2.3.10.
+     *
+     * @return función seleccionada o null
+     */
+    public CarteleraItem getFuncionSeleccionada() {
+
+        return funcionSeleccionada;
+    }
+
+    /**
      * Carga el poster local correspondiente a la película.
      *
-     * Se buscan archivos con el formato:
-     *
-     * pelicula_ID.jpg
-     * pelicula_ID.png
-     * pelicula_ID.jpeg
-     *
      * @param imageView componente donde se cargará la imagen
-     * @param idPelicula identificador de la película
+     * @param idPelicula identificador de película
      */
     private void cargarPoster(
             ImageView imageView,
@@ -456,7 +842,8 @@ public class CarteleraController {
             ".jpeg"
         };
 
-        for (String extension : extensiones) {
+        for (String extension :
+                extensiones) {
 
             String ruta =
                     "/org/cine/resources/images/"
@@ -466,14 +853,21 @@ public class CarteleraController {
 
             InputStream entrada =
                     getClass()
-                            .getResourceAsStream(ruta);
+                            .getResourceAsStream(
+                                    ruta
+                            );
 
             if (entrada != null) {
 
                 Image imagen =
-                        new Image(entrada);
+                        new Image(
+                                entrada
+                        );
 
-                imageView.setImage(imagen);
+                imageView
+                        .setImage(
+                                imagen
+                        );
 
                 return;
             }
@@ -481,7 +875,8 @@ public class CarteleraController {
     }
 
     /**
-     * Muestra un mensaje cuando no existen funciones.
+     * Muestra el mensaje cuando no existen
+     * resultados para los filtros.
      */
     private void mostrarSinResultados() {
 
@@ -489,7 +884,7 @@ public class CarteleraController {
                 new VBox(8);
 
         mensaje.setAlignment(
-                javafx.geometry.Pos.CENTER
+                Pos.CENTER
         );
 
         Label titulo =
@@ -505,8 +900,7 @@ public class CarteleraController {
 
         Label descripcion =
                 new Label(
-                        "No existen funciones disponibles "
-                        + "para mostrar."
+                        "Intenta cambiar los filtros de búsqueda."
                 );
 
         descripcion.setStyle(
@@ -514,7 +908,8 @@ public class CarteleraController {
                 + "-fx-text-fill: #708097;"
         );
 
-        mensaje.getChildren()
+        mensaje
+                .getChildren()
                 .addAll(
                         titulo,
                         descripcion
@@ -526,7 +921,7 @@ public class CarteleraController {
     }
 
     /**
-     * Convierte un precio a formato de moneda.
+     * Formatea el precio.
      *
      * @param precio precio de la función
      * @return precio formateado
@@ -535,6 +930,7 @@ public class CarteleraController {
             BigDecimal precio) {
 
         if (precio == null) {
+
             return "Q0.00";
         }
 
@@ -547,12 +943,15 @@ public class CarteleraController {
     /**
      * Evita mostrar valores null.
      *
-     * @param valor texto recibido
+     * @param valor texto
      * @return texto válido
      */
-    private String valorTexto(String valor) {
+    private String valorTexto(
+            String valor) {
 
-        if (valor == null || valor.isBlank()) {
+        if (valor == null
+                || valor.isBlank()) {
+
             return "No disponible";
         }
 

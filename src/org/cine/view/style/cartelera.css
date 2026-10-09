@@ -353,3 +353,22 @@
     -fx-text-fill: #d6dfeb;
     -fx-font-size: 8px;
 }
+
+/* =========================
+   FUNCION SELECCIONADA
+   ========================= */
+
+.movie-card-selected {
+    -fx-border-color: #2563eb;
+    -fx-border-width: 2px;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(37, 99, 235, 0.25),
+        8,
+        0,
+        0,
+        2
+    );
+}

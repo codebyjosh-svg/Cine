@@ -167,10 +167,12 @@
 
                             <Button fx:id="btnFiltrar"
                                     text="Filtrar"
+                                    onAction="#handleFiltrar"
                                     styleClass="button-primary"/>
 
                             <Button fx:id="btnLimpiar"
                                     text="Limpiar"
+                                    onAction="#handleLimpiar"
                                     styleClass="button-secondary"/>
 
                         </HBox>
