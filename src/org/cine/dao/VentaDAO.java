@@ -6,6 +6,6 @@ public interface VentaDAO {
  record Butaca(int id,String nombre,boolean disponible){public String toString(){return nombre;}}
  List<Opcion> clientes() throws SQLException;List<Funcion> funciones() throws SQLException;List<Butaca> butacas(int funcion) throws SQLException;
  int abrir(int cliente,int usuario) throws SQLException;void agregar(int venta,int funcion,int butaca) throws SQLException;void quitar(int venta,int boleto) throws SQLException;
- List<Boleto> boletos(int venta) throws SQLException;Venta confirmar(int venta) throws SQLException;Venta consultar(int id) throws SQLException;List<Venta> ventas() throws SQLException;
+ List<Boleto> boletos(int venta) throws SQLException;Venta confirmar(int venta, String metodoPago) throws SQLException;;Venta consultar(int id) throws SQLException;List<Venta> ventas() throws SQLException;
  List<String> factura(int id) throws SQLException;void cancelar(int id) throws SQLException;
 }

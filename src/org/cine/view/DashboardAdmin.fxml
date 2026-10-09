@@ -81,8 +81,6 @@
 
                         </HBox>
 
-
-                        <Button text="Vender boletos" onAction="#abrirVenta" styleClass="menu-button" maxWidth="Infinity"/>
                         <Button maxWidth="Infinity"
                                 mnemonicParsing="false"
                                 alignment="CENTER_LEFT"
@@ -205,21 +203,22 @@
                         </HBox>
 
 
-                        <HBox alignment="CENTER_LEFT"
-                              prefHeight="36"
-                              styleClass="menu-disabled">
+                        <Button maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                alignment="CENTER_LEFT"
+                                contentDisplay="LEFT"
+                                graphicTextGap="10"
+                                onAction="#abrirVenta"
+                                styleClass="menu-button">
 
-                            <padding>
-                                <Insets left="10"/>
-                            </padding>
+                            <graphic>
+                                <Label text="V"
+                                       styleClass="menu-icon"/>
+                            </graphic>
 
-                            <Label text="V"
-                                   styleClass="menu-icon"/>
+                            <text>Ventas</text>
 
-                            <Label text="Ventas"
-                                   styleClass="menu-text"/>
-
-                        </HBox>
+                        </Button>
 
 
                         <HBox alignment="CENTER_LEFT"
@@ -542,7 +541,7 @@
                             </VBox>
 
 
-                            <Label text="3 módulos disponibles"
+                            <Label text="4 módulos disponibles"
                                    styleClass="available-badge"/>
 
                         </HBox>
@@ -793,30 +792,31 @@
 
                             <VBox GridPane.columnIndex="1"
                                   GridPane.rowIndex="2"
-                                  styleClass="module-disabled">
+                                  styleClass="module-active"
+                                  pickOnBounds="true"
+                                  onMouseClicked="#abrirVenta">
 
-                                <HBox alignment="CENTER_LEFT">
+                                <HBox alignment="CENTER_LEFT"
+                                      mouseTransparent="true">
 
                                     <Label text="V"
-                                           styleClass="module-letter"/>
+                                           styleClass="module-letter"
+                                           mouseTransparent="true"/>
 
-                                    <Label text="EN DESARROLLO"
-                                           styleClass="development-label"/>
+                                    <Label text="DISPONIBLE"
+                                           styleClass="available-label"
+                                           mouseTransparent="true"/>
 
                                 </HBox>
 
                                 <Label text="Ventas"
-                                       styleClass="module-title"/>
+                                       styleClass="module-title"
+                                       mouseTransparent="true"/>
 
                                 <Label text="Gestión de ventas y boletos."
                                        wrapText="true"
-                                       styleClass="module-description"/>
-
-                                <Button text="Próximamente"
-                                        disable="true"
-                                        maxWidth="Infinity"
-                                        mnemonicParsing="false"
-                                        styleClass="module-button-disabled"/>
+                                       styleClass="module-description"
+                                       mouseTransparent="true"/>
 
                             </VBox>
 
