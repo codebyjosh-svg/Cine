@@ -8,15 +8,35 @@ import org.cine.model.Funcion;
 import org.cine.model.Pelicula;
 import org.cine.model.Sala;
 
-/** Operaciones de US-2.2. Los errores SQL se comunican al controlador. */
+/**
+ * Operaciones de la historia US-2.2.
+ */
 public interface FuncionDAO {
-    List<Funcion> listarTodos() throws SQLException;
-    Optional<Funcion> buscarPorId(int idFuncion) throws SQLException;
-    int insertar(Funcion funcion) throws SQLException;
-    void actualizar(Funcion funcion) throws SQLException;
-    void cancelar(int idFuncion) throws SQLException;
-    void finalizar(int idFuncion) throws SQLException;
-    List<Pelicula> listarPeliculasActivas() throws SQLException;
-    List<Sala> listarSalasActivas() throws SQLException;
-    LocalDateTime obtenerHoraServidor() throws SQLException;
+
+    List<Funcion> listarTodos()
+            throws SQLException;
+
+    Optional<Funcion> buscarPorId(int idFuncion)
+            throws SQLException;
+
+    int insertar(Funcion funcion)
+            throws SQLException;
+
+    void actualizar(Funcion funcion)
+            throws SQLException;
+
+    void cancelar(int idFuncion)
+            throws SQLException;
+
+    void finalizar(int idFuncion)
+            throws SQLException;
+
+    List<Pelicula> listarPeliculasActivas()
+            throws SQLException;
+
+    List<Sala> listarSalasActivas()
+            throws SQLException;
+
+    LocalDateTime obtenerHoraServidor()
+            throws SQLException;
 }

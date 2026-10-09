@@ -1,3 +1,0 @@
-db.url=jdbc:mysql://localhost:3306/cinedb_in4cm?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-db.user=IN4CM
-db.password=
