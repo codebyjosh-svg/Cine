@@ -1,11 +1,11 @@
 .cartelera-root {
-    -fx-background-color: #f4f7fb;
     -fx-font-family: "Segoe UI";
+    -fx-background-color: #f4f7fb;
 }
 
-/* ==============================
-   BARRA SUPERIOR
-   ============================== */
+/* =========================
+   ENCABEZADO
+   ========================= */
 
 .top-bar {
     -fx-background-color: #17243a;
@@ -24,16 +24,17 @@
 
 .top-section-title {
     -fx-text-fill: white;
-    -fx-font-size: 15px;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
 
 .back-button {
     -fx-background-color: #33445f;
     -fx-text-fill: white;
+    -fx-font-size: 10px;
     -fx-font-weight: bold;
-    -fx-background-radius: 6px;
-    -fx-padding: 9px 14px;
+    -fx-background-radius: 5px;
+    -fx-padding: 7px 12px;
     -fx-cursor: hand;
 }
 
@@ -41,9 +42,9 @@
     -fx-background-color: #405575;
 }
 
-/* ==============================
+/* =========================
    SCROLL
-   ============================== */
+   ========================= */
 
 .main-scroll {
     -fx-background-color: transparent;
@@ -54,68 +55,68 @@
     -fx-background-color: #f4f7fb;
 }
 
-/* ==============================
+/* =========================
    CONTENIDO
-   ============================== */
+   ========================= */
 
 .content-container {
-    -fx-padding: 16px 22px 20px 22px;
+    -fx-padding: 12px 18px 14px 18px;
 }
 
 .page-title {
     -fx-text-fill: #111d31;
-    -fx-font-size: 23px;
+    -fx-font-size: 21px;
     -fx-font-weight: bold;
 }
 
 .page-subtitle {
     -fx-text-fill: #66758c;
-    -fx-font-size: 11px;
+    -fx-font-size: 10px;
 }
 
-/* ==============================
+/* =========================
    ESTADO
-   ============================== */
+   ========================= */
 
 .status-badge {
     -fx-background-color: white;
     -fx-border-color: #dbe3ef;
     -fx-border-radius: 5px;
     -fx-background-radius: 5px;
-    -fx-padding: 7px 10px;
+    -fx-padding: 5px 8px;
 }
 
 .status-dot {
     -fx-text-fill: #16a34a;
-    -fx-font-size: 10px;
+    -fx-font-size: 9px;
 }
 
 .status-text {
     -fx-text-fill: #166534;
-    -fx-font-size: 10px;
+    -fx-font-size: 9px;
     -fx-font-weight: bold;
 }
 
 .status-text-secondary {
     -fx-text-fill: #66758c;
-    -fx-font-size: 10px;
+    -fx-font-size: 9px;
 }
 
-/* ==============================
+/* =========================
    FILTROS
-   ============================== */
+   ========================= */
 
 .filter-card {
     -fx-background-color: white;
     -fx-border-color: #dbe3ef;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
-    -fx-padding: 10px;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-padding: 8px;
 }
 
 .field-label {
     -fx-text-fill: #15233b;
-    -fx-font-size: 10px;
+    -fx-font-size: 9px;
     -fx-font-weight: bold;
 }
 
@@ -124,10 +125,10 @@
 .form-date {
     -fx-background-color: #f8fafc;
     -fx-border-color: #cbd8e8;
-    -fx-border-radius: 5px;
-    -fx-background-radius: 5px;
-    -fx-padding: 7px;
-    -fx-font-size: 10px;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 6px;
+    -fx-font-size: 9px;
 }
 
 .form-field:focused,
@@ -137,16 +138,16 @@
     -fx-background-color: white;
 }
 
-/* ==============================
+/* =========================
    BOTONES
-   ============================== */
+   ========================= */
 
 .button-primary,
-.button-secondary,
-.button-ver-funcion {
+.button-secondary {
+    -fx-font-size: 9px;
     -fx-font-weight: bold;
     -fx-background-radius: 5px;
-    -fx-padding: 8px 13px;
+    -fx-padding: 7px 11px;
     -fx-cursor: hand;
 }
 
@@ -168,55 +169,47 @@
     -fx-background-color: #d8e3f1;
 }
 
-/* ==============================
-   SECCION CARTELERA
-   ============================== */
-
-.section-container {
-    -fx-background-color: white;
-    -fx-border-color: #dbe3ef;
-    -fx-border-radius: 9px;
-    -fx-background-radius: 9px;
-    -fx-padding: 12px;
-}
+/* =========================
+   SECCION
+   ========================= */
 
 .section-title {
     -fx-text-fill: #10203a;
-    -fx-font-size: 15px;
+    -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
 
 .section-subtitle {
     -fx-text-fill: #708097;
-    -fx-font-size: 10px;
+    -fx-font-size: 9px;
 }
 
 .section-badge {
     -fx-background-color: #edf4ff;
     -fx-text-fill: #2161d1;
-    -fx-font-size: 9px;
+    -fx-font-size: 8px;
     -fx-font-weight: bold;
-    -fx-padding: 5px 9px;
-    -fx-background-radius: 5px;
+    -fx-padding: 4px 8px;
+    -fx-background-radius: 4px;
 }
 
-/* ==============================
+/* =========================
    GRID
-   ============================== */
+   ========================= */
 
 .movies-grid {
-    -fx-padding: 2px;
+    -fx-padding: 0;
 }
 
-/* ==============================
-   TARJETA DE PELICULA
-   ============================== */
+/* =========================
+   TARJETAS
+   ========================= */
 
 .movie-card {
     -fx-background-color: white;
     -fx-border-color: #dbe3ef;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
     -fx-padding: 0;
 }
 
@@ -224,16 +217,16 @@
     -fx-border-color: #a9c3eb;
 }
 
-/* ==============================
+/* =========================
    POSTER
-   ============================== */
+   ========================= */
 
 .poster-container {
     -fx-background-color: #e9eef6;
-    -fx-background-radius: 8px 8px 0 0;
-    -fx-min-height: 250px;
-    -fx-pref-height: 250px;
-    -fx-max-height: 250px;
+    -fx-background-radius: 7px 7px 0 0;
+    -fx-min-height: 185px;
+    -fx-pref-height: 185px;
+    -fx-max-height: 185px;
 }
 
 .movie-poster {
@@ -242,106 +235,115 @@
 
 .poster-placeholder {
     -fx-text-fill: #8997aa;
-    -fx-font-size: 11px;
+    -fx-font-size: 10px;
     -fx-font-weight: bold;
 }
 
-/* ==============================
-   BADGES DEL POSTER
-   ============================== */
+/* =========================
+   BADGES
+   ========================= */
 
 .classification-badge {
     -fx-background-color: rgba(15, 29, 49, 0.88);
     -fx-text-fill: white;
-    -fx-font-size: 8px;
+    -fx-font-size: 7px;
     -fx-font-weight: bold;
-    -fx-padding: 4px 6px;
-    -fx-background-radius: 4px;
+    -fx-padding: 3px 5px;
+    -fx-background-radius: 3px;
 }
 
 .genre-badge {
     -fx-background-color: #2563eb;
     -fx-text-fill: white;
-    -fx-font-size: 8px;
+    -fx-font-size: 7px;
     -fx-font-weight: bold;
-    -fx-padding: 4px 6px;
-    -fx-background-radius: 4px;
+    -fx-padding: 3px 5px;
+    -fx-background-radius: 3px;
 }
 
-/* ==============================
-   INFORMACION PELICULA
-   ============================== */
+/* =========================
+   INFORMACION DE PELICULA
+   ========================= */
 
 .movie-info {
-    -fx-padding: 8px;
+    -fx-padding: 7px;
 }
 
 .movie-title {
     -fx-text-fill: #111d31;
-    -fx-font-size: 11px;
+    -fx-font-size: 10px;
     -fx-font-weight: bold;
 }
 
 .movie-price {
     -fx-text-fill: #2563eb;
-    -fx-font-size: 11px;
+    -fx-font-size: 10px;
     -fx-font-weight: bold;
 }
 
 .movie-detail {
     -fx-text-fill: #66758c;
-    -fx-font-size: 9px;
+    -fx-font-size: 8px;
+}
+
+.movie-id {
+    -fx-text-fill: #8997aa;
+    -fx-font-size: 7px;
 }
 
 .availability-badge {
     -fx-background-color: #dcfce7;
     -fx-text-fill: #166534;
-    -fx-font-size: 9px;
+    -fx-font-size: 8px;
     -fx-font-weight: bold;
-    -fx-padding: 4px 7px;
-    -fx-background-radius: 4px;
+    -fx-padding: 3px 6px;
+    -fx-background-radius: 3px;
 }
 
-/* ==============================
+/* =========================
    VER FUNCION
-   ============================== */
+   ========================= */
 
 .button-ver-funcion {
     -fx-background-color: #2563eb;
     -fx-text-fill: white;
-    -fx-font-size: 10px;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 6px;
+    -fx-cursor: hand;
 }
 
 .button-ver-funcion:hover {
     -fx-background-color: #1d4ed8;
 }
 
-/* ==============================
+/* =========================
    INFORMACION INFERIOR
-   ============================== */
+   ========================= */
 
 .info-card {
     -fx-background-color: white;
     -fx-border-color: #dbe3ef;
-    -fx-border-radius: 8px;
-    -fx-background-radius: 8px;
-    -fx-padding: 12px;
+    -fx-border-radius: 7px;
+    -fx-background-radius: 7px;
+    -fx-padding: 9px;
 }
 
 .info-title {
     -fx-text-fill: #10203a;
-    -fx-font-size: 12px;
+    -fx-font-size: 10px;
     -fx-font-weight: bold;
 }
 
 .info-text {
     -fx-text-fill: #708097;
-    -fx-font-size: 10px;
+    -fx-font-size: 8px;
 }
 
-/* ==============================
+/* =========================
    PIE
-   ============================== */
+   ========================= */
 
 .footer-container {
     -fx-background-color: #17243a;
@@ -349,5 +351,5 @@
 
 .footer-label {
     -fx-text-fill: #d6dfeb;
-    -fx-font-size: 9px;
+    -fx-font-size: 8px;
 }
