@@ -52,8 +52,7 @@ public class Principal extends Application {
     // LOGIN
     // =========================================================
 
-    public static void mostrarLogin()
-            throws IOException {
+    public static void mostrarLogin() throws IOException {
 
         cambiarEscena(
                 "/org/cine/view/Login.fxml",
@@ -71,7 +70,6 @@ public class Principal extends Application {
         if (!SesionContext.haySesionActiva()) {
 
             mostrarLogin();
-
             return;
         }
 
@@ -94,19 +92,7 @@ public class Principal extends Application {
     public static void mostrarUsuarios()
             throws IOException {
 
-        Usuario actual =
-                SesionContext.getUsuarioActual();
-
-        if (actual == null
-                || !actual.isEstado()
-                || !"admin".equalsIgnoreCase(
-                        actual.getNombreRol())) {
-
-            throw new IllegalStateException(
-                    "La gestión de usuarios requiere "
-                    + "una sesión de administrador."
-            );
-        }
+        validarAdministrador("usuarios");
 
         cambiarEscena(
                 "/org/cine/view/Usuarios.fxml",
@@ -121,19 +107,7 @@ public class Principal extends Application {
     public static void mostrarPeliculas()
             throws IOException {
 
-        Usuario actual =
-                SesionContext.getUsuarioActual();
-
-        if (actual == null
-                || !actual.isEstado()
-                || !"admin".equalsIgnoreCase(
-                        actual.getNombreRol())) {
-
-            throw new IllegalStateException(
-                    "La gestión de películas requiere "
-                    + "una sesión de administrador."
-            );
-        }
+        validarAdministrador("películas");
 
         cambiarEscena(
                 "/org/cine/view/Peliculas.fxml",
@@ -148,19 +122,7 @@ public class Principal extends Application {
     public static void mostrarGeneros()
             throws IOException {
 
-        Usuario actual =
-                SesionContext.getUsuarioActual();
-
-        if (actual == null
-                || !actual.isEstado()
-                || !"admin".equalsIgnoreCase(
-                        actual.getNombreRol())) {
-
-            throw new IllegalStateException(
-                    "La gestión de géneros requiere "
-                    + "una sesión de administrador."
-            );
-        }
+        validarAdministrador("géneros");
 
         cambiarEscena(
                 "/org/cine/view/Generos.fxml",
@@ -172,25 +134,10 @@ public class Principal extends Application {
     // CLIENTES
     // =========================================================
 
-    /**
-     * US-1.4 - Gestión de clientes.
-     */
     public static void mostrarClientes()
             throws IOException {
 
-        Usuario actual =
-                SesionContext.getUsuarioActual();
-
-        if (actual == null
-                || !actual.isEstado()
-                || !"admin".equalsIgnoreCase(
-                        actual.getNombreRol())) {
-
-            throw new IllegalStateException(
-                    "La gestión de clientes requiere "
-                    + "una sesión de administrador."
-            );
-        }
+        validarAdministrador("clientes");
 
         cambiarEscena(
                 "/org/cine/view/Clientes.fxml",
@@ -199,28 +146,43 @@ public class Principal extends Application {
     }
 
     // =========================================================
+    // PRODUCTOS DE DULCERÍA
+    // =========================================================
+
+    public static void mostrarProductos()
+            throws IOException {
+
+        validarAdministrador("productos");
+
+        cambiarEscena(
+                "/org/cine/view/Productos.fxml",
+                "Cine - Productos de dulcería"
+        );
+    }
+
+    // =========================================================
+    // CATEGORÍAS DE PRODUCTOS
+    // =========================================================
+
+    public static void mostrarCategoriasProducto()
+            throws IOException {
+
+        validarAdministrador("categorías de productos");
+
+        cambiarEscena(
+                "/org/cine/view/CategoriasProducto.fxml",
+                "Cine - Categorías de productos"
+        );
+    }
+
+    // =========================================================
     // SALAS Y BUTACAS - US-2.1
     // =========================================================
 
-    /**
-     * US-2.1 - Gestión de salas y butacas.
-     */
     public static void mostrarSalas()
             throws IOException {
 
-        Usuario actual =
-                SesionContext.getUsuarioActual();
-
-        if (actual == null
-                || !actual.isEstado()
-                || !"admin".equalsIgnoreCase(
-                        actual.getNombreRol())) {
-
-            throw new IllegalStateException(
-                    "La gestión de salas requiere "
-                    + "una sesión de administrador."
-            );
-        }
+        validarAdministrador("salas");
 
         cambiarEscena(
                 "/org/cine/view/Salas.fxml",
@@ -258,8 +220,7 @@ public class Principal extends Application {
     // US-2.3 -> US-2.4
     // =========================================================
 
-    public static void mostrarVenta(
-            int idFuncion)
+    public static void mostrarVenta(int idFuncion)
             throws IOException {
 
         String rol =
@@ -281,19 +242,12 @@ public class Principal extends Application {
                         )
                 );
 
-        Parent root =
-                loader.load();
+        Parent root = loader.load();
 
         org.cine.controller.VentaController controller =
                 loader.getController();
 
-        /*
-         * Se pasa la función seleccionada
-         * desde Cartelera.
-         */
-        controller.seleccionarFuncion(
-                idFuncion
-        );
+        controller.seleccionarFuncion(idFuncion);
 
         Scene scene =
                 new Scene(
@@ -319,14 +273,9 @@ public class Principal extends Application {
     // FACTURA - US-2.4
     // =========================================================
 
-    public static void mostrarFactura(
-            int idVenta)
+    public static void mostrarFactura(int idVenta)
             throws IOException {
 
-        /*
-         * Mantiene la validación de permisos
-         * utilizada por la integración de ventas.
-         */
         PermisosVenta.exigirVendedor();
 
         FXMLLoader loader =
@@ -336,8 +285,7 @@ public class Principal extends Application {
                         )
                 );
 
-        Parent root =
-                loader.load();
+        Parent root = loader.load();
 
         aplicarEscena(
                 root,
@@ -346,42 +294,22 @@ public class Principal extends Application {
                 true
         );
 
-        /*
-         * Se utiliza cargarFactura() porque es
-         * la implementación de FacturaController
-         * que viene del lado HEAD.
-         */
         FacturaController controller =
                 loader.getController();
 
-        controller.cargarFactura(
-                idVenta
-        );
+        controller.cargarFactura(idVenta);
     }
 
     // =========================================================
     // PROGRAMACIÓN - US-2.2
     // =========================================================
 
-    /**
-     * US-2.2 - Programación de funciones.
-     */
     public static void mostrarProgramacion()
             throws IOException {
 
-        Usuario actual =
-                SesionContext.getUsuarioActual();
-
-        if (actual == null
-                || !actual.isEstado()
-                || !"admin".equalsIgnoreCase(
-                        actual.getNombreRol())) {
-
-            throw new IllegalStateException(
-                    "La programación de funciones requiere "
-                    + "una sesión de administrador."
-            );
-        }
+        validarAdministrador(
+                "programación de funciones"
+        );
 
         cambiarEscena(
                 "/org/cine/view/Programacion.fxml",
@@ -393,9 +321,6 @@ public class Principal extends Application {
     // CARTELERA - US-2.3
     // =========================================================
 
-    /**
-     * US-2.3 - Consulta de cartelera.
-     */
     public static void mostrarCartelera()
             throws IOException {
 
@@ -449,6 +374,29 @@ public class Principal extends Application {
     }
 
     // =========================================================
+    // VALIDACIÓN DE ADMINISTRADOR
+    // =========================================================
+
+    private static void validarAdministrador(
+            String modulo) {
+
+        Usuario actual =
+                SesionContext.getUsuarioActual();
+
+        if (actual == null
+                || !actual.isEstado()
+                || !"admin".equalsIgnoreCase(
+                        actual.getNombreRol())) {
+
+            throw new IllegalStateException(
+                    "La gestión de " + modulo
+                    + " requiere una sesión "
+                    + "de administrador."
+            );
+        }
+    }
+
+    // =========================================================
     // CERRAR SESIÓN
     // =========================================================
 
@@ -469,10 +417,23 @@ public class Principal extends Application {
             String titulo)
             throws IOException {
 
+        if (stagePrincipal == null) {
+
+            throw new IllegalStateException(
+                    "La ventana principal todavía "
+                    + "no está inicializada."
+            );
+        }
+
+        if (ruta == null || ruta.isBlank()) {
+
+            throw new IOException(
+                    "No se indicó la ruta de la vista."
+            );
+        }
+
         URL recurso =
-                Principal.class.getResource(
-                        ruta
-                );
+                Principal.class.getResource(ruta);
 
         if (recurso == null) {
 
@@ -483,51 +444,42 @@ public class Principal extends Application {
         }
 
         FXMLLoader loader =
-                new FXMLLoader(
-                        recurso
-                );
+                new FXMLLoader(recurso);
 
-        Parent root =
-                loader.load();
+        Parent root = loader.load();
 
         // =====================================================
         // IDENTIFICAR VISTAS
         // =====================================================
 
         boolean usuarios =
-                ruta.endsWith(
-                        "/Usuarios.fxml"
-                );
+                ruta.endsWith("/Usuarios.fxml");
 
         boolean peliculas =
-                ruta.endsWith(
-                        "/Peliculas.fxml"
-                );
+                ruta.endsWith("/Peliculas.fxml");
 
         boolean generos =
-                ruta.endsWith(
-                        "/Generos.fxml"
-                );
+                ruta.endsWith("/Generos.fxml");
 
         boolean clientes =
+                ruta.endsWith("/Clientes.fxml");
+
+        boolean productos =
+                ruta.endsWith("/Productos.fxml");
+
+        boolean categoriasProducto =
                 ruta.endsWith(
-                        "/Clientes.fxml"
+                        "/CategoriasProducto.fxml"
                 );
 
         boolean salas =
-                ruta.endsWith(
-                        "/Salas.fxml"
-                );
+                ruta.endsWith("/Salas.fxml");
 
         boolean venta =
-                ruta.endsWith(
-                        "/Venta.fxml"
-                );
+                ruta.endsWith("/Venta.fxml");
 
         boolean factura =
-                ruta.endsWith(
-                        "/Factura.fxml"
-                );
+                ruta.endsWith("/Factura.fxml");
 
         boolean stockCritico =
                 ruta.endsWith(
@@ -553,15 +505,13 @@ public class Principal extends Application {
                 || peliculas
                 || generos
                 || clientes
+                || productos
+                || categoriasProducto
                 || salas
-                || venta
-                || factura
-                || stockCritico
-                || programacion
-                || cartelera;
+                || programacion;
 
         // =====================================================
-        // OPERACIONES
+        // PANTALLAS DE OPERACIÓN
         // =====================================================
 
         boolean operacion =
@@ -594,6 +544,7 @@ public class Principal extends Application {
         /*
          * Se evita que la ventana salga de la pantalla.
          */
+
         double ancho =
                 Math.min(
                         operacion
@@ -640,9 +591,7 @@ public class Principal extends Application {
                 )
         );
 
-        stagePrincipal.setTitle(
-                titulo
-        );
+        stagePrincipal.setTitle(titulo);
 
         stagePrincipal.sizeToScene();
 
@@ -653,8 +602,7 @@ public class Principal extends Application {
     // MAIN
     // =========================================================
 
-    public static void main(
-            String[] args) {
+    public static void main(String[] args) {
 
         launch(args);
     }

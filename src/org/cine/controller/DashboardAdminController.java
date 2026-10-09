@@ -23,11 +23,15 @@ public class DashboardAdminController {
         if (usuario != null) {
 
             if (lblUsuario != null) {
-                lblUsuario.setText(usuario.getNombreCompleto());
+                lblUsuario.setText(
+                        usuario.getNombreCompleto()
+                );
             }
 
             if (lblRol != null) {
-                lblRol.setText(usuario.getNombreRol());
+                lblRol.setText(
+                        usuario.getNombreRol()
+                );
             }
         }
     }
@@ -69,6 +73,24 @@ public class DashboardAdminController {
     }
 
     // ==============================
+    // PRODUCTOS
+    // ==============================
+
+    @FXML
+    private void abrirProductos() throws IOException {
+        Principal.mostrarProductos();
+    }
+
+    // ==============================
+    // CATEGORÍAS DE PRODUCTO
+    // ==============================
+
+    @FXML
+    private void abrirCategoriasProducto() throws IOException {
+        Principal.mostrarCategoriasProducto();
+    }
+
+    // ==============================
     // SALAS Y BUTACAS - US-2.1
     // ==============================
 
@@ -78,21 +100,21 @@ public class DashboardAdminController {
     }
 
     // ==============================
-    // VENTA DE BOLETOS - US-2.4
-    // ==============================
-
-    @FXML
-    private void abrirVenta() throws IOException {
-        Principal.mostrarVenta();
-    }
-
-    // ==============================
     // FUNCIONES - US-2.2
     // ==============================
 
     @FXML
     private void abrirFunciones() throws IOException {
         Principal.mostrarProgramacion();
+    }
+
+    // ==============================
+    // VENTA DE BOLETOS - US-2.4
+    // ==============================
+
+    @FXML
+    private void abrirVenta() throws IOException {
+        Principal.mostrarVenta();
     }
 
     // ==============================
