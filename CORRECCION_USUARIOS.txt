@@ -1,0 +1,9 @@
+CORRECCIONES DE GESTION DE USUARIOS
+- Se elimino el panel Cliente debajo de Rol.
+- Solo se ofrecen los roles admin y taquillero en la gestion de usuarios.
+- Se elimino la columna Cliente de la tabla de usuarios.
+- Se quitaron las referencias al panel Cliente del controlador.
+- No se modificaron los archivos SQL ni db.properties.
+- Se excluyeron build/ y dist/ para regenerar el proyecto desde el codigo fuente con Clean and Build de NetBeans.
+- Los usuarios con otros roles siguen en la base de datos y pueden aparecer en la lista, pero no se pueden editar desde esta pantalla.
+NOTA: La compilacion y conexion real a MySQL requieren probar el proyecto en NetBeans configurado.

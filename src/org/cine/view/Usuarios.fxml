@@ -167,25 +167,6 @@
 
                     </VBox>
 
-
-                    <!-- CLIENTE -->
-
-                    <VBox fx:id="bloqueCliente"
-                          spacing="5"
-                          managed="false"
-                          visible="false">
-
-                        <Label text="Cliente"
-                               styleClass="field-label"/>
-
-                        <ComboBox fx:id="cmbCliente"
-                                  promptText="Selecciona un cliente"
-                                  maxWidth="1.7976931348623157E308"
-                                  styleClass="combo"/>
-
-                    </VBox>
-
-
                     <!-- CONTRASEÑA -->
 
                     <VBox spacing="5">
@@ -320,10 +301,6 @@
                             <TableColumn fx:id="colRol"
                                          text="Rol"
                                          prefWidth="85"/>
-
-                            <TableColumn fx:id="colCliente"
-                                         text="Cliente"
-                                         prefWidth="70"/>
 
                             <TableColumn fx:id="colEstado"
                                          text="Estado"

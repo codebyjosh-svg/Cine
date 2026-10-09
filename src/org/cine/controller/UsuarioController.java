@@ -18,9 +18,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
 import org.cine.dao.impl.UsuarioDAOImpl;
-import org.cine.model.ClienteVinculo;
 import org.cine.model.Rol;
 import org.cine.model.Usuario;
 import org.cine.service.UsuarioService;
@@ -28,7 +26,6 @@ import org.cine.service.SesionContext;
 import org.cine.system.Principal;
 
 public class UsuarioController {
-    @FXML private VBox bloqueCliente;
     @FXML private TextField txtNombre;
     @FXML private TextField txtApellido;
     @FXML private TextField txtUsername;
@@ -36,7 +33,6 @@ public class UsuarioController {
     @FXML private PasswordField txtContrasena;
     @FXML private PasswordField txtConfirmacion;
     @FXML private ComboBox<Rol> cmbRol;
-    @FXML private ComboBox<ClienteVinculo> cmbCliente;
     @FXML private ComboBox<String> cmbFiltroEstado;
     @FXML private TextField txtBusqueda;
     @FXML private TableView<Usuario> tblUsuarios;
@@ -45,7 +41,6 @@ public class UsuarioController {
     @FXML private TableColumn<Usuario, String> colUsername;
     @FXML private TableColumn<Usuario, String> colCorreo;
     @FXML private TableColumn<Usuario, String> colRol;
-    @FXML private TableColumn<Usuario, Integer> colCliente;
     @FXML private TableColumn<Usuario, String> colEstado;
     @FXML private TableColumn<Usuario, LocalDateTime> colFecha;
     @FXML private Label lblModo;
@@ -73,7 +68,6 @@ public class UsuarioController {
         colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
         colCorreo.setCellValueFactory(new PropertyValueFactory<>("correoElectronico"));
         colRol.setCellValueFactory(new PropertyValueFactory<>("nombreRol"));
-        colCliente.setCellValueFactory(new PropertyValueFactory<>("idCliente"));
         colEstado.setCellValueFactory(new PropertyValueFactory<>("estadoTexto"));
         colFecha.setCellValueFactory(new PropertyValueFactory<>("fechaRegistro"));
 
@@ -84,7 +78,6 @@ public class UsuarioController {
         cmbFiltroEstado.setValue("Todos");
         txtBusqueda.textProperty().addListener((observable, anterior, actual) -> filtrar());
         cmbFiltroEstado.valueProperty().addListener((observable, anterior, actual) -> filtrar());
-        cmbRol.valueProperty().addListener((observable, anterior, actual) -> mostrarCliente());
 
         limpiarFormulario();
         cargarDatos(null);
@@ -93,8 +86,12 @@ public class UsuarioController {
     private void cargarDatos(Integer seleccionarId) {
         try {
             usuarios.setAll(servicio.listar());
-            cmbRol.setItems(FXCollections.observableArrayList(servicio.listarRoles()));
-            cmbCliente.setItems(FXCollections.observableArrayList(servicio.listarClientes()));
+            cmbRol.setItems(FXCollections.observableArrayList(
+                    servicio.listarRoles().stream()
+                            .filter(rol -> rol != null && rol.getNombreRol() != null)
+                            .filter(rol -> "admin".equalsIgnoreCase(rol.getNombreRol().trim())
+                                    || "taquillero".equalsIgnoreCase(rol.getNombreRol().trim()))
+                            .toList()));
             filtrar();
             if (seleccionarId != null) {
                 for (Usuario usuario : tblUsuarios.getItems()) {
@@ -130,17 +127,6 @@ public class UsuarioController {
         lblResultados.setText(encontrados.size() + " usuarios");
     }
 
-    private void mostrarCliente() {
-        Rol rol = cmbRol.getValue();
-        boolean esCliente = rol != null && "cliente".equals(rol.getNombreRol());
-        bloqueCliente.setVisible(esCliente);
-        bloqueCliente.setManaged(esCliente);
-        cmbCliente.setDisable(!esCliente);
-        if (!esCliente) {
-            cmbCliente.setValue(null);
-        }
-    }
-
     private void limpiarFormulario() {
         idEdicion = 0;
         txtNombre.clear();
@@ -151,8 +137,6 @@ public class UsuarioController {
         txtConfirmacion.clear();
         txtContrasena.setPromptText("Mínimo 8 caracteres");
         cmbRol.setValue(null);
-        cmbCliente.setValue(null);
-        mostrarCliente();
         lblModo.setText("Nuevo usuario");
         lblError.setText("");
         tblUsuarios.getSelectionModel().clearSelection();
@@ -171,6 +155,14 @@ public class UsuarioController {
         if (usuario == null) {
             return;
         }
+        boolean rolPermitido = cmbRol.getItems().stream()
+                .anyMatch(rol -> rol.getIdRol() == usuario.getIdRol());
+        if (!rolPermitido) {
+            alerta(Alert.AlertType.WARNING,
+                    "Solo se pueden editar cuentas de administrador o taquillero desde esta pantalla.")
+                    .showAndWait();
+            return;
+        }
         idEdicion = usuario.getIdUsuario();
         txtNombre.setText(usuario.getNombreUsuario());
         txtApellido.setText(usuario.getApellidoUsuario());
@@ -183,13 +175,6 @@ public class UsuarioController {
         for (Rol rol : cmbRol.getItems()) {
             if (rol.getIdRol() == usuario.getIdRol()) {
                 cmbRol.setValue(rol);
-                break;
-            }
-        }
-        cmbCliente.setValue(null);
-        for (ClienteVinculo cliente : cmbCliente.getItems()) {
-            if (Integer.valueOf(cliente.getIdCliente()).equals(usuario.getIdCliente())) {
-                cmbCliente.setValue(cliente);
                 break;
             }
         }
@@ -208,7 +193,7 @@ public class UsuarioController {
         usuario.setUsername(txtUsername.getText());
         usuario.setCorreoElectronico(txtCorreo.getText());
         usuario.setIdRol(cmbRol.getValue() == null ? 0 : cmbRol.getValue().getIdRol());
-        usuario.setIdCliente(cmbCliente.getValue() == null ? null : cmbCliente.getValue().getIdCliente());
+        usuario.setIdCliente(null);
         boolean nuevo = idEdicion == 0;
         try {
             int id = servicio.guardar(usuario, txtContrasena.getText(), txtConfirmacion.getText());
