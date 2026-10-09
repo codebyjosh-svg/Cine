@@ -94,7 +94,7 @@ public class ProductoController {
     }
 
     @FXML
-    private void cargarProductos() {
+      private void cargarProductos() {
         List<Producto> productos = productoDAO.listarTodos();
         tbProductos.setItems(FXCollections.observableArrayList(productos));
 
