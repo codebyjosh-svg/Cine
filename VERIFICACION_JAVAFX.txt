@@ -1,0 +1,25 @@
+COMPROBACIONES DE CINE(6).ZIP CORREGIDO
+
+- Se identifico la ruta absoluta de JavaFX bajo C:\Users\emili en run.jvmargs.
+- JavaFX 21.0.11 para Windows x64 y MySQL Connector/J 8.0.33 incluidos en lib/.
+- Classpath configurado con cinco JAR y rutas relativas. Modulepath y opciones
+  --module-path / --add-modules de ejecucion vacios.
+- org.cine.system.Lanzador es la clase principal del proyecto y del JAR.
+- Ant con JDK 21 y las bibliotecas Windows incluidas:
+  clean, jar y compile-test: BUILD SUCCESSFUL.
+- Cuatro pruebas originales ejecutadas correctamente:
+  PruebaSecurityUtil, PruebaNavegacionRol, PruebaLoginIntegracion y
+  PruebaCasosFaltantes. Se comprobo rechazo de claves incorrectas, estado
+  inactivo y limpieza de la sesion.
+- Los SQL recibidos se instalaron en MySQL 8.0.46 temporal para probar JDBC.
+- Se ejecuto ant run con el Lanzador real usando JavaFX 21.0.11 para Linux
+  y renderizado headless: Login.fxml abierto, rechazo de clave incorrecta,
+  autenticacion de admin, taquillero, bodega y cliente, apertura de sus cuatro
+  dashboards con nombre/rol correctos y cierre de sesion desde cada pantalla.
+  Resultado: BUILD SUCCESSFUL.
+- JavaFX emitio el aviso de clases cargadas desde 'unnamed module' al usar
+  Classpath. Las pantallas y el login funcionaron durante la comprobacion.
+- Los SQL y db.properties conservan el contenido del archivo recibido.
+  Los parametros del servidor temporal solo se usaron durante las pruebas.
+- Este entorno es Linux; no se ejecuto NetBeans ni las DLL de Windows.
+  En tu equipo configura la contrasena real de MySQL y usa JDK 21.

@@ -2,6 +2,13 @@ package org.cine.model;
 
 import java.sql.Date;
 
+/**
+ * Modelo de una película del sistema.
+ *
+ * Contiene la información general de la película utilizada
+ * tanto por la gestión de películas como por la programación
+ * de funciones.
+ */
 public class Pelicula {
 
     private int idPelicula;
@@ -19,9 +26,17 @@ public class Pelicula {
     public Pelicula() {
     }
 
-    public Pelicula(int idPelicula, String titulo, String sinopsis,
-            String director, int duracionMinutos, String clasificacion,
-            String idioma, Date fechaEstreno, int idGenero, int estado) {
+    public Pelicula(
+            int idPelicula,
+            String titulo,
+            String sinopsis,
+            String director,
+            int duracionMinutos,
+            String clasificacion,
+            String idioma,
+            Date fechaEstreno,
+            int idGenero,
+            int estado) {
 
         this.idPelicula = idPelicula;
         this.titulo = titulo;
@@ -35,13 +50,32 @@ public class Pelicula {
         this.estado = estado;
     }
 
-    public Pelicula(int idPelicula, String titulo, String sinopsis,
-            String director, int duracionMinutos, String clasificacion,
-            String idioma, Date fechaEstreno, int idGenero, int estado,
+    public Pelicula(
+            int idPelicula,
+            String titulo,
+            String sinopsis,
+            String director,
+            int duracionMinutos,
+            String clasificacion,
+            String idioma,
+            Date fechaEstreno,
+            int idGenero,
+            int estado,
             byte[] imagen) {
 
-        this(idPelicula, titulo, sinopsis, director, duracionMinutos,
-                clasificacion, idioma, fechaEstreno, idGenero, estado);
+        this(
+                idPelicula,
+                titulo,
+                sinopsis,
+                director,
+                duracionMinutos,
+                clasificacion,
+                idioma,
+                fechaEstreno,
+                idGenero,
+                estado
+        );
+
         this.imagen = imagen;
     }
 

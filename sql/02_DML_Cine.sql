@@ -274,7 +274,7 @@ INSERT INTO boletos
 VALUES
 (1,1,1,1,1,45.00,'vendido'),
 (2,1,1,2,1,45.00,'vendido'),
-(3,2,2,9,2,45.00,'vendido'),
+(3,2,2,3,1,45.00,'vendido'),
 (4,3,3,10,2,55.00,'vendido');
 
 -- ============================================================
@@ -298,13 +298,26 @@ INSERT INTO movimientos_inventario
 (id_movimiento, id_producto, id_usuario, id_venta,
  tipo_movimiento, cantidad, fecha_movimiento, observacion)
 VALUES
-(1,2,3,NULL,'ENTRADA',50,NOW()-INTERVAL 5 DAY,'Carga inicial.'),
+(1,2,3,NULL,'ENTRADA',51,NOW()-INTERVAL 5 DAY,'Carga inicial.'),
 (2,2,3,NULL,'SALIDA',10,NOW()-INTERVAL 4 DAY,'Ajuste de salida de inventario.'),
-(3,8,3,NULL,'ENTRADA',25,NOW()-INTERVAL 4 DAY,'Carga inicial.'),
+(3,8,3,NULL,'ENTRADA',26,NOW()-INTERVAL 4 DAY,'Carga inicial.'),
 (4,5,3,NULL,'ENTRADA',201,NOW()-INTERVAL 4 DAY,'Carga inicial.'),
 (5,5,2,2,'SALIDA',1,NOW()-INTERVAL 1 DAY,'Salida por venta.'),
-(6,6,3,NULL,'ENTRADA',4,NOW()-INTERVAL 3 DAY,'Carga inicial.'),
-(7,7,3,NULL,'ENTRADA',2,NOW()-INTERVAL 3 DAY,'Carga inicial.');
+(6,6,3,NULL,'ENTRADA',5,NOW()-INTERVAL 3 DAY,'Carga inicial.'),
+(7,7,3,NULL,'ENTRADA',2,NOW()-INTERVAL 3 DAY,'Carga inicial.'),
+(8,1,3,NULL,'ENTRADA',50,NOW()-INTERVAL 5 DAY,'Carga inicial.'),
+(9,3,3,NULL,'ENTRADA',100,NOW()-INTERVAL 5 DAY,'Carga inicial.'),
+(10,4,3,NULL,'ENTRADA',3,NOW()-INTERVAL 5 DAY,'Carga inicial.'),
+(11,9,3,NULL,'ENTRADA',18,NOW()-INTERVAL 5 DAY,'Carga inicial.'),
+(12,10,3,NULL,'ENTRADA',30,NOW()-INTERVAL 5 DAY,'Carga inicial.'),
+(13,11,3,NULL,'ENTRADA',45,NOW()-INTERVAL 5 DAY,'Carga inicial.'),
+(14,12,3,NULL,'ENTRADA',12,NOW()-INTERVAL 5 DAY,'Carga inicial.'),
+(15,13,3,NULL,'ENTRADA',1,NOW()-INTERVAL 5 DAY,'Carga inicial.'),
+(16,14,3,NULL,'ENTRADA',80,NOW()-INTERVAL 5 DAY,'Carga inicial.'),
+(17,15,3,NULL,'ENTRADA',50,NOW()-INTERVAL 5 DAY,'Carga inicial.'),
+(18,2,2,1,'SALIDA',1,NOW()-INTERVAL 2 DAY,'Salida por venta.'),
+(19,8,2,1,'SALIDA',1,NOW()-INTERVAL 2 DAY,'Salida por venta.'),
+(20,6,2,3,'SALIDA',1,NOW()-INTERVAL 3 HOUR,'Salida por venta.');
 
 COMMIT;
 

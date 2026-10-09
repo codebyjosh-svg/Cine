@@ -17,48 +17,127 @@ public class DashboardAdminController {
 
     @FXML
     private void initialize() {
+
         Usuario usuario = SesionContext.getUsuarioActual();
 
         if (usuario != null) {
+
             if (lblUsuario != null) {
-                lblUsuario.setText(usuario.getNombreCompleto());
+                lblUsuario.setText(
+                        usuario.getNombreCompleto()
+                );
             }
 
             if (lblRol != null) {
-                lblRol.setText(usuario.getNombreRol());
+                lblRol.setText(
+                        usuario.getNombreRol()
+                );
             }
         }
     }
+
+    // ==============================
+    // USUARIOS
+    // ==============================
 
     @FXML
     private void abrirUsuarios() throws IOException {
         Principal.mostrarUsuarios();
     }
 
+    // ==============================
+    // PELÍCULAS
+    // ==============================
+
     @FXML
     private void abrirPeliculas() throws IOException {
         Principal.mostrarPeliculas();
     }
+
+    // ==============================
+    // GÉNEROS
+    // ==============================
 
     @FXML
     private void abrirGeneros() throws IOException {
         Principal.mostrarGeneros();
     }
 
+    // ==============================
+    // CLIENTES
+    // ==============================
+
     @FXML
     private void abrirClientes() throws IOException {
         Principal.mostrarClientes();
     }
+
+    // ==============================
+    // PRODUCTOS
+    // ==============================
 
     @FXML
     private void abrirProductos() throws IOException {
         Principal.mostrarProductos();
     }
 
+    // ==============================
+    // CATEGORÍAS DE PRODUCTO
+    // ==============================
+
     @FXML
     private void abrirCategoriasProducto() throws IOException {
         Principal.mostrarCategoriasProducto();
     }
+
+    // ==============================
+    // SALAS Y BUTACAS - US-2.1
+    // ==============================
+
+    @FXML
+    private void abrirSalas() throws IOException {
+        Principal.mostrarSalas();
+    }
+
+    // ==============================
+    // FUNCIONES - US-2.2
+    // ==============================
+
+    @FXML
+    private void abrirFunciones() throws IOException {
+        Principal.mostrarProgramacion();
+    }
+
+    // ==============================
+    // VENTA DE BOLETOS - US-2.4
+    // ==============================
+
+    @FXML
+    private void abrirVenta() throws IOException {
+        Principal.mostrarVenta();
+    }
+
+    // ==============================
+    // STOCK CRÍTICO - US-3.3
+    // ==============================
+
+    @FXML
+    private void abrirStockCritico() throws IOException {
+        Principal.mostrarStockCritico();
+    }
+
+    // ==============================
+    // VENTAS - US-3.3
+    // ==============================
+
+    @FXML
+    private void abrirVentas() throws IOException {
+        Principal.mostrarVentas();
+    }
+
+    // ==============================
+    // CERRAR SESIÓN
+    // ==============================
 
     @FXML
     private void cerrarSesion() throws IOException {

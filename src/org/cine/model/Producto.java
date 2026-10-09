@@ -2,6 +2,12 @@ package org.cine.model;
 
 import java.math.BigDecimal;
 
+/**
+ * Producto de dulcería.
+ *
+ * Permite administrar los datos del producto y consultar
+ * sus existencias y estado para las ventas.
+ */
 public class Producto {
 
     private int idProducto;
@@ -14,6 +20,10 @@ public class Producto {
     private int stockMinimo;
     private int estado;
 
+    // ==========================================
+    // CONSTRUCTOR VACÍO
+    // ==========================================
+
     public Producto() {
         this.precio = BigDecimal.ZERO;
         this.stock = 0;
@@ -21,9 +31,20 @@ public class Producto {
         this.estado = 1;
     }
 
-    public Producto(int idProducto, int idCategoriaProducto,
-            String nombreProducto, String descripcion, BigDecimal precio,
-            int stock, int stockMinimo, int estado) {
+    // ==========================================
+    // CONSTRUCTOR PARA CRUD
+    // ==========================================
+
+    public Producto(
+            int idProducto,
+            int idCategoriaProducto,
+            String nombreProducto,
+            String descripcion,
+            BigDecimal precio,
+            int stock,
+            int stockMinimo,
+            int estado) {
+
         this.idProducto = idProducto;
         this.idCategoriaProducto = idCategoriaProducto;
         this.nombreProducto = nombreProducto;
@@ -34,14 +55,60 @@ public class Producto {
         this.estado = estado;
     }
 
-    public Producto(int idProducto, int idCategoriaProducto,
-            String nombreCategoria, String nombreProducto,
-            String descripcion, BigDecimal precio, int stock,
-            int stockMinimo, int estado) {
-        this(idProducto, idCategoriaProducto, nombreProducto, descripcion,
-                precio, stock, stockMinimo, estado);
+    // ==========================================
+    // CONSTRUCTOR CON CATEGORÍA
+    // ==========================================
+
+    public Producto(
+            int idProducto,
+            int idCategoriaProducto,
+            String nombreCategoria,
+            String nombreProducto,
+            String descripcion,
+            BigDecimal precio,
+            int stock,
+            int stockMinimo,
+            int estado) {
+
+        this(
+                idProducto,
+                idCategoriaProducto,
+                nombreProducto,
+                descripcion,
+                precio,
+                stock,
+                stockMinimo,
+                estado
+        );
+
         this.nombreCategoria = nombreCategoria;
     }
+
+    // ==========================================
+    // CONSTRUCTOR PARA VENTA / DULCERÍA
+    // ==========================================
+
+    public Producto(
+            int idProducto,
+            String nombreProducto,
+            String nombreCategoria,
+            BigDecimal precio,
+            int stock,
+            int stockMinimo,
+            boolean estado) {
+
+        this.idProducto = idProducto;
+        this.nombreProducto = nombreProducto;
+        this.nombreCategoria = nombreCategoria;
+        this.precio = precio;
+        this.stock = stock;
+        this.stockMinimo = stockMinimo;
+        this.estado = estado ? 1 : 0;
+    }
+
+    // ==========================================
+    // GETTERS Y SETTERS
+    // ==========================================
 
     public int getIdProducto() {
         return idProducto;
@@ -114,6 +181,26 @@ public class Producto {
     public void setEstado(int estado) {
         this.estado = estado;
     }
+
+    // ==========================================
+    // ESTADO
+    // ==========================================
+
+    public boolean isEstado() {
+        return estado == 1;
+    }
+
+    // ==========================================
+    // STOCK CRÍTICO
+    // ==========================================
+
+    public boolean isStockCritico() {
+        return isEstado() && stock <= stockMinimo;
+    }
+
+    // ==========================================
+    // TEXTO
+    // ==========================================
 
     @Override
     public String toString() {

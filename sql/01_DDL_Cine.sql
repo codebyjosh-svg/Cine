@@ -1,5 +1,6 @@
 -- ============================================================
 -- 01_DDL_Cine.sql
+-- Tablas, relaciones y vistas del cine. Ejecutar antes de 02 y 03.
 -- Sistema de Gestion Integral para Cine
 -- Base: cinedb_in4cm
 -- 14 tablas - cobertura Sprints 1, 2 y 3
@@ -38,7 +39,8 @@ CREATE TABLE clientes (
     telefono VARCHAR(20) NULL,
     estado TINYINT NOT NULL DEFAULT 1,
     fecha_registro TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT chk_cliente_estado CHECK (estado IN (0,1))
+    CONSTRAINT chk_cliente_estado CHECK (estado IN (0,1)),
+    CONSTRAINT chk_clientes_correo_formato CHECK ((COALESCE(CHAR_LENGTH(correo_electronico) BETWEEN 3 AND 120 AND CHAR_LENGTH(SUBSTRING_INDEX(correo_electronico, '@', 1)) <= 64 AND REGEXP_LIKE(correo_electronico, '^[A-Za-z0-9_%+-]+([.][A-Za-z0-9_%+-]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?([.][A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*[.][A-Za-z]{2,63}$', 'c'), 0) = 1))
 ) ENGINE=InnoDB;
 
 CREATE TABLE usuarios (
@@ -65,7 +67,8 @@ CREATE TABLE usuarios (
         ON DELETE RESTRICT
         ON UPDATE CASCADE,
 
-    CONSTRAINT chk_usuario_estado CHECK (estado IN (0,1))
+    CONSTRAINT chk_usuario_estado CHECK (estado IN (0,1)),
+    CONSTRAINT chk_usuarios_correo_formato CHECK ((COALESCE(CHAR_LENGTH(correo_electronico) BETWEEN 3 AND 120 AND CHAR_LENGTH(SUBSTRING_INDEX(correo_electronico, '@', 1)) <= 64 AND REGEXP_LIKE(correo_electronico, '^[A-Za-z0-9_%+-]+([.][A-Za-z0-9_%+-]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?([.][A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*[.][A-Za-z]{2,63}$', 'c'), 0) = 1))
 ) ENGINE=InnoDB;
 
 CREATE TABLE generos (
@@ -82,7 +85,7 @@ CREATE TABLE peliculas (
     sinopsis TEXT,
     director VARCHAR(150),
     duracion_minutos INT NOT NULL,
-    clasificacion VARCHAR(50) NOT NULL,
+    clasificacion VARCHAR(20) NOT NULL,
     idioma VARCHAR(50) NOT NULL DEFAULT 'Español',
     fecha_estreno DATE,
     imagen LONGBLOB NULL,
@@ -146,6 +149,7 @@ CREATE TABLE butacas (
 ) ENGINE=InnoDB;
 
 CREATE INDEX idx_butacas_sala ON butacas(id_sala);
+CREATE UNIQUE INDEX uq_butaca_id_sala ON butacas(id_butaca, id_sala);
 
 CREATE TABLE funciones (
     id_funcion INT AUTO_INCREMENT PRIMARY KEY,
@@ -181,6 +185,9 @@ CREATE INDEX idx_funciones_sala_horario
 
 CREATE INDEX idx_funciones_pelicula
     ON funciones(id_pelicula, estado);
+
+CREATE UNIQUE INDEX uq_funcion_id_sala
+    ON funciones(id_funcion, id_sala);
 
 CREATE TABLE ventas (
     id_venta INT AUTO_INCREMENT PRIMARY KEY,
@@ -230,15 +237,15 @@ CREATE TABLE boletos (
         ON DELETE RESTRICT
         ON UPDATE CASCADE,
 
-    CONSTRAINT fk_boleto_funcion
-        FOREIGN KEY (id_funcion)
-        REFERENCES funciones(id_funcion)
+    CONSTRAINT fk_boleto_funcion_sala
+        FOREIGN KEY (id_funcion, id_sala)
+        REFERENCES funciones(id_funcion, id_sala)
         ON DELETE RESTRICT
         ON UPDATE RESTRICT,
 
-    CONSTRAINT fk_boleto_butaca
-        FOREIGN KEY (id_butaca)
-        REFERENCES butacas(id_butaca)
+    CONSTRAINT fk_boleto_butaca_sala
+        FOREIGN KEY (id_butaca, id_sala)
+        REFERENCES butacas(id_butaca, id_sala)
         ON DELETE RESTRICT
         ON UPDATE CASCADE,
 
@@ -324,9 +331,10 @@ CREATE TABLE detalle_venta_productos (
         ON DELETE RESTRICT
         ON UPDATE CASCADE,
 
+    CONSTRAINT uq_venta_producto UNIQUE (id_venta, id_producto),
     CONSTRAINT chk_detalle_cantidad CHECK (cantidad > 0),
     CONSTRAINT chk_detalle_precio CHECK (precio_unitario >= 0),
-    CONSTRAINT chk_detalle_subtotal CHECK (subtotal >= 0)
+    CONSTRAINT chk_detalle_subtotal CHECK (subtotal >= 0 AND subtotal = cantidad * precio_unitario)
 ) ENGINE=InnoDB;
 
 CREATE INDEX idx_detalle_venta
@@ -370,67 +378,244 @@ CREATE INDEX idx_movimientos_producto
 -- VISTAS BASE
 -- ============================================================
 
-CREATE VIEW vw_cartelera AS
+CREATE OR REPLACE VIEW vw_lista_clientes AS
 SELECT
-    f.id_funcion,
-    f.fecha_inicio,
-    f.fecha_fin,
+    c.id_cliente,
+    c.cui,
+    c.nit,
+    c.nombre_cliente,
+    c.apellido_cliente,
+    CONCAT(c.nombre_cliente, ' ', c.apellido_cliente) AS cliente,
+    c.correo_electronico,
+    c.telefono,
+    c.estado,
+    c.fecha_registro
+FROM clientes c;
+
+CREATE OR REPLACE VIEW vw_lista_generos AS
+SELECT
+    id_genero,
+    nombre_genero,
+    descripcion,
+    estado
+FROM generos;
+
+CREATE OR REPLACE VIEW vw_lista_peliculas AS
+SELECT
     p.id_pelicula,
-    p.titulo AS pelicula,
-    g.nombre_genero AS genero,
-    s.id_sala,
-    s.nombre_sala AS sala,
-    s.formato,
+    p.titulo,
+    p.sinopsis,
+    p.director,
     p.duracion_minutos,
     p.clasificacion,
     p.idioma,
+    p.fecha_estreno,
+    p.imagen,
+    p.id_genero,
+    g.nombre_genero,
+    p.estado
+FROM peliculas p
+INNER JOIN generos g
+    ON g.id_genero = p.id_genero;
+
+CREATE OR REPLACE VIEW vw_lista_salas AS
+SELECT
+    s.id_sala,
+    s.nombre_sala,
+    s.formato,
+    s.estado,
+    (
+        SELECT COUNT(*)
+        FROM butacas b
+        WHERE b.id_sala = s.id_sala
+          AND b.estado = 1
+    ) AS capacidad
+FROM salas s;
+
+CREATE OR REPLACE VIEW vw_lista_funciones AS
+SELECT
+    f.id_funcion,
+    f.id_pelicula,
+    p.titulo,
+    p.id_genero,
+    g.nombre_genero,
+    p.duracion_minutos,
+    p.clasificacion,
+    p.idioma,
+    f.id_sala,
+    s.nombre_sala,
+    s.formato,
+    f.fecha_inicio,
+    f.fecha_fin,
     f.precio_boleto,
-    f.estado
+    f.estado,
+    (
+        SELECT COUNT(*)
+        FROM butacas bu
+        WHERE bu.id_sala = f.id_sala
+          AND bu.estado = 1
+    ) AS capacidad,
+    (
+        SELECT COUNT(*)
+        FROM boletos b
+        WHERE b.id_funcion = f.id_funcion
+          AND b.estado = 'reservado'
+    ) AS boletos_reservados,
+    (
+        SELECT COUNT(*)
+        FROM boletos b
+        WHERE b.id_funcion = f.id_funcion
+          AND b.estado = 'vendido'
+    ) AS boletos_vendidos,
+    (
+        SELECT COUNT(*)
+        FROM butacas bu
+        WHERE bu.id_sala = f.id_sala
+          AND bu.estado = 1
+          AND NOT EXISTS (
+              SELECT 1
+              FROM boletos b
+              WHERE b.id_funcion = f.id_funcion
+                AND b.id_butaca = bu.id_butaca
+                AND b.estado IN ('reservado','vendido')
+          )
+    ) AS butacas_disponibles
 FROM funciones f
 INNER JOIN peliculas p
     ON p.id_pelicula = f.id_pelicula
 INNER JOIN generos g
     ON g.id_genero = p.id_genero
 INNER JOIN salas s
-    ON s.id_sala = f.id_sala
-WHERE f.estado = 'programada'
-  AND p.estado = 1
-  AND s.estado = 1;
+    ON s.id_sala = f.id_sala;
 
-CREATE VIEW vw_stock_critico AS
+CREATE OR REPLACE VIEW vw_cartelera AS
+SELECT
+    lf.*
+FROM vw_lista_funciones lf
+WHERE lf.estado = 'programada'
+  AND lf.fecha_inicio > NOW()
+  AND EXISTS (
+      SELECT 1
+      FROM peliculas p
+      WHERE p.id_pelicula = lf.id_pelicula
+        AND p.estado = 1
+  )
+  AND EXISTS (
+      SELECT 1
+      FROM salas s
+      WHERE s.id_sala = lf.id_sala
+        AND s.estado = 1
+  );
+
+CREATE OR REPLACE VIEW vw_lista_productos AS
 SELECT
     p.id_producto,
-    p.nombre_producto,
+    p.id_categoria_producto,
     c.nombre_categoria,
+    p.nombre_producto,
+    p.descripcion,
     p.precio,
     p.stock,
     p.stock_minimo,
     p.estado
 FROM productos p
 INNER JOIN categorias_producto c
-    ON c.id_categoria_producto = p.id_categoria_producto
-WHERE p.estado = 1
-  AND p.stock <= p.stock_minimo;
+    ON c.id_categoria_producto = p.id_categoria_producto;
 
-CREATE VIEW vw_lista_ventas AS
+CREATE OR REPLACE VIEW vw_stock_critico AS
+SELECT *
+FROM vw_lista_productos
+WHERE estado = 1
+  AND stock <= stock_minimo;
+
+CREATE OR REPLACE VIEW vw_lista_boletos AS
+SELECT
+    b.id_boleto,
+    b.id_venta,
+    b.id_funcion,
+    f.id_pelicula,
+    p.titulo,
+    b.id_sala,
+    s.nombre_sala,
+    b.id_butaca,
+    bu.fila,
+    bu.numero,
+    CONCAT(bu.fila, bu.numero) AS butaca,
+    f.fecha_inicio,
+    f.fecha_fin,
+    b.precio_unitario,
+    b.estado
+FROM boletos b
+INNER JOIN funciones f
+    ON f.id_funcion = b.id_funcion
+INNER JOIN peliculas p
+    ON p.id_pelicula = f.id_pelicula
+INNER JOIN salas s
+    ON s.id_sala = b.id_sala
+INNER JOIN butacas bu
+    ON bu.id_butaca = b.id_butaca;
+
+CREATE OR REPLACE VIEW vw_lista_ventas AS
 SELECT
     v.id_venta,
     v.fecha_venta,
     v.id_cliente,
+    c.cui,
+    c.nit,
     CONCAT(c.nombre_cliente, ' ', c.apellido_cliente) AS cliente,
-    c.nit AS nit,
+    c.correo_electronico,
     v.id_usuario,
     CONCAT(u.nombre_usuario, ' ', u.apellido_usuario) AS cajero,
+    CONCAT(u.nombre_usuario, ' ', u.apellido_usuario) AS taquillero,
     v.total,
+    v.total AS total_venta,
     v.metodo_pago,
-    v.estado
+    v.estado,
+    v.fecha_confirmacion,
+    v.fecha_anulacion,
+    v.motivo_anulacion,
+    (
+        SELECT COUNT(*)
+        FROM boletos b
+        WHERE b.id_venta = v.id_venta
+          AND b.estado IN ('reservado','vendido')
+    ) AS cantidad_boletos,
+    (
+        SELECT COALESCE(SUM(b.precio_unitario), 0)
+        FROM boletos b
+        WHERE b.id_venta = v.id_venta
+          AND b.estado IN ('reservado','vendido')
+    ) AS total_boletos,
+    (
+        SELECT COALESCE(SUM(d.subtotal), 0)
+        FROM detalle_venta_productos d
+        WHERE d.id_venta = v.id_venta
+    ) AS total_productos
 FROM ventas v
 INNER JOIN clientes c
     ON c.id_cliente = v.id_cliente
 INNER JOIN usuarios u
     ON u.id_usuario = v.id_usuario;
 
-CREATE VIEW vw_factura_ventas AS
+CREATE OR REPLACE VIEW vw_movimientos_inventario AS
+SELECT
+    m.id_movimiento,
+    m.id_producto,
+    p.nombre_producto,
+    m.id_usuario,
+    CONCAT(u.nombre_usuario, ' ', u.apellido_usuario) AS usuario,
+    m.id_venta,
+    m.tipo_movimiento,
+    m.cantidad,
+    m.fecha_movimiento,
+    m.observacion
+FROM movimientos_inventario m
+INNER JOIN productos p
+    ON p.id_producto = m.id_producto
+INNER JOIN usuarios u
+    ON u.id_usuario = m.id_usuario;
+
+CREATE OR REPLACE VIEW vw_factura_ventas AS
 SELECT
     v.id_venta,
     v.fecha_venta,
@@ -446,6 +631,15 @@ INNER JOIN clientes c
     ON c.id_cliente = v.id_cliente
 INNER JOIN usuarios u
     ON u.id_usuario = v.id_usuario;
+
+CREATE OR REPLACE VIEW vw_reporte_ventas_diarias AS
+SELECT
+    DATE(fecha_venta) AS fecha,
+    COUNT(*) AS cantidad_ventas,
+    COALESCE(SUM(total), 0) AS total_ventas
+FROM ventas
+WHERE estado = 'confirmada'
+GROUP BY DATE(fecha_venta);
 
 SET FOREIGN_KEY_CHECKS = 1;
 

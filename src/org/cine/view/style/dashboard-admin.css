@@ -91,6 +91,7 @@
     -fx-background-color: transparent;
     -fx-background-radius: 6px;
     -fx-border-color: transparent;
+    -fx-border-width: 0;
 
     -fx-text-fill: #aeb9cc;
     -fx-font-size: 11px;
@@ -98,14 +99,21 @@
 
     -fx-alignment: CENTER_LEFT;
     -fx-content-display: LEFT;
+    -fx-text-alignment: LEFT;
 
     -fx-padding: 0 10px 0 10px;
+
+    -fx-min-width: 200px;
+    -fx-pref-width: 200px;
+    -fx-max-width: 200px;
 
     -fx-min-height: 36px;
     -fx-pref-height: 36px;
     -fx-max-height: 36px;
 
     -fx-cursor: hand;
+    -fx-focus-traversable: false;
+    -fx-opacity: 1.0;
 }
 
 .menu-button .menu-icon {
@@ -114,6 +122,19 @@
 
 .menu-button:hover {
     -fx-background-color: #16284a;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.menu-button:focused {
+    -fx-background-color: #16284a;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+}
+
+.menu-button:armed,
+.menu-button:pressed {
+    -fx-background-color: #2858df;
     -fx-text-fill: white;
 }
 
