@@ -447,8 +447,7 @@
                                     <Label text="U"
                                            styleClass="kpi-letter"/>
 
-                                    <Label text="4"
-                                           styleClass="kpi-number"/>
+                                    <Label fx:id="lblKpiUsuarios" text="—" styleClass="kpi-number"/>
 
                                 </HBox>
 
@@ -469,8 +468,7 @@
                                     <Label text="P"
                                            styleClass="kpi-letter"/>
 
-                                    <Label text="10"
-                                           styleClass="kpi-number"/>
+                                    <Label fx:id="lblKpiPeliculas" text="—" styleClass="kpi-number"/>
 
                                 </HBox>
 
@@ -491,15 +489,14 @@
                                     <Label text="G"
                                            styleClass="kpi-letter"/>
 
-                                    <Label text="10"
-                                           styleClass="kpi-number"/>
+                                    <Label fx:id="lblKpiClientes" text="—" styleClass="kpi-number"/>
 
                                 </HBox>
 
-                                <Label text="Géneros"
+                                <Label text="Clientes activos"
                                        styleClass="kpi-title"/>
 
-                                <Label text="Géneros registrados"
+                                <Label text="Clientes registrados y activos"
                                        styleClass="kpi-description"/>
 
                             </VBox>
@@ -513,15 +510,14 @@
                                     <Label text="S"
                                            styleClass="kpi-letter"/>
 
-                                    <Label text="0"
-                                           styleClass="kpi-number"/>
+                                    <Label fx:id="lblKpiVentas" text="—" styleClass="kpi-number"/>
 
                                 </HBox>
 
-                                <Label text="Salas"
+                                <Label text="Ventas confirmadas"
                                        styleClass="kpi-title"/>
 
-                                <Label text="Módulo en desarrollo"
+                                <Label text="Ventas válidas realizadas"
                                        styleClass="kpi-description"/>
 
                             </VBox>
@@ -844,11 +840,7 @@
                                        wrapText="true"
                                        styleClass="module-description"/>
 
-                                <Button text="Próximamente"
-                                        disable="true"
-                                        maxWidth="Infinity"
-                                        mnemonicParsing="false"
-                                        styleClass="module-button-disabled"/>
+                                <Button text="Abrir reportes" onAction="#abrirReportes" maxWidth="Infinity" styleClass="menu-button"/>
 
                             </VBox>
 

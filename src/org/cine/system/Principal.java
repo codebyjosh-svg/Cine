@@ -121,6 +121,13 @@ public class Principal extends Application {
         );
     }
 
+    public static void mostrarReportes() throws IOException {
+        String rol = SesionContext.getRolActual();
+        if (rol == null || !"admin".equalsIgnoreCase(rol))
+            throw new IllegalStateException("Solo administradores pueden consultar reportes.");
+        cambiarEscena("/org/cine/view/Reportes.fxml", "Cine - Reportes de ventas");
+    }
+
     public static void mostrarVenta() throws IOException {
         String rol=SesionContext.getRolActual();
         if(rol==null||!("admin".equalsIgnoreCase(rol)||"taquillero".equalsIgnoreCase(rol)))throw new IllegalStateException("No autorizado para ventas");
@@ -159,12 +166,13 @@ public class Principal extends Application {
         boolean generos = ruta.endsWith("/Generos.fxml");
         boolean clientes = ruta.endsWith("/Clientes.fxml");
         boolean venta = ruta.endsWith("/Venta.fxml");
+        boolean reportes = ruta.endsWith("/Reportes.fxml");
 
         boolean moduloGrande =
                 usuarios
                 || peliculas
                 || generos
-                || clientes || venta;
+                || clientes || venta || reportes;
 
         double ancho = moduloGrande ? 1100 : 860;
         double alto = moduloGrande ? 700 : 540;

@@ -3,6 +3,9 @@ package org.cine.controller;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import org.cine.dao.impl.ReporteDAOImpl;
+import org.cine.model.IndicadoresAdmin;
+import java.sql.SQLException;
 import org.cine.model.Usuario;
 import org.cine.service.SesionContext;
 import org.cine.system.Principal;
@@ -14,6 +17,7 @@ public class DashboardAdminController {
 
     @FXML
     private Label lblRol;
+    @FXML private Label lblKpiUsuarios, lblKpiPeliculas, lblKpiClientes, lblKpiVentas;
 
     @FXML
     private void initialize() {
@@ -29,6 +33,21 @@ public class DashboardAdminController {
             if (lblRol != null) {
                 lblRol.setText(usuario.getNombreRol());
             }
+        }
+        actualizarIndicadores();
+    }
+
+    @FXML private void abrirReportes() throws IOException { Principal.mostrarReportes(); }
+
+    @FXML private void actualizarIndicadores() {
+        try {
+            IndicadoresAdmin k = new ReporteDAOImpl().indicadores();
+            if (lblKpiUsuarios != null) lblKpiUsuarios.setText(String.valueOf(k.usuariosActivos()));
+            if (lblKpiPeliculas != null) lblKpiPeliculas.setText(String.valueOf(k.peliculasActivas()));
+            if (lblKpiClientes != null) lblKpiClientes.setText(String.valueOf(k.clientesActivos()));
+            if (lblKpiVentas != null) lblKpiVentas.setText(String.valueOf(k.ventasConfirmadas()));
+        } catch (SQLException ex) {
+            System.err.println("No se pudieron cargar los KPIs: " + ex.getMessage());
         }
     }
 
