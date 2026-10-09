@@ -1,19 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<AnchorPane prefHeight="540.0" prefWidth="860.0" stylesheets="@style/dashboard.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cine.controller.DashboardController">
+
+<AnchorPane prefHeight="540.0"
+            prefWidth="860.0"
+            stylesheets="@style/dashboard.css"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cine.controller.DashboardController">
+
     <children>
-        <VBox alignment="CENTER" layoutX="180.0" layoutY="80.0" prefHeight="380.0" prefWidth="500.0" spacing="18.0" styleClass="dashboard-card">
+
+        <VBox alignment="CENTER"
+              layoutX="180.0"
+              layoutY="80.0"
+              prefHeight="380.0"
+              prefWidth="500.0"
+              spacing="18.0"
+              styleClass="dashboard-card">
+
             <children>
-                <Label text="Dashboard Bodega" styleClass="title" />
-                <Label text="Sesión iniciada correctamente" styleClass="subtitle" />
-                <Label fx:id="lblUsuario" styleClass="user" />
-                <Label fx:id="lblRol" styleClass="role" />
-                <Button fx:id="btnStockCritico" text="Productos con stock crítico" onAction="#abrirStockCritico" maxWidth="Infinity"/>
-                <Button fx:id="btnCerrarSesion" mnemonicParsing="false" onAction="#cerrarSesion" text="Cerrar sesión" styleClass="logout-button" />
+
+                <Label text="Dashboard Bodega"
+                       styleClass="title"/>
+
+                <Label text="Sesión iniciada correctamente"
+                       styleClass="subtitle"/>
+
+                <Label fx:id="lblUsuario"
+                       styleClass="user"/>
+
+                <Label fx:id="lblRol"
+                       styleClass="role"/>
+
+                <!-- INVENTARIO -->
+
+                <Button fx:id="btnInventario"
+                        mnemonicParsing="false"
+                        onAction="#abrirInventario"
+                        text="Inventario"
+                        styleClass="inventory-button"
+                        maxWidth="Infinity"/>
+
+                <!-- STOCK CRÍTICO -->
+
+                <Button fx:id="btnStockCritico"
+                        mnemonicParsing="false"
+                        onAction="#abrirStockCritico"
+                        text="Productos con stock crítico"
+                        maxWidth="Infinity"/>
+
+                <!-- CERRAR SESIÓN -->
+
+                <Button fx:id="btnCerrarSesion"
+                        mnemonicParsing="false"
+                        onAction="#cerrarSesion"
+                        text="Cerrar sesión"
+                        styleClass="logout-button"
+                        maxWidth="Infinity"/>
+
             </children>
+
         </VBox>
+
     </children>
+
 </AnchorPane>

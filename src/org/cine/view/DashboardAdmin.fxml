@@ -19,46 +19,71 @@
             prefWidth="1100.0"
             prefHeight="700.0">
 
+    <!-- ===================================================== -->
+    <!-- SIDEBAR -->
+    <!-- ===================================================== -->
+
     <left>
+
         <BorderPane prefWidth="230.0"
                     minWidth="230.0"
                     maxWidth="230.0"
                     styleClass="sidebar">
 
             <top>
+
                 <VBox spacing="8.0">
+
                     <padding>
-                        <Insets top="24.0" right="16.0" bottom="12.0" left="16.0"/>
+                        <Insets top="24.0"
+                                right="16.0"
+                                bottom="12.0"
+                                left="16.0"/>
                     </padding>
 
-                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <HBox alignment="CENTER_LEFT"
+                          spacing="10.0">
+
                         <StackPane prefWidth="38.0"
                                    prefHeight="38.0"
                                    styleClass="brand-logo">
-                            <Label text="C" styleClass="brand-letter"/>
+
+                            <Label text="C"
+                                   styleClass="brand-letter"/>
+
                         </StackPane>
 
                         <VBox spacing="2.0">
+
                             <Label text="CINEMA"
                                    styleClass="brand-title"/>
+
                             <Label text="Sistema de Gestión"
                                    styleClass="brand-subtitle"/>
+
                         </VBox>
+
                     </HBox>
 
                     <Label text="MENÚ PRINCIPAL"
                            styleClass="menu-title">
+
                         <VBox.margin>
-                            <Insets top="14.0" bottom="4.0"/>
+                            <Insets top="14.0"
+                                    bottom="4.0"/>
                         </VBox.margin>
+
                     </Label>
 
                     <VBox spacing="3.0">
+
+                        <!-- DASHBOARD -->
 
                         <HBox alignment="CENTER_LEFT"
                               minHeight="36.0"
                               prefHeight="36.0"
                               styleClass="menu-active">
+
                             <padding>
                                 <Insets left="10.0"/>
                             </padding>
@@ -68,7 +93,10 @@
 
                             <Label text="Dashboard"
                                    styleClass="menu-text"/>
+
                         </HBox>
+
+                        <!-- USUARIOS -->
 
                         <Button text="Usuarios"
                                 onAction="#abrirUsuarios"
@@ -79,6 +107,8 @@
                                 mnemonicParsing="false"
                                 styleClass="menu-button"/>
 
+                        <!-- PELÍCULAS -->
+
                         <Button text="Películas"
                                 onAction="#abrirPeliculas"
                                 alignment="CENTER_LEFT"
@@ -87,6 +117,8 @@
                                 maxWidth="Infinity"
                                 mnemonicParsing="false"
                                 styleClass="menu-button"/>
+
+                        <!-- GÉNEROS -->
 
                         <Button text="Géneros"
                                 onAction="#abrirGeneros"
@@ -97,6 +129,8 @@
                                 mnemonicParsing="false"
                                 styleClass="menu-button"/>
 
+                        <!-- CLIENTES -->
+
                         <Button text="Clientes"
                                 onAction="#abrirClientes"
                                 alignment="CENTER_LEFT"
@@ -106,6 +140,8 @@
                                 mnemonicParsing="false"
                                 styleClass="menu-button"/>
 
+                        <!-- PRODUCTOS -->
+
                         <Button text="Productos"
                                 onAction="#abrirProductos"
                                 alignment="CENTER_LEFT"
@@ -114,6 +150,8 @@
                                 maxWidth="Infinity"
                                 mnemonicParsing="false"
                                 styleClass="menu-button"/>
+
+                        <!-- CATEGORÍAS -->
 
                         <Button text="Categorías de productos"
                                 onAction="#abrirCategoriasProducto"
@@ -125,6 +163,8 @@
                                 mnemonicParsing="false"
                                 styleClass="menu-button"/>
 
+                        <!-- SALAS -->
+
                         <Button text="Salas y butacas"
                                 onAction="#abrirSalas"
                                 alignment="CENTER_LEFT"
@@ -133,6 +173,8 @@
                                 maxWidth="Infinity"
                                 mnemonicParsing="false"
                                 styleClass="menu-button"/>
+
+                        <!-- FUNCIONES -->
 
                         <Button text="Funciones"
                                 onAction="#abrirFunciones"
@@ -143,6 +185,8 @@
                                 mnemonicParsing="false"
                                 styleClass="menu-button"/>
 
+                        <!-- VENTAS -->
+
                         <Button text="Ventas"
                                 onAction="#abrirVenta"
                                 alignment="CENTER_LEFT"
@@ -151,6 +195,8 @@
                                 maxWidth="Infinity"
                                 mnemonicParsing="false"
                                 styleClass="menu-button"/>
+
+                        <!-- STOCK -->
 
                         <Button text="Stock crítico"
                                 onAction="#abrirStockCritico"
@@ -161,12 +207,29 @@
                                 mnemonicParsing="false"
                                 styleClass="menu-button"/>
 
+                        <!-- INVENTARIO -->
+
+                        <Button text="Inventario"
+                                onAction="#abrirInventario"
+                                alignment="CENTER_LEFT"
+                                graphicTextGap="10.0"
+                                minHeight="36.0"
+                                maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                styleClass="menu-button"/>
+
                     </VBox>
+
                 </VBox>
+
             </top>
 
+            <!-- CERRAR SESIÓN -->
+
             <bottom>
+
                 <VBox spacing="8.0">
+
                     <padding>
                         <Insets top="12.0"
                                 right="16.0"
@@ -181,15 +244,24 @@
                             minHeight="38.0"
                             mnemonicParsing="false"
                             styleClass="logout-button"/>
+
                 </VBox>
+
             </bottom>
 
         </BorderPane>
+
     </left>
+
+    <!-- ===================================================== -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- ===================================================== -->
 
     <center>
 
         <BorderPane styleClass="main-area">
+
+            <!-- TOPBAR -->
 
             <top>
 
@@ -250,6 +322,8 @@
                 </BorderPane>
 
             </top>
+
+            <!-- CONTENIDO -->
 
             <center>
 
@@ -582,7 +656,7 @@
 
                         </VBox>
 
-                        <!-- VENTAS Y STOCK -->
+                        <!-- VENTAS / STOCK / INVENTARIO -->
 
                         <VBox GridPane.columnIndex="2"
                               GridPane.rowIndex="2"
@@ -592,7 +666,7 @@
                             <HBox alignment="CENTER_LEFT"
                                   spacing="8.0">
 
-                                <Label text="V"
+                                <Label text="O"
                                        styleClass="module-letter"/>
 
                                 <Label text="DISPONIBLE"
@@ -600,16 +674,16 @@
 
                             </HBox>
 
-                            <Label text="Ventas"
+                            <Label text="Operaciones"
                                    styleClass="module-title"/>
 
-                            <Label text="Gestionar ventas y consultar el stock crítico."
+                            <Label text="Ventas, stock crítico e inventario de dulcería."
                                    wrapText="true"
                                    styleClass="module-description"/>
 
                             <Region VBox.vgrow="ALWAYS"/>
 
-                            <HBox spacing="8.0">
+                            <HBox spacing="6.0">
 
                                 <Button text="Ventas"
                                         onAction="#abrirVenta"
@@ -625,6 +699,13 @@
                                         mnemonicParsing="false"
                                         styleClass="menu-button"/>
 
+                                <Button text="Inventario"
+                                        onAction="#abrirInventario"
+                                        HBox.hgrow="ALWAYS"
+                                        maxWidth="Infinity"
+                                        mnemonicParsing="false"
+                                        styleClass="menu-button"/>
+
                             </HBox>
 
                         </VBox>
@@ -634,6 +715,8 @@
                 </VBox>
 
             </center>
+
+            <!-- FOOTER -->
 
             <bottom>
 

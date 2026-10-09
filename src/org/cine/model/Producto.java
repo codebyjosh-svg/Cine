@@ -20,20 +20,12 @@ public class Producto {
     private int stockMinimo;
     private int estado;
 
-    // ==========================================
-    // CONSTRUCTOR VACÍO
-    // ==========================================
-
     public Producto() {
         this.precio = BigDecimal.ZERO;
         this.stock = 0;
         this.stockMinimo = 5;
         this.estado = 1;
     }
-
-    // ==========================================
-    // CONSTRUCTOR PARA CRUD
-    // ==========================================
 
     public Producto(
             int idProducto,
@@ -54,10 +46,6 @@ public class Producto {
         this.stockMinimo = stockMinimo;
         this.estado = estado;
     }
-
-    // ==========================================
-    // CONSTRUCTOR CON CATEGORÍA
-    // ==========================================
 
     public Producto(
             int idProducto,
@@ -84,10 +72,9 @@ public class Producto {
         this.nombreCategoria = nombreCategoria;
     }
 
-    // ==========================================
-    // CONSTRUCTOR PARA VENTA / DULCERÍA
-    // ==========================================
-
+    /**
+     * Constructor utilizado para las ventas de dulcería.
+     */
     public Producto(
             int idProducto,
             String nombreProducto,
@@ -105,10 +92,6 @@ public class Producto {
         this.stockMinimo = stockMinimo;
         this.estado = estado ? 1 : 0;
     }
-
-    // ==========================================
-    // GETTERS Y SETTERS
-    // ==========================================
 
     public int getIdProducto() {
         return idProducto;
@@ -182,25 +165,13 @@ public class Producto {
         this.estado = estado;
     }
 
-    // ==========================================
-    // ESTADO
-    // ==========================================
-
     public boolean isEstado() {
         return estado == 1;
     }
 
-    // ==========================================
-    // STOCK CRÍTICO
-    // ==========================================
-
     public boolean isStockCritico() {
         return isEstado() && stock <= stockMinimo;
     }
-
-    // ==========================================
-    // TEXTO
-    // ==========================================
 
     @Override
     public String toString() {

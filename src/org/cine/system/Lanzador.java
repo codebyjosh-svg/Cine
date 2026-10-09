@@ -1,6 +1,10 @@
 package org.cine.system;
 
-/** Inicia la aplicacion con las bibliotecas incluidas en Classpath. */
+/**
+ * Punto de entrada del proyecto.
+ *
+ * Se utiliza para iniciar la aplicación JavaFX.
+ */
 public final class Lanzador {
 
     private Lanzador() {

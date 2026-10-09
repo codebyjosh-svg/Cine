@@ -92,3 +92,21 @@
 .functions-button:hover {
     -fx-background-color: #1d4ed8;
 }
+
+/* =========================================================
+   BOTÓN DE INVENTARIO
+   ========================================================= */
+
+.inventory-button {
+    -fx-pref-width: 180px;
+    -fx-pref-height: 40px;
+    -fx-background-radius: 8px;
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.inventory-button:hover {
+    -fx-background-color: #1d4ed8;
+}

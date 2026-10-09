@@ -68,20 +68,17 @@ public class Principal extends Application {
             throws IOException {
 
         if (!SesionContext.haySesionActiva()) {
-
             mostrarLogin();
             return;
         }
 
-        String ruta =
-                NavegacionRol.vistaPorRol(
-                        SesionContext.getRolActual()
-                );
+        String ruta = NavegacionRol.vistaPorRol(
+                SesionContext.getRolActual()
+        );
 
         cambiarEscena(
                 ruta,
-                "Cine - "
-                + SesionContext.getRolActual()
+                "Cine - " + SesionContext.getRolActual()
         );
     }
 
@@ -176,7 +173,7 @@ public class Principal extends Application {
     }
 
     // =========================================================
-    // SALAS Y BUTACAS - US-2.1
+    // SALAS Y BUTACAS
     // =========================================================
 
     public static void mostrarSalas()
@@ -191,14 +188,13 @@ public class Principal extends Application {
     }
 
     // =========================================================
-    // VENTA DE BOLETOS - US-2.4
+    // VENTA DE BOLETOS
     // =========================================================
 
     public static void mostrarVenta()
             throws IOException {
 
-        String rol =
-                SesionContext.getRolActual();
+        String rol = SesionContext.getRolActual();
 
         if (rol == null
                 || !("admin".equalsIgnoreCase(rol)
@@ -217,14 +213,12 @@ public class Principal extends Application {
 
     // =========================================================
     // VENTA CON FUNCIÓN PRESELECCIONADA
-    // US-2.3 -> US-2.4
     // =========================================================
 
     public static void mostrarVenta(int idFuncion)
             throws IOException {
 
-        String rol =
-                SesionContext.getRolActual();
+        String rol = SesionContext.getRolActual();
 
         if (rol == null
                 || !("admin".equalsIgnoreCase(rol)
@@ -235,12 +229,11 @@ public class Principal extends Application {
             );
         }
 
-        FXMLLoader loader =
-                new FXMLLoader(
-                        Principal.class.getResource(
-                                "/org/cine/view/Venta.fxml"
-                        )
-                );
+        FXMLLoader loader = new FXMLLoader(
+                Principal.class.getResource(
+                        "/org/cine/view/Venta.fxml"
+                )
+        );
 
         Parent root = loader.load();
 
@@ -249,12 +242,11 @@ public class Principal extends Application {
 
         controller.seleccionarFuncion(idFuncion);
 
-        Scene scene =
-                new Scene(
-                        root,
-                        1100,
-                        700
-                );
+        Scene scene = new Scene(
+                root,
+                1100,
+                700
+        );
 
         stagePrincipal.setScene(scene);
 
@@ -270,7 +262,7 @@ public class Principal extends Application {
     }
 
     // =========================================================
-    // FACTURA - US-2.4
+    // FACTURA
     // =========================================================
 
     public static void mostrarFactura(int idVenta)
@@ -278,12 +270,11 @@ public class Principal extends Application {
 
         PermisosVenta.exigirVendedor();
 
-        FXMLLoader loader =
-                new FXMLLoader(
-                        Principal.class.getResource(
-                                "/org/cine/view/Factura.fxml"
-                        )
-                );
+        FXMLLoader loader = new FXMLLoader(
+                Principal.class.getResource(
+                        "/org/cine/view/Factura.fxml"
+                )
+        );
 
         Parent root = loader.load();
 
@@ -301,7 +292,7 @@ public class Principal extends Application {
     }
 
     // =========================================================
-    // PROGRAMACIÓN - US-2.2
+    // PROGRAMACIÓN
     // =========================================================
 
     public static void mostrarProgramacion()
@@ -318,22 +309,20 @@ public class Principal extends Application {
     }
 
     // =========================================================
-    // CARTELERA - US-2.3
+    // CARTELERA
     // =========================================================
 
     public static void mostrarCartelera()
             throws IOException {
 
-        String rol =
-                SesionContext.getRolActual();
+        String rol = SesionContext.getRolActual();
 
         if (rol == null
                 || !("admin".equalsIgnoreCase(rol)
                 || "taquillero".equalsIgnoreCase(rol))) {
 
             throw new IllegalStateException(
-                    "No autorizado para consultar "
-                    + "la cartelera."
+                    "No autorizado para consultar la cartelera."
             );
         }
 
@@ -370,6 +359,36 @@ public class Principal extends Application {
         cambiarEscena(
                 "/org/cine/view/Venta.fxml",
                 "Cine - Ventas"
+        );
+    }
+
+    // =========================================================
+    // INVENTARIO - US-3.2
+    // =========================================================
+
+    public static void mostrarInventario()
+            throws IOException {
+
+        Usuario usuario = SesionContext.getUsuarioActual();
+
+        if (usuario == null
+                || !usuario.isEstado()
+                || !SesionContext.haySesionActiva()
+                || usuario.getIdUsuario() <= 0
+                || !("admin".equalsIgnoreCase(
+                        SesionContext.getRolActual())
+                && !"bodega".equalsIgnoreCase(
+                        SesionContext.getRolActual()))) {
+
+            throw new IllegalStateException(
+                    "El inventario requiere una sesión activa "
+                    + "de administrador o bodega."
+            );
+        }
+
+        cambiarEscena(
+                "/org/cine/view/Inventario.fxml",
+                "Cinema - Inventario de confitería"
         );
     }
 
@@ -496,6 +515,11 @@ public class Principal extends Application {
                         "/Cartelera.fxml"
                 );
 
+        boolean inventario =
+                ruta.endsWith(
+                        "/Inventario.fxml"
+                );
+
         // =====================================================
         // MÓDULOS GRANDES
         // =====================================================
@@ -508,7 +532,8 @@ public class Principal extends Application {
                 || productos
                 || categoriasProducto
                 || salas
-                || programacion;
+                || programacion
+                || inventario;
 
         // =====================================================
         // PANTALLAS DE OPERACIÓN
@@ -594,7 +619,6 @@ public class Principal extends Application {
         stagePrincipal.setTitle(titulo);
 
         stagePrincipal.sizeToScene();
-
         stagePrincipal.centerOnScreen();
     }
 
@@ -603,7 +627,6 @@ public class Principal extends Application {
     // =========================================================
 
     public static void main(String[] args) {
-
         launch(args);
     }
 }
