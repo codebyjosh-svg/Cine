@@ -121,6 +121,70 @@ public class Principal extends Application {
         );
     }
 
+    // ==============================
+    // US-2.4 - VENTA DE BOLETOS
+    // ==============================
+
+    public static void mostrarVenta() throws IOException {
+
+        String rol = SesionContext.getRolActual();
+
+        if (rol == null
+                || !("admin".equalsIgnoreCase(rol)
+                || "taquillero".equalsIgnoreCase(rol))) {
+
+            throw new IllegalStateException(
+                    "No autorizado para ventas."
+            );
+        }
+
+        cambiarEscena(
+                "/org/cine/view/Venta.fxml",
+                "Cinema - Venta de boletos"
+        );
+    }
+
+    // ==============================
+    // US-2.4 - FACTURA
+    // ==============================
+
+    public static void mostrarFactura(int id) throws IOException {
+
+        String rol = SesionContext.getRolActual();
+
+        if (rol == null
+                || !("admin".equalsIgnoreCase(rol)
+                || "taquillero".equalsIgnoreCase(rol))) {
+
+            throw new IllegalStateException(
+                    "No autorizado para facturas."
+            );
+        }
+
+        FXMLLoader loader = new FXMLLoader(
+                Principal.class.getResource(
+                        "/org/cine/view/Factura.fxml"
+                )
+        );
+
+        Parent root = loader.load();
+
+        stagePrincipal.setScene(
+                new Scene(root, 1050, 700)
+        );
+
+        stagePrincipal.setTitle("Cinema - Factura");
+
+        ((org.cine.controller.FacturaController)
+                loader.getController()).mostrar(id);
+
+        stagePrincipal.centerOnScreen();
+    }
+
+    // ==============================
+    // US-2.2 - PROGRAMACIÓN
+    // ==============================
+
     /**
      * US-2.2 - Programación de funciones.
      *
@@ -146,10 +210,18 @@ public class Principal extends Application {
         );
     }
 
+    // ==============================
+    // CERRAR SESIÓN
+    // ==============================
+
     public static void cerrarSesion() throws IOException {
         SesionContext.cerrarSesion();
         mostrarLogin();
     }
+
+    // ==============================
+    // CAMBIO DE ESCENA
+    // ==============================
 
     public static void cambiarEscena(
             String ruta,
@@ -170,12 +242,16 @@ public class Principal extends Application {
         boolean peliculas = ruta.endsWith("/Peliculas.fxml");
         boolean generos = ruta.endsWith("/Generos.fxml");
         boolean clientes = ruta.endsWith("/Clientes.fxml");
+        boolean venta = ruta.endsWith("/Venta.fxml");
+        boolean programacion = ruta.endsWith("/Programacion.fxml");
 
         boolean moduloGrande =
                 usuarios
                 || peliculas
                 || generos
-                || clientes;
+                || clientes
+                || venta
+                || programacion;
 
         double ancho = moduloGrande ? 1100 : 860;
         double alto = moduloGrande ? 700 : 540;
