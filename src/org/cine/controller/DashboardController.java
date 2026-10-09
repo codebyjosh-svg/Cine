@@ -7,18 +7,65 @@ import org.cine.model.Usuario;
 import org.cine.service.SesionContext;
 import org.cine.system.Principal;
 
-public class DashboardController {
-    @FXML private Label lblUsuario;
-    @FXML private Label lblRol;
+/**
+ * Controlador de los dashboards de personal y cliente
+ * referenciados por los archivos FXML.
+ */
+public final class DashboardController {
+
+    @FXML
+    private Label lblUsuario;
+
+    @FXML
+    private Label lblRol;
 
     @FXML
     private void initialize() {
+
         Usuario usuario = SesionContext.getUsuarioActual();
+
         if (usuario != null) {
-            lblUsuario.setText(usuario.getNombreCompleto());
-            lblRol.setText(usuario.getNombreRol());
+
+            if (lblUsuario != null) {
+                lblUsuario.setText(usuario.getNombreCompleto());
+            }
+
+            if (lblRol != null) {
+                lblRol.setText(usuario.getNombreRol());
+            }
         }
     }
+
+    // ==============================
+    // VENTAS
+    // ==============================
+
+    @FXML
+    private void abrirVentas() throws IOException {
+        Principal.mostrarVentas();
+    }
+
+    // ==============================
+    // FUNCIONES - US-2.2
+    // ==============================
+
+    @FXML
+    private void abrirFunciones() throws IOException {
+        Principal.mostrarProgramacion();
+    }
+
+    // ==============================
+    // STOCK CRÍTICO - US-3.3
+    // ==============================
+
+    @FXML
+    private void abrirStockCritico() throws IOException {
+        Principal.mostrarStockCritico();
+    }
+
+    // ==============================
+    // CERRAR SESIÓN
+    // ==============================
 
     @FXML
     private void abrirInventario() throws IOException {

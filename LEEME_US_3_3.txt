@@ -1,0 +1,74 @@
+US-3.3 — STOCK CRÍTICO Y VENTA DE DULCERÍA
+Responsable: Joshua. Tareas T3.3.1 a T3.3.12.
+
+ABRIR EN NETBEANS
+1. Extraiga el ZIP y abra la carpeta Cine como proyecto Apache NetBeans.
+2. Use JDK 21. La clase principal es org.cine.system.Principal.
+3. JavaFX 21.0.11 para Windows está incluido en lib/javafx-21.0.11.
+   Se usa el modulepath; no hace falta volver a agregarlo al classpath.
+4. Copie src/db.properties.example a src/db.properties y coloque su usuario
+   y contraseña reales de MySQL. La base predeterminada es cinedb_in4cm.
+5. Ejecute Clean and Build y después Run.
+
+BASE DE DATOS EXISTENTE
+Ejecute en MySQL Workbench únicamente:
+    sql/actualizacion_US_3_3_stock_dulceria.sql
+La actualización es repetible y conserva tablas, productos, ventas y stock.
+No vuelva a ejecutar los DDL/DML completos sobre su base ya instalada.
+
+INSTALACIÓN EN UNA BASE VACÍA
+Ejecute en este orden los archivos SIN "(1)" en su nombre:
+    1. sql/cinedb_script_ddl.sql
+    2. sql/cinedb_script_dml.sql
+Los DDL completos ya incluyen US-3.3; la actualización aparte es para bases
+existentes. Los archivos con "(1)" se conservaron del proyecto recibido.
+
+CÓMO UTILIZARLO
+- Admin: botones Stock crítico y Ventas en el menú lateral.
+- Taquillero: Venta de dulcería y Consultar stock crítico.
+- Bodega: Productos con stock crítico.
+- Cliente: no tiene acceso a los módulos de personal.
+
+STOCK CRÍTICO
+Se muestran productos activos cuando stock <= stock_minimo, incluyendo
+el caso de igualdad y el caso cero. Puede filtrar por nombre, categoría,
+ID o nivel, y actualizar las existencias. Los conteos corresponden al
+listado completo; el texto inferior corresponde al filtro aplicado.
+
+VENTA
+Seleccione un cliente activo y un producto. Agregar al carrito suma la
+cantidad a una sola línea del mismo producto. Puede reemplazar la cantidad
+con Guardar cantidad o retirar el producto con Quitar.
+
+Se comprueba la cantidad ACUMULADA contra las existencias al agregar,
+al editar y al confirmar. El carrito no reserva ni descuenta existencias.
+Confirmar realiza el descuento y registra los movimientos en una sola
+transacción. Si otro vendedor consumió el stock, la confirmación se rechaza
+y la venta permanece abierta para corregirla. No hay descuentos parciales.
+
+El número de venta aparece en pantalla. Volver o Nueva venta conserva
+una venta abierta en la BD; puede retomarla ingresando su número.
+Retomar permite añadir dulcería a una venta abierta que ya tenga boletos.
+Un taquillero solo retoma sus ventas; el administrador puede retomar otras.
+
+FACTURA
+Muestra el cliente, fecha, número, vendedor real, artículos, subtotales
+de boletos y dulcería, y total general. Los importes vienen de la BD.
+Imprimir factura utiliza la impresora predeterminada, sin abrir el diálogo
+de impresión. Si no hay impresora o falla el trabajo, informa el error.
+Si no se puede consultar la factura después de confirmar, use Actualizar
+factura; no hace falta confirmar otra vez la venta.
+
+ALCANCE DE ESTA ENTREGA
+El ZIP recibido no traía VentaController ni Factura.fxml. Se agregó la base
+de venta de dulcería y la integración con ventas/boletos existentes en SQL.
+La selección visual de funciones y butacas pertenece al módulo de boletos
+del Sprint 2 y no fue agregada dentro de US-3.3.
+
+PRUEBAS Y TAREAS
+documentacion/US_3_3_Joshua.md: detalle de las 12 tareas y sus archivos.
+test/org/cine/test/PruebaStockDulceriaBD.java: stock, cantidades, venta mixta,
+rollback y dos confirmaciones simultáneas de la última unidad.
+test/org/cine/test/PruebaStockDulceriaFXML.java: botones, vistas y navegación.
+test/evidencia/US_3_3/: resultados de ejecución y capturas de las vistas.
+Las pruebas crean sus propios datos y los eliminan al finalizar.

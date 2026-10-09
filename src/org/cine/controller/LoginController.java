@@ -13,9 +13,13 @@ import org.cine.service.SesionContext;
 import org.cine.system.Principal;
 
 public class LoginController {
-    @FXML private TextField txtUsername;
-    @FXML private PasswordField txtPassword;
-    @FXML private Label lblMensaje;
+
+    @FXML
+    private TextField txtUsername;
+    @FXML
+    private PasswordField txtPassword;
+    @FXML
+    private Label lblMensaje;
 
     private final UsuarioDAO usuarioDAO = new UsuarioDAOImpl();
 
@@ -26,25 +30,104 @@ public class LoginController {
 
     @FXML
     private void iniciarSesion() {
+
         lblMensaje.setText("");
-        String username = txtUsername.getText() == null ? "" : txtUsername.getText().trim();
-        String password = txtPassword.getText() == null ? "" : txtPassword.getText();
+
+        String username = txtUsername.getText() == null
+                ? ""
+                : txtUsername.getText().trim();
+
+        String password = txtPassword.getText() == null
+                ? ""
+                : txtPassword.getText();
 
         if (username.isBlank() || password.isBlank()) {
-            lblMensaje.setText("Ingrese usuario y contraseña.");
+
+            lblMensaje.setText(
+                    "Ingrese usuario y contraseña."
+            );
+
             return;
         }
 
         try {
-            Usuario usuario = usuarioDAO.autenticar(username, password);
+
+            System.out.println("=================================");
+            System.out.println("INTENTO DE LOGIN");
+            System.out.println("Usuario: " + username);
+            System.out.println("=================================");
+
+            Usuario usuario
+                    = usuarioDAO.autenticar(
+                            username,
+                            password
+                    );
+
+            System.out.println(
+                    "Usuario encontrado: "
+                    + usuario.getUsername()
+            );
+
+            System.out.println(
+                    "Rol: "
+                    + usuario.getNombreRol()
+            );
+
+            System.out.println(
+                    "Estado: "
+                    + usuario.isEstado()
+            );
+
             SesionContext.iniciarSesion(usuario);
+
+            System.out.println(
+                    "Sesión iniciada correctamente."
+            );
+
             Principal.mostrarDashboardSegunRol();
+
         } catch (AutenticacionException ex) {
-            lblMensaje.setText(ex.getMessage());
+
+            System.out.println(
+                    "ERROR DE AUTENTICACION: "
+                    + ex.getMotivo()
+            );
+
+            ex.printStackTrace();
+
+            lblMensaje.setText(
+                    ex.getMessage()
+            );
+
             txtPassword.clear();
-        } catch (IOException | IllegalArgumentException ex) {
+
+        } catch (IOException ex) {
+
+            System.out.println(
+                    "ERROR AL ABRIR DASHBOARD:"
+            );
+
+            ex.printStackTrace();
+
             SesionContext.cerrarSesion();
-            lblMensaje.setText("No se pudo abrir la pantalla del usuario.");
+
+            lblMensaje.setText(
+                    "Error al abrir el dashboard."
+            );
+
+        } catch (IllegalArgumentException ex) {
+
+            System.out.println(
+                    "ERROR DE NAVEGACION:"
+            );
+
+            ex.printStackTrace();
+
+            SesionContext.cerrarSesion();
+
+            lblMensaje.setText(
+                    "Rol no reconocido."
+            );
         }
     }
 

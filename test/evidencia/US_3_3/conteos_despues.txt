@@ -1,0 +1,2 @@
+productos	stock	ventas	movimientos
+8	624	5	16

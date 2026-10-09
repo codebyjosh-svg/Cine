@@ -1,19 +1,754 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-<AnchorPane prefHeight="540.0" prefWidth="860.0" stylesheets="@style/dashboard.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cine.controller.DashboardController">
-    <children>
-        <VBox alignment="CENTER" layoutX="180.0" layoutY="80.0" prefHeight="380.0" prefWidth="500.0" spacing="18.0" styleClass="dashboard-card">
-            <children>
-                <Label text="Dashboard Admin" styleClass="title" />
-                <Label text="Sesión iniciada correctamente" styleClass="subtitle" />
-                <Label fx:id="lblUsuario" styleClass="user" />
-                <Label fx:id="lblRol" styleClass="role" />
-                <Button fx:id="btnInventario" mnemonicParsing="false" onAction="#abrirInventario" text="Inventario" styleClass="inventory-button" />
-                <Button mnemonicParsing="false" onAction="#cerrarSesion" text="Cerrar sesión" styleClass="logout-button" />
-            </children>
-        </VBox>
-    </children>
-</AnchorPane>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cine.controller.DashboardAdminController"
+            stylesheets="@style/dashboard-admin.css"
+            styleClass="dashboard-root"
+            prefWidth="1100.0"
+            prefHeight="700.0">
+
+    <!-- ===================================================== -->
+    <!-- SIDEBAR -->
+    <!-- ===================================================== -->
+
+    <left>
+
+        <BorderPane prefWidth="230.0"
+                    minWidth="230.0"
+                    maxWidth="230.0"
+                    styleClass="sidebar">
+
+            <top>
+
+                <VBox spacing="8.0">
+
+                    <padding>
+                        <Insets top="24.0"
+                                right="16.0"
+                                bottom="12.0"
+                                left="16.0"/>
+                    </padding>
+
+                    <HBox alignment="CENTER_LEFT"
+                          spacing="10.0">
+
+                        <StackPane prefWidth="38.0"
+                                   prefHeight="38.0"
+                                   styleClass="brand-logo">
+
+                            <Label text="C"
+                                   styleClass="brand-letter"/>
+
+                        </StackPane>
+
+                        <VBox spacing="2.0">
+
+                            <Label text="CINEMA"
+                                   styleClass="brand-title"/>
+
+                            <Label text="Sistema de Gestión"
+                                   styleClass="brand-subtitle"/>
+
+                        </VBox>
+
+                    </HBox>
+
+                    <Label text="MENÚ PRINCIPAL"
+                           styleClass="menu-title">
+
+                        <VBox.margin>
+                            <Insets top="14.0"
+                                    bottom="4.0"/>
+                        </VBox.margin>
+
+                    </Label>
+
+                    <VBox spacing="3.0">
+
+                        <!-- DASHBOARD -->
+
+                        <HBox alignment="CENTER_LEFT"
+                              minHeight="36.0"
+                              prefHeight="36.0"
+                              styleClass="menu-active">
+
+                            <padding>
+                                <Insets left="10.0"/>
+                            </padding>
+
+                            <Label text="D"
+                                   styleClass="menu-icon"/>
+
+                            <Label text="Dashboard"
+                                   styleClass="menu-text"/>
+
+                        </HBox>
+
+                        <!-- USUARIOS -->
+
+                        <Button text="Usuarios"
+                                onAction="#abrirUsuarios"
+                                alignment="CENTER_LEFT"
+                                graphicTextGap="10.0"
+                                minHeight="36.0"
+                                maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                styleClass="menu-button"/>
+
+                        <!-- PELÍCULAS -->
+
+                        <Button text="Películas"
+                                onAction="#abrirPeliculas"
+                                alignment="CENTER_LEFT"
+                                graphicTextGap="10.0"
+                                minHeight="36.0"
+                                maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                styleClass="menu-button"/>
+
+                        <!-- GÉNEROS -->
+
+                        <Button text="Géneros"
+                                onAction="#abrirGeneros"
+                                alignment="CENTER_LEFT"
+                                graphicTextGap="10.0"
+                                minHeight="36.0"
+                                maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                styleClass="menu-button"/>
+
+                        <!-- CLIENTES -->
+
+                        <Button text="Clientes"
+                                onAction="#abrirClientes"
+                                alignment="CENTER_LEFT"
+                                graphicTextGap="10.0"
+                                minHeight="36.0"
+                                maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                styleClass="menu-button"/>
+
+                        <!-- PRODUCTOS -->
+
+                        <Button text="Productos"
+                                onAction="#abrirProductos"
+                                alignment="CENTER_LEFT"
+                                graphicTextGap="10.0"
+                                minHeight="36.0"
+                                maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                styleClass="menu-button"/>
+
+                        <!-- CATEGORÍAS -->
+
+                        <Button text="Categorías de productos"
+                                onAction="#abrirCategoriasProducto"
+                                alignment="CENTER_LEFT"
+                                graphicTextGap="10.0"
+                                wrapText="true"
+                                minHeight="36.0"
+                                maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                styleClass="menu-button"/>
+
+                        <!-- SALAS -->
+
+                        <Button text="Salas y butacas"
+                                onAction="#abrirSalas"
+                                alignment="CENTER_LEFT"
+                                graphicTextGap="10.0"
+                                minHeight="36.0"
+                                maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                styleClass="menu-button"/>
+
+                        <!-- FUNCIONES -->
+
+                        <Button text="Funciones"
+                                onAction="#abrirFunciones"
+                                alignment="CENTER_LEFT"
+                                graphicTextGap="10.0"
+                                minHeight="36.0"
+                                maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                styleClass="menu-button"/>
+
+                        <!-- VENTAS -->
+
+                        <Button text="Ventas"
+                                onAction="#abrirVenta"
+                                alignment="CENTER_LEFT"
+                                graphicTextGap="10.0"
+                                minHeight="36.0"
+                                maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                styleClass="menu-button"/>
+
+                        <!-- STOCK -->
+
+                        <Button text="Stock crítico"
+                                onAction="#abrirStockCritico"
+                                alignment="CENTER_LEFT"
+                                graphicTextGap="10.0"
+                                minHeight="36.0"
+                                maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                styleClass="menu-button"/>
+
+                        <!-- INVENTARIO -->
+
+                        <Button text="Inventario"
+                                onAction="#abrirInventario"
+                                alignment="CENTER_LEFT"
+                                graphicTextGap="10.0"
+                                minHeight="36.0"
+                                maxWidth="Infinity"
+                                mnemonicParsing="false"
+                                styleClass="menu-button"/>
+
+                    </VBox>
+
+                </VBox>
+
+            </top>
+
+            <!-- CERRAR SESIÓN -->
+
+            <bottom>
+
+                <VBox spacing="8.0">
+
+                    <padding>
+                        <Insets top="12.0"
+                                right="16.0"
+                                bottom="20.0"
+                                left="16.0"/>
+                    </padding>
+
+                    <Button text="Cerrar sesión"
+                            onAction="#cerrarSesion"
+                            alignment="CENTER_LEFT"
+                            maxWidth="Infinity"
+                            minHeight="38.0"
+                            mnemonicParsing="false"
+                            styleClass="logout-button"/>
+
+                </VBox>
+
+            </bottom>
+
+        </BorderPane>
+
+    </left>
+
+    <!-- ===================================================== -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- ===================================================== -->
+
+    <center>
+
+        <BorderPane styleClass="main-area">
+
+            <!-- TOPBAR -->
+
+            <top>
+
+                <BorderPane styleClass="topbar">
+
+                    <padding>
+                        <Insets top="18.0"
+                                right="24.0"
+                                bottom="18.0"
+                                left="24.0"/>
+                    </padding>
+
+                    <left>
+
+                        <VBox spacing="4.0">
+
+                            <Label text="Dashboard Administrativo"
+                                   styleClass="page-title"/>
+
+                            <Label text="Panel de administración del cine"
+                                   styleClass="page-subtitle"/>
+
+                        </VBox>
+
+                    </left>
+
+                    <right>
+
+                        <HBox alignment="CENTER_RIGHT"
+                              spacing="10.0">
+
+                            <VBox alignment="CENTER_RIGHT"
+                                  spacing="3.0">
+
+                                <Label fx:id="lblUsuario"
+                                       text=""
+                                       styleClass="user-name"/>
+
+                                <Label fx:id="lblRol"
+                                       text=""
+                                       styleClass="user-role"/>
+
+                            </VBox>
+
+                            <StackPane prefWidth="38.0"
+                                       prefHeight="38.0"
+                                       styleClass="avatar">
+
+                                <Label text="A"
+                                       styleClass="avatar-text"/>
+
+                            </StackPane>
+
+                        </HBox>
+
+                    </right>
+
+                </BorderPane>
+
+            </top>
+
+            <!-- CONTENIDO -->
+
+            <center>
+
+                <VBox spacing="12.0"
+                      styleClass="content">
+
+                    <padding>
+                        <Insets top="16.0"
+                                right="24.0"
+                                bottom="16.0"
+                                left="24.0"/>
+                    </padding>
+
+                    <HBox alignment="CENTER_LEFT"
+                          spacing="12.0">
+
+                        <VBox spacing="4.0">
+
+                            <Label text="Gestión del sistema"
+                                   styleClass="section-title"/>
+
+                            <Label text="Selecciona el módulo que deseas administrar."
+                                   wrapText="true"
+                                   styleClass="section-description"/>
+
+                        </VBox>
+
+                        <Region HBox.hgrow="ALWAYS"/>
+
+                        <Label text="10 módulos disponibles"
+                               styleClass="available-badge"/>
+
+                    </HBox>
+
+                    <GridPane hgap="12.0"
+                              vgap="12.0"
+                              VBox.vgrow="ALWAYS">
+
+                        <columnConstraints>
+
+                            <ColumnConstraints percentWidth="33.33"
+                                               fillWidth="true"/>
+
+                            <ColumnConstraints percentWidth="33.33"
+                                               fillWidth="true"/>
+
+                            <ColumnConstraints percentWidth="33.34"
+                                               fillWidth="true"/>
+
+                        </columnConstraints>
+
+                        <!-- USUARIOS -->
+
+                        <VBox GridPane.columnIndex="0"
+                              GridPane.rowIndex="0"
+                              spacing="6.0"
+                              styleClass="module-active">
+
+                            <HBox alignment="CENTER_LEFT"
+                                  spacing="8.0">
+
+                                <Label text="U"
+                                       styleClass="module-letter"/>
+
+                                <Label text="DISPONIBLE"
+                                       styleClass="available-label"/>
+
+                            </HBox>
+
+                            <Label text="Usuarios"
+                                   styleClass="module-title"/>
+
+                            <Label text="Administrar usuarios, roles y estados."
+                                   wrapText="true"
+                                   styleClass="module-description"/>
+
+                            <Region VBox.vgrow="ALWAYS"/>
+
+                            <Button text="Abrir usuarios"
+                                    onAction="#abrirUsuarios"
+                                    maxWidth="Infinity"
+                                    mnemonicParsing="false"
+                                    styleClass="menu-button"/>
+
+                        </VBox>
+
+                        <!-- PELÍCULAS -->
+
+                        <VBox GridPane.columnIndex="1"
+                              GridPane.rowIndex="0"
+                              spacing="6.0"
+                              styleClass="module-active">
+
+                            <HBox alignment="CENTER_LEFT"
+                                  spacing="8.0">
+
+                                <Label text="P"
+                                       styleClass="module-letter"/>
+
+                                <Label text="DISPONIBLE"
+                                       styleClass="available-label"/>
+
+                            </HBox>
+
+                            <Label text="Películas"
+                                   styleClass="module-title"/>
+
+                            <Label text="Administrar el catálogo de películas."
+                                   wrapText="true"
+                                   styleClass="module-description"/>
+
+                            <Region VBox.vgrow="ALWAYS"/>
+
+                            <Button text="Abrir películas"
+                                    onAction="#abrirPeliculas"
+                                    maxWidth="Infinity"
+                                    mnemonicParsing="false"
+                                    styleClass="menu-button"/>
+
+                        </VBox>
+
+                        <!-- GÉNEROS -->
+
+                        <VBox GridPane.columnIndex="2"
+                              GridPane.rowIndex="0"
+                              spacing="6.0"
+                              styleClass="module-active">
+
+                            <HBox alignment="CENTER_LEFT"
+                                  spacing="8.0">
+
+                                <Label text="G"
+                                       styleClass="module-letter"/>
+
+                                <Label text="DISPONIBLE"
+                                       styleClass="available-label"/>
+
+                            </HBox>
+
+                            <Label text="Géneros"
+                                   styleClass="module-title"/>
+
+                            <Label text="Administrar los géneros cinematográficos."
+                                   wrapText="true"
+                                   styleClass="module-description"/>
+
+                            <Region VBox.vgrow="ALWAYS"/>
+
+                            <Button text="Abrir géneros"
+                                    onAction="#abrirGeneros"
+                                    maxWidth="Infinity"
+                                    mnemonicParsing="false"
+                                    styleClass="menu-button"/>
+
+                        </VBox>
+
+                        <!-- CLIENTES -->
+
+                        <VBox GridPane.columnIndex="0"
+                              GridPane.rowIndex="1"
+                              spacing="6.0"
+                              styleClass="module-active">
+
+                            <HBox alignment="CENTER_LEFT"
+                                  spacing="8.0">
+
+                                <Label text="C"
+                                       styleClass="module-letter"/>
+
+                                <Label text="DISPONIBLE"
+                                       styleClass="available-label"/>
+
+                            </HBox>
+
+                            <Label text="Clientes"
+                                   styleClass="module-title"/>
+
+                            <Label text="Registrar y administrar los clientes del cine."
+                                   wrapText="true"
+                                   styleClass="module-description"/>
+
+                            <Region VBox.vgrow="ALWAYS"/>
+
+                            <Button text="Abrir clientes"
+                                    onAction="#abrirClientes"
+                                    maxWidth="Infinity"
+                                    mnemonicParsing="false"
+                                    styleClass="menu-button"/>
+
+                        </VBox>
+
+                        <!-- PRODUCTOS -->
+
+                        <VBox GridPane.columnIndex="1"
+                              GridPane.rowIndex="1"
+                              spacing="6.0"
+                              styleClass="module-active">
+
+                            <HBox alignment="CENTER_LEFT"
+                                  spacing="8.0">
+
+                                <Label text="P"
+                                       styleClass="module-letter"/>
+
+                                <Label text="DISPONIBLE"
+                                       styleClass="available-label"/>
+
+                            </HBox>
+
+                            <Label text="Productos"
+                                   styleClass="module-title"/>
+
+                            <Label text="Administrar productos, precios y stock mínimo."
+                                   wrapText="true"
+                                   styleClass="module-description"/>
+
+                            <Region VBox.vgrow="ALWAYS"/>
+
+                            <Button text="Abrir productos"
+                                    onAction="#abrirProductos"
+                                    maxWidth="Infinity"
+                                    mnemonicParsing="false"
+                                    styleClass="menu-button"/>
+
+                        </VBox>
+
+                        <!-- CATEGORÍAS -->
+
+                        <VBox GridPane.columnIndex="2"
+                              GridPane.rowIndex="1"
+                              spacing="6.0"
+                              styleClass="module-active">
+
+                            <HBox alignment="CENTER_LEFT"
+                                  spacing="8.0">
+
+                                <Label text="C"
+                                       styleClass="module-letter"/>
+
+                                <Label text="DISPONIBLE"
+                                       styleClass="available-label"/>
+
+                            </HBox>
+
+                            <Label text="Categorías de productos"
+                                   styleClass="module-title"
+                                   wrapText="true"/>
+
+                            <Label text="Administrar las categorías de dulcería."
+                                   wrapText="true"
+                                   styleClass="module-description"/>
+
+                            <Region VBox.vgrow="ALWAYS"/>
+
+                            <Button text="Abrir categorías"
+                                    onAction="#abrirCategoriasProducto"
+                                    maxWidth="Infinity"
+                                    mnemonicParsing="false"
+                                    styleClass="menu-button"/>
+
+                        </VBox>
+
+                        <!-- SALAS -->
+
+                        <VBox GridPane.columnIndex="0"
+                              GridPane.rowIndex="2"
+                              spacing="6.0"
+                              styleClass="module-active">
+
+                            <HBox alignment="CENTER_LEFT"
+                                  spacing="8.0">
+
+                                <Label text="S"
+                                       styleClass="module-letter"/>
+
+                                <Label text="DISPONIBLE"
+                                       styleClass="available-label"/>
+
+                            </HBox>
+
+                            <Label text="Salas y butacas"
+                                   styleClass="module-title"/>
+
+                            <Label text="Administrar salas, formatos, butacas y estados."
+                                   wrapText="true"
+                                   styleClass="module-description"/>
+
+                            <Region VBox.vgrow="ALWAYS"/>
+
+                            <Button text="Abrir salas"
+                                    onAction="#abrirSalas"
+                                    maxWidth="Infinity"
+                                    mnemonicParsing="false"
+                                    styleClass="menu-button"/>
+
+                        </VBox>
+
+                        <!-- FUNCIONES -->
+
+                        <VBox GridPane.columnIndex="1"
+                              GridPane.rowIndex="2"
+                              spacing="6.0"
+                              styleClass="module-active">
+
+                            <HBox alignment="CENTER_LEFT"
+                                  spacing="8.0">
+
+                                <Label text="F"
+                                       styleClass="module-letter"/>
+
+                                <Label text="DISPONIBLE"
+                                       styleClass="available-label"/>
+
+                            </HBox>
+
+                            <Label text="Funciones"
+                                   styleClass="module-title"/>
+
+                            <Label text="Programar funciones y horarios."
+                                   wrapText="true"
+                                   styleClass="module-description"/>
+
+                            <Region VBox.vgrow="ALWAYS"/>
+
+                            <Button text="Abrir funciones"
+                                    onAction="#abrirFunciones"
+                                    maxWidth="Infinity"
+                                    mnemonicParsing="false"
+                                    styleClass="menu-button"/>
+
+                        </VBox>
+
+                        <!-- VENTAS / STOCK / INVENTARIO -->
+
+                        <VBox GridPane.columnIndex="2"
+                              GridPane.rowIndex="2"
+                              spacing="6.0"
+                              styleClass="module-active">
+
+                            <HBox alignment="CENTER_LEFT"
+                                  spacing="8.0">
+
+                                <Label text="O"
+                                       styleClass="module-letter"/>
+
+                                <Label text="DISPONIBLE"
+                                       styleClass="available-label"/>
+
+                            </HBox>
+
+                            <Label text="Operaciones"
+                                   styleClass="module-title"/>
+
+                            <Label text="Ventas, stock crítico e inventario de dulcería."
+                                   wrapText="true"
+                                   styleClass="module-description"/>
+
+                            <Region VBox.vgrow="ALWAYS"/>
+
+                            <HBox spacing="6.0">
+
+                                <Button text="Ventas"
+                                        onAction="#abrirVenta"
+                                        HBox.hgrow="ALWAYS"
+                                        maxWidth="Infinity"
+                                        mnemonicParsing="false"
+                                        styleClass="menu-button"/>
+
+                                <Button text="Stock"
+                                        onAction="#abrirStockCritico"
+                                        HBox.hgrow="ALWAYS"
+                                        maxWidth="Infinity"
+                                        mnemonicParsing="false"
+                                        styleClass="menu-button"/>
+
+                                <Button text="Inventario"
+                                        onAction="#abrirInventario"
+                                        HBox.hgrow="ALWAYS"
+                                        maxWidth="Infinity"
+                                        mnemonicParsing="false"
+                                        styleClass="menu-button"/>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </GridPane>
+
+                </VBox>
+
+            </center>
+
+            <!-- FOOTER -->
+
+            <bottom>
+
+                <BorderPane styleClass="footer">
+
+                    <padding>
+                        <Insets top="8.0"
+                                right="24.0"
+                                bottom="8.0"
+                                left="24.0"/>
+                    </padding>
+
+                    <left>
+
+                        <Label text="CINEMA | Sistema de Gestión de Cine"
+                               styleClass="footer-text"/>
+
+                    </left>
+
+                    <right>
+
+                        <Label text="Versión 1.0"
+                               styleClass="footer-text"/>
+
+                    </right>
+
+                </BorderPane>
+
+            </bottom>
+
+        </BorderPane>
+
+    </center>
+
+</BorderPane>

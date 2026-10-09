@@ -1,0 +1,652 @@
+/* =========================================================
+   CINEMA - DASHBOARD ADMINISTRATIVO
+   Diseño basado en Google Stitch
+   ========================================================= */
+
+.dashboard-root {
+    -fx-background-color: #f4f6fb;
+    -fx-font-family: "Segoe UI";
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar {
+    -fx-background-color: #0b1428;
+    -fx-min-width: 228px;
+    -fx-pref-width: 228px;
+    -fx-max-width: 228px;
+}
+
+.brand-box {
+    -fx-padding: 0 4px 0 4px;
+}
+
+.brand-logo {
+    -fx-background-color: #ed1f2f;
+    -fx-background-radius: 7px;
+}
+
+.brand-letter {
+    -fx-text-fill: white;
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+}
+
+.brand-title {
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.brand-subtitle {
+    -fx-text-fill: #7f8ca7;
+    -fx-font-size: 9px;
+}
+
+.menu-title {
+    -fx-text-fill: #73819c;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.menu-list {
+    -fx-spacing: 3px;
+}
+
+
+/* =========================================================
+   MENÚ SIDEBAR
+   ========================================================= */
+
+.menu-active {
+    -fx-background-color: #2858df;
+    -fx-background-radius: 6px;
+}
+
+.menu-active .menu-text,
+.menu-active .menu-icon {
+    -fx-text-fill: white;
+}
+
+.menu-icon {
+    -fx-min-width: 22px;
+    -fx-pref-width: 22px;
+    -fx-text-fill: #8290a9;
+    -fx-font-size: 12px;
+    -fx-alignment: CENTER;
+}
+
+.menu-text {
+    -fx-text-fill: #aeb9cc;
+    -fx-font-size: 11px;
+}
+
+
+/* Botones Usuarios / Películas / Géneros */
+
+.menu-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+
+    -fx-text-fill: #aeb9cc;
+    -fx-font-size: 11px;
+    -fx-font-weight: normal;
+
+    -fx-alignment: CENTER_LEFT;
+    -fx-content-display: LEFT;
+    -fx-text-alignment: LEFT;
+
+    -fx-padding: 0 10px 0 10px;
+
+    -fx-min-width: 200px;
+    -fx-pref-width: 200px;
+    -fx-max-width: 200px;
+
+    -fx-min-height: 36px;
+    -fx-pref-height: 36px;
+    -fx-max-height: 36px;
+
+    -fx-cursor: hand;
+    -fx-focus-traversable: false;
+    -fx-opacity: 1.0;
+}
+
+.menu-button .menu-icon {
+    -fx-text-fill: #8290a9;
+}
+
+.menu-button:hover {
+    -fx-background-color: #16284a;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+}
+
+.menu-button:focused {
+    -fx-background-color: #16284a;
+    -fx-text-fill: white;
+    -fx-border-color: transparent;
+}
+
+.menu-button:armed,
+.menu-button:pressed {
+    -fx-background-color: #2858df;
+    -fx-text-fill: white;
+}
+
+.menu-button:hover .menu-icon {
+    -fx-text-fill: white;
+}
+
+.menu-button:pressed {
+    -fx-background-color: #1d4ed8;
+}
+
+
+/* Opciones todavía no disponibles */
+
+.menu-disabled {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+    -fx-padding: 0 10px;
+    -fx-opacity: 0.72;
+}
+
+.menu-disabled .menu-text {
+    -fx-text-fill: #8290a9;
+}
+
+.menu-disabled .menu-icon {
+    -fx-text-fill: #68758c;
+}
+
+
+/* Configuración */
+
+.menu-bottom {
+    -fx-background-color: transparent;
+    -fx-background-radius: 6px;
+}
+
+.menu-bottom:hover {
+    -fx-background-color: #16284a;
+}
+
+
+/* Cerrar sesión */
+
+.logout-button {
+    -fx-background-color: #321522;
+    -fx-border-color: #5a2030;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+
+    -fx-text-fill: #ff9ba7;
+    -fx-font-size: 11px;
+
+    -fx-padding: 9px 10px;
+
+    -fx-cursor: hand;
+}
+
+.logout-button:hover {
+    -fx-background-color: #4a1b2a;
+}
+
+.logout-button:pressed {
+    -fx-background-color: #5a2030;
+}
+
+
+/* =========================================================
+   ÁREA PRINCIPAL
+   ========================================================= */
+
+.main-area {
+    -fx-background-color: #f4f6fb;
+}
+
+
+/* =========================================================
+   TOPBAR
+   ========================================================= */
+
+.topbar {
+    -fx-background-color: white;
+
+    -fx-border-color: #e2e7f0;
+    -fx-border-width: 0 0 1px 0;
+
+    -fx-padding: 0 24px;
+}
+
+.page-title {
+    -fx-text-fill: #101827;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.page-subtitle {
+    -fx-text-fill: #73809a;
+    -fx-font-size: 10px;
+}
+
+.user-name {
+    -fx-text-fill: #111827;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.user-role {
+    -fx-text-fill: #7b879d;
+    -fx-font-size: 9px;
+}
+
+.avatar {
+    -fx-background-color: #e8efff;
+    -fx-background-radius: 50%;
+}
+
+.avatar-text {
+    -fx-text-fill: #2858df;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.more-button {
+    -fx-background-color: #f3f5f9;
+    -fx-background-radius: 7px;
+}
+
+.more-button:hover {
+    -fx-background-color: #e7ebf3;
+}
+
+.more-text {
+    -fx-text-fill: #65718a;
+    -fx-font-size: 16px;
+}
+
+
+/* =========================================================
+   SCROLL
+   ========================================================= */
+
+.content-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.content-scroll > .viewport {
+    -fx-background-color: #f4f6fb;
+}
+
+.content {
+    -fx-padding: 26px 26px 22px 26px;
+}
+
+
+/* =========================================================
+   SECCIONES
+   ========================================================= */
+
+.section-title {
+    -fx-text-fill: #101827;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.section-description {
+    -fx-text-fill: #7a879e;
+    -fx-font-size: 10px;
+}
+
+
+/* =========================================================
+   TARJETAS KPI
+   ========================================================= */
+
+.kpi-card {
+    -fx-background-color: white;
+
+    -fx-background-radius: 9px;
+
+    -fx-border-color: #dfe5ee;
+    -fx-border-radius: 9px;
+    -fx-border-width: 1px;
+
+    -fx-padding: 14px;
+
+    -fx-min-height: 105px;
+}
+
+.kpi-card:hover {
+    -fx-border-color: #cbd5e5;
+}
+
+.kpi-letter {
+    -fx-text-fill: #162033;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.kpi-number {
+    -fx-text-fill: #101827;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.kpi-title {
+    -fx-text-fill: #182236;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.kpi-description {
+    -fx-text-fill: #8490a5;
+    -fx-font-size: 9px;
+}
+
+
+/* =========================================================
+   BADGE "MÓDULOS DISPONIBLES"
+   ========================================================= */
+
+.available-badge {
+    -fx-background-color: #e9efff;
+    -fx-background-radius: 15px;
+
+    -fx-text-fill: #2858df;
+
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+
+    -fx-padding: 6px 11px;
+}
+
+
+/* =========================================================
+   TARJETAS DE MÓDULOS
+   ========================================================= */
+
+/*
+   IMPORTANTE:
+   Estas tarjetas ahora son la zona completa de acceso.
+   Ya NO necesitan un botón interno para los módulos
+   disponibles.
+*/
+
+.module-active {
+    -fx-background-color: white;
+
+    -fx-background-radius: 8px;
+
+    -fx-border-color: #dfe5ee;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+
+    -fx-padding: 13px;
+
+    -fx-min-height: 143px;
+
+    -fx-cursor: hand;
+}
+
+.module-active:hover {
+    -fx-background-color: #f8faff;
+    -fx-border-color: #2858df;
+}
+
+.module-active:pressed {
+    -fx-background-color: #edf2ff;
+}
+
+
+/* Módulos en desarrollo */
+
+.module-disabled {
+    -fx-background-color: #e8ecf2;
+
+    -fx-background-radius: 8px;
+
+    -fx-border-color: #dce1e9;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+
+    -fx-padding: 13px;
+
+    -fx-min-height: 143px;
+}
+
+
+/* Letras de los módulos */
+
+.module-letter {
+    -fx-text-fill: #1c2a40;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+
+/* Título del módulo */
+
+.module-title {
+    -fx-text-fill: #101827;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+
+/* Descripción */
+
+.module-description {
+    -fx-text-fill: #78869c;
+    -fx-font-size: 9px;
+    -fx-line-spacing: 1px;
+}
+
+
+/* =========================================================
+   ESTADO DISPONIBLE
+   ========================================================= */
+
+.available-label {
+    -fx-background-color: #e4f7ed;
+    -fx-background-radius: 10px;
+
+    -fx-text-fill: #168a55;
+
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+
+    -fx-padding: 4px 7px;
+}
+
+
+/* =========================================================
+   ESTADO EN DESARROLLO
+   ========================================================= */
+
+.development-label {
+    -fx-background-color: #dce1e8;
+    -fx-background-radius: 10px;
+
+    -fx-text-fill: #778297;
+
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+
+    -fx-padding: 4px 7px;
+}
+
+
+/* =========================================================
+   BOTONES DE MÓDULOS
+   ========================================================= */
+
+/*
+   Estos todavía se utilizan en los módulos
+   que están EN DESARROLLO.
+*/
+
+.module-button {
+    -fx-background-color: #edf2ff;
+    -fx-background-radius: 5px;
+
+    -fx-border-color: transparent;
+
+    -fx-text-fill: #2858df;
+
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+
+    -fx-padding: 8px;
+
+    -fx-cursor: hand;
+}
+
+.module-button:hover {
+    -fx-background-color: #dce7ff;
+}
+
+.module-button:pressed {
+    -fx-background-color: #cbdcff;
+}
+
+
+/* Botones deshabilitados */
+
+.module-button-disabled {
+    -fx-background-color: #dfe4eb;
+
+    -fx-background-radius: 5px;
+
+    -fx-border-color: transparent;
+
+    -fx-text-fill: #aab2bf;
+
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+
+    -fx-padding: 8px;
+}
+
+
+/* =========================================================
+   ACTIVIDAD RECIENTE
+   ========================================================= */
+
+.activity-card {
+    -fx-background-color: white;
+
+    -fx-background-radius: 9px;
+
+    -fx-border-color: #dfe5ee;
+    -fx-border-radius: 9px;
+
+    -fx-padding: 15px;
+}
+
+.activity-title {
+    -fx-text-fill: #111827;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.activity-subtitle {
+    -fx-text-fill: #8290a5;
+    -fx-font-size: 9px;
+}
+
+.activity-row {
+    -fx-border-color: #edf0f5;
+    -fx-border-width: 1px 0 0 0;
+
+    -fx-padding: 9px 0 4px 0;
+}
+
+
+/* Icono azul */
+
+.activity-icon-blue {
+    -fx-background-color: #e7efff;
+    -fx-background-radius: 7px;
+}
+
+
+/* Icono verde */
+
+.activity-icon-green {
+    -fx-background-color: #e4f7ed;
+    -fx-background-radius: 7px;
+}
+
+.activity-icon-text {
+    -fx-text-fill: #2858df;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.activity-main {
+    -fx-text-fill: #1b2537;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.activity-detail {
+    -fx-text-fill: #8591a5;
+    -fx-font-size: 9px;
+}
+
+.activity-time {
+    -fx-text-fill: #a0a8b7;
+    -fx-font-size: 8px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+    -fx-background-color: white;
+
+    -fx-border-color: #e1e6ef;
+    -fx-border-width: 1px 0 0 0;
+
+    -fx-padding: 0 24px;
+}
+
+.footer-text {
+    -fx-text-fill: #8791a3;
+    -fx-font-size: 8px;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 8px;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #c8ced9;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
