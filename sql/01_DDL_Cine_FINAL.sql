@@ -373,27 +373,44 @@ CREATE INDEX idx_movimientos_producto
 CREATE VIEW vw_cartelera AS
 SELECT
     f.id_funcion,
-    f.fecha_inicio,
-    f.fecha_fin,
     p.id_pelicula,
-    p.titulo AS pelicula,
-    g.nombre_genero AS genero,
-    s.id_sala,
-    s.nombre_sala AS sala,
-    s.formato,
-    p.duracion_minutos,
+    p.titulo AS titulo,
+    g.nombre_genero AS nombre_genero,
     p.clasificacion,
-    p.idioma,
+    s.id_sala,
+    s.nombre_sala AS nombre_sala,
+    f.fecha_inicio,
     f.precio_boleto,
+
+    (
+        SELECT COUNT(*)
+        FROM butacas bu
+        WHERE bu.id_sala = f.id_sala
+          AND bu.estado = 1
+          AND NOT EXISTS (
+              SELECT 1
+              FROM boletos b
+              WHERE b.id_funcion = f.id_funcion
+                AND b.id_butaca = bu.id_butaca
+                AND b.estado IN ('reservado', 'vendido')
+          )
+    ) AS butacas_disponibles,
+
     f.estado
+
 FROM funciones f
+
 INNER JOIN peliculas p
     ON p.id_pelicula = f.id_pelicula
+
 INNER JOIN generos g
     ON g.id_genero = p.id_genero
+
 INNER JOIN salas s
     ON s.id_sala = f.id_sala
+
 WHERE f.estado = 'programada'
+  AND f.fecha_inicio > NOW()
   AND p.estado = 1
   AND s.estado = 1;
 
