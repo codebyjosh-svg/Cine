@@ -937,59 +937,71 @@ public class CarteleraController {
     }
 
     /**
-     * Carga el poster local correspondiente a la película.
+     * Carga el póster de cada película desde los recursos locales del proyecto.
      *
-     * @param imageView componente donde se cargará la imagen
-     * @param idPelicula identificador de película
+     * @param imageView componente donde se muestra la imagen
+     * @param idPelicula identificador de la película
      */
     private void cargarPoster(
             ImageView imageView,
             int idPelicula) {
 
         String[] extensiones = {
-            ".jpg",
             ".png",
+            ".jpg",
             ".jpeg"
         };
 
-        for (String extension
-                : extensiones) {
+        for (String extension : extensiones) {
 
-            String ruta
-                    = "/org/cine/resources/images/"
-                    + "pelicula_"
+            String ruta = "/resources/img/pelicula_"
                     + idPelicula
                     + extension;
 
-            try (InputStream entrada
-                    = getClass()
-                            .getResourceAsStream(
-                                    ruta
-                            )) {
+            try {
 
-                        if (entrada != null) {
+                java.net.URL recurso
+                        = getClass().getResource(ruta);
 
-                            Image imagen
-                                    = new Image(
-                                            entrada
-                                    );
+                if (recurso != null) {
 
-                            imageView
-                                    .setImage(
-                                            imagen
-                                    );
+                    Image imagen = new Image(
+                            recurso.toExternalForm(),
+                            false
+                    );
 
-                            return;
-                        }
+                    if (!imagen.isError()) {
 
-                    } catch (Exception ex) {
+                        imageView.setImage(imagen);
+
+                        imageView.setFitWidth(257);
+                        imageView.setFitHeight(185);
+                        imageView.setPreserveRatio(true);
 
                         System.out.println(
-                                "No se pudo cargar el poster: "
+                                "Póster cargado correctamente: "
                                 + ruta
                         );
+
+                        return;
                     }
+                }
+
+            } catch (Exception ex) {
+
+                System.err.println(
+                        "Error al cargar póster: "
+                        + ruta
+                );
+
+                ex.printStackTrace();
+            }
         }
+
+        System.err.println(
+                "No se encontró imagen para película ID: "
+                + idPelicula
+        );
     }
 
     /**

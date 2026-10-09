@@ -20,6 +20,15 @@ public class ConfiteriaController {
     @FXML private TextField nombre,descripcion,precio,stockMinimo,cantidad,busqueda;
     @FXML private Label mensaje,total;
     private ProductoFila seleccionado;
+    @FXML private TableView<CarritoFila> tablaCarrito;
+    @FXML private TableColumn<CarritoFila,String> colCarProducto,colCarCantidad,colCarSubtotal;
+    private final javafx.collections.ObservableList<CarritoFila> carrito=FXCollections.observableArrayList();
+    public static class CarritoFila {
+        final int id; final String nombre; final BigDecimal precio; int cantidad;
+        CarritoFila(ProductoFila p,int q){id=p.id;nombre=p.nombre;precio=p.precio;cantidad=q;}
+        BigDecimal subtotal(){return precio.multiply(BigDecimal.valueOf(cantidad));}
+    }
+
 
     public static class ProductoFila {
         int id, categoria, stock, minimo; String nombre, descripcion, categoriaNombre; BigDecimal precio; boolean activo;
@@ -49,6 +58,10 @@ public class ConfiteriaController {
         colMinimo.setCellValueFactory(c->new SimpleStringProperty(""+c.getValue().minimo));
         colEstado.setCellValueFactory(c->new SimpleStringProperty(c.getValue().activo?"Activo":"Inactivo"));
         tabla.getSelectionModel().selectedItemProperty().addListener((o,a,b)->cargarFormulario(b));
+        colCarProducto.setCellValueFactory(c->new SimpleStringProperty(c.getValue().nombre));
+        colCarCantidad.setCellValueFactory(c->new SimpleStringProperty(""+c.getValue().cantidad));
+        colCarSubtotal.setCellValueFactory(c->new SimpleStringProperty("Q "+c.getValue().subtotal()));
+        tablaCarrito.setItems(carrito);
         cantidad.setText("1"); recargar();
         cantidad.textProperty().addListener((o,a,b)->actualizarTotal());
     }
@@ -144,49 +157,69 @@ public class ConfiteriaController {
         });
     }
     @FXML private void actualizarTotal(){
-        if(seleccionado==null){total.setText("Total: Q 0.00");return;}
-        try{int q=Integer.parseInt(cantidad.getText().trim());total.setText("Total: Q "+seleccionado.precio.multiply(BigDecimal.valueOf(Math.max(q,0))));}
-        catch(Exception e){total.setText("Cantidad inválida");}
+        BigDecimal importe=BigDecimal.ZERO;
+        for(CarritoFila item:carrito)importe=importe.add(item.subtotal());
+        total.setText("Carrito: Q "+importe);
     }
+    @FXML private void agregarCarrito(){
+        if(seleccionado==null){mensaje.setText("Selecciona un producto.");return;}
+        try{int q=Integer.parseInt(cantidad.getText().trim());if(q<=0)throw new IllegalArgumentException("Cantidad inválida.");
+            if(!seleccionado.activo)throw new IllegalArgumentException("Producto inactivo.");
+            CarritoFila linea=carrito.stream().filter(x->x.id==seleccionado.id).findFirst().orElse(null);
+            int nuevo=q+(linea==null?0:linea.cantidad);
+            if(nuevo>seleccionado.stock)throw new IllegalArgumentException("Stock insuficiente.");
+            if(linea==null)carrito.add(new CarritoFila(seleccionado,q));else{linea.cantidad=nuevo;tablaCarrito.refresh();}
+            actualizarTotal();mensaje.setText("Producto agregado al carrito.");
+        }catch(Exception e){mensaje.setText("Error: "+e.getMessage());}
+    }
+    @FXML private void quitarCarrito(){CarritoFila item=tablaCarrito.getSelectionModel().getSelectedItem();if(item!=null){carrito.remove(item);actualizarTotal();}}
+    @FXML private void vaciarCarrito(){carrito.clear();actualizarTotal();}
     @FXML private void vender(){
-        if(seleccionado==null||clientes.getValue()==null){mensaje.setText("Selecciona un producto y un cliente.");return;}
-        int q;
-        try{q=Integer.parseInt(cantidad.getText().trim());if(q<=0)throw new NumberFormatException();}
-        catch(NumberFormatException e){mensaje.setText("La cantidad debe ser mayor que cero.");return;}
-        if(!seleccionado.activo){mensaje.setText("El producto está inactivo.");return;}
+        if(carrito.isEmpty()||clientes.getValue()==null){mensaje.setText("Selecciona un cliente y agrega productos al carrito.");return;}
         var u=SesionContext.getUsuarioActual();if(u==null){mensaje.setText("Necesitas iniciar sesión.");return;}
+        String rol=u.getNombreRol();if(!"admin".equalsIgnoreCase(rol)&&!"taquillero".equalsIgnoreCase(rol)) {mensaje.setText("Esta cuenta no está autorizada para vender.");return;}
         try(Connection c=Conexion.getInstance().getConnection()){
             c.setAutoCommit(false);
             try{
-                int ventaId; BigDecimal importe;
-                // Bloquea el producto: evita vender existencias que otra caja ya utilizó.
-                try(PreparedStatement p=c.prepareStatement("SELECT precio,stock,estado FROM productos WHERE id_producto=? FOR UPDATE")){
-                    p.setInt(1,seleccionado.id);
-                    try(ResultSet r=p.executeQuery()){
-                        if(!r.next()||!r.getBoolean("estado"))throw new SQLException("Producto no disponible.");
-                        if(r.getInt("stock")<q)throw new SQLException("Stock insuficiente.");
-                        importe=r.getBigDecimal("precio").multiply(BigDecimal.valueOf(q));
+                int ventaId; BigDecimal totalVenta=BigDecimal.ZERO;
+                java.util.Map<Integer,BigDecimal> precios=new java.util.HashMap<>();
+                // Bloqueo estable por ID para evitar ventas simultáneas con stock negativo.
+                java.util.List<CarritoFila> items=new java.util.ArrayList<>(carrito);
+                items.sort(java.util.Comparator.comparingInt(x->x.id));
+                for(CarritoFila item:items){
+                    try(PreparedStatement p=c.prepareStatement("SELECT precio,stock,estado FROM productos WHERE id_producto=? FOR UPDATE")){
+                        p.setInt(1,item.id);try(ResultSet r=p.executeQuery()){
+                            if(!r.next()||!r.getBoolean("estado"))throw new SQLException("Producto inactivo: "+item.nombre);
+                            if(r.getInt("stock")<item.cantidad)throw new SQLException("Stock insuficiente: "+item.nombre);
+                            precios.put(item.id,r.getBigDecimal("precio"));
+                            totalVenta=totalVenta.add(r.getBigDecimal("precio").multiply(BigDecimal.valueOf(item.cantidad)));
+                        }
                     }
                 }
                 try(PreparedStatement p=c.prepareStatement("INSERT INTO ventas(id_cliente,id_usuario,total,metodo_pago,estado,fecha_confirmacion) VALUES(?,?,?,'EFECTIVO','confirmada',NOW())",Statement.RETURN_GENERATED_KEYS)){
-                    p.setInt(1,clientes.getValue().id);p.setInt(2,u.getIdUsuario());p.setBigDecimal(3,importe);p.executeUpdate();
+                    p.setInt(1,clientes.getValue().id);p.setInt(2,u.getIdUsuario());p.setBigDecimal(3,totalVenta);p.executeUpdate();
                     try(ResultSet k=p.getGeneratedKeys()){if(!k.next())throw new SQLException("No se creó la venta.");ventaId=k.getInt(1);}
                 }
-                try(PreparedStatement p=c.prepareStatement("INSERT INTO detalle_venta_productos(id_venta,id_producto,cantidad,precio_unitario,subtotal) VALUES(?,?,?,?,?)")){
-                    p.setInt(1,ventaId);p.setInt(2,seleccionado.id);p.setInt(3,q);p.setBigDecimal(4,importe.divide(BigDecimal.valueOf(q)));p.setBigDecimal(5,importe);p.executeUpdate();
+                for(CarritoFila item:items){BigDecimal precioReal=precios.get(item.id);BigDecimal subtotal=precioReal.multiply(BigDecimal.valueOf(item.cantidad));
+                    try(PreparedStatement p=c.prepareStatement("INSERT INTO detalle_venta_productos(id_venta,id_producto,cantidad,precio_unitario,subtotal) VALUES(?,?,?,?,?)")){
+                        p.setInt(1,ventaId);p.setInt(2,item.id);p.setInt(3,item.cantidad);p.setBigDecimal(4,precioReal);p.setBigDecimal(5,subtotal);p.executeUpdate();
+                    }
+                    try(PreparedStatement p=c.prepareStatement("UPDATE productos SET stock=stock-? WHERE id_producto=?")){
+                        p.setInt(1,item.cantidad);p.setInt(2,item.id);p.executeUpdate();
+                    }
+                    try(PreparedStatement p=c.prepareStatement("INSERT INTO movimientos_inventario(id_producto,id_usuario,id_venta,tipo_movimiento,cantidad,observacion) VALUES(?,?,?,'SALIDA',?,'Venta confitería')")){
+                        p.setInt(1,item.id);p.setInt(2,u.getIdUsuario());p.setInt(3,ventaId);p.setInt(4,item.cantidad);p.executeUpdate();
+                    }
                 }
-                try(PreparedStatement p=c.prepareStatement("UPDATE productos SET stock=stock-? WHERE id_producto=?")){
-                    p.setInt(1,q);p.setInt(2,seleccionado.id);p.executeUpdate();
-                }
-                try(PreparedStatement p=c.prepareStatement("INSERT INTO movimientos_inventario(id_producto,id_usuario,id_venta,tipo_movimiento,cantidad,observacion) VALUES(?,?,?,'SALIDA',?,'Venta confitería')")){
-                    p.setInt(1,seleccionado.id);p.setInt(2,u.getIdUsuario());p.setInt(3,ventaId);p.setInt(4,q);p.executeUpdate();
-                }
-                c.commit();recargar();mensaje.setText("Venta #"+ventaId+" registrada. Total: Q "+importe);
+                c.commit();carrito.clear();actualizarTotal();recargar();mensaje.setText("Venta #"+ventaId+" registrada. Total Q "+totalVenta);
                 FacturasConfiteria.mostrarFactura(ventaId);
             }catch(Exception ex){c.rollback();throw ex;}finally{c.setAutoCommit(true);}
         }catch(Exception e){error(e);}
     }
     @FXML private void buscarFacturas(){ FacturasConfiteria.buscarFacturas(); }
+    @FXML private void abrirCategorias() throws IOException {Principal.mostrarCategoriasProducto();}
+    @FXML private void abrirInventario() throws IOException {Principal.mostrarInventario();}
+    @FXML private void abrirStockCritico() throws IOException {Principal.mostrarStockCritico();}
     @FXML private void volver() throws IOException {Principal.mostrarDashboardSegunRol();}
     private void error(Exception e){mensaje.setText("Error: "+e.getMessage());e.printStackTrace();}
 }

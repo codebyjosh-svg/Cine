@@ -1,0 +1,6 @@
+package org.cine.controller;
+import java.io.IOException;import javafx.fxml.FXML;import javafx.beans.property.SimpleStringProperty;import javafx.collections.FXCollections;import javafx.scene.control.*;import org.cine.model.StockCritico;import org.cine.dao.impl.StockCriticoDAOImpl;import org.cine.system.Principal;
+public class StockCriticoController {@FXML private TableView<StockCritico> tabla;@FXML private TableColumn<StockCritico,String> colNombre,colCategoria,colStock,colMinimo;@FXML private Label mensaje;
+@FXML private void initialize(){colNombre.setCellValueFactory(c->new SimpleStringProperty(c.getValue().producto()));colCategoria.setCellValueFactory(c->new SimpleStringProperty(c.getValue().categoria()));colStock.setCellValueFactory(c->new SimpleStringProperty(""+c.getValue().stock()));colMinimo.setCellValueFactory(c->new SimpleStringProperty(""+c.getValue().minimo()));recargar();}
+@FXML private void recargar(){try{var datos=new StockCriticoDAOImpl().listar();tabla.setItems(FXCollections.observableArrayList(datos));mensaje.setText(datos.isEmpty()?"No hay productos con stock crítico.":datos.size()+" productos tienen stock menor o igual al mínimo.");}catch(Exception e){mensaje.setText("Error: "+e.getMessage());}}
+@FXML private void volver()throws IOException{Principal.mostrarDashboardSegunRol();}}

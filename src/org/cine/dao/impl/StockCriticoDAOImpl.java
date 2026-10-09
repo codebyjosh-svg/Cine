@@ -1,0 +1,3 @@
+package org.cine.dao.impl;
+import org.cine.dao.StockCriticoDAO;import org.cine.model.StockCritico;import org.cine.util.Conexion;import java.sql.*;import java.util.*;
+public class StockCriticoDAOImpl implements StockCriticoDAO{public List<StockCritico> listar()throws SQLException{List<StockCritico> out=new ArrayList<>();try(Connection c=Conexion.getInstance().getConnection();PreparedStatement s=c.prepareStatement("SELECT id_producto,nombre_producto,nombre_categoria,stock,stock_minimo FROM vw_stock_critico ORDER BY stock,nombre_producto");ResultSet r=s.executeQuery()){while(r.next())out.add(new StockCritico(r.getInt(1),r.getString(2),r.getString(3),r.getInt(4),r.getInt(5)));}return out;}}

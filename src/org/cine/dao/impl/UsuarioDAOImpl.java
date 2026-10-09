@@ -93,6 +93,13 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                 );
             }
 
+            if (!("admin".equalsIgnoreCase(usuario.getNombreRol())
+                    || "taquillero".equalsIgnoreCase(usuario.getNombreRol()))) {
+                throw new AutenticacionException(
+                        AutenticacionException.Motivo.CREDENCIALES_INVALIDAS,
+                        "Este rol ya no tiene acceso al sistema.");
+            }
+
             if (!usuario.isEstado()) {
 
                 throw new AutenticacionException(

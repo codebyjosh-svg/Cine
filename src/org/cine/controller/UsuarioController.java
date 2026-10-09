@@ -93,7 +93,9 @@ public class UsuarioController {
     private void cargarDatos(Integer seleccionarId) {
         try {
             usuarios.setAll(servicio.listar());
-            cmbRol.setItems(FXCollections.observableArrayList(servicio.listarRoles()));
+            cmbRol.setItems(FXCollections.observableArrayList(servicio.listarRoles().stream()
+                    .filter(r -> "admin".equalsIgnoreCase(r.getNombreRol())
+                            || "taquillero".equalsIgnoreCase(r.getNombreRol())).toList()));
             cmbCliente.setItems(FXCollections.observableArrayList(servicio.listarClientes()));
             filtrar();
             if (seleccionarId != null) {
@@ -132,7 +134,7 @@ public class UsuarioController {
 
     private void mostrarCliente() {
         Rol rol = cmbRol.getValue();
-        boolean esCliente = rol != null && "cliente".equals(rol.getNombreRol());
+        boolean esCliente = false; // No existen cuentas con rol cliente.
         bloqueCliente.setVisible(esCliente);
         bloqueCliente.setManaged(esCliente);
         cmbCliente.setDisable(!esCliente);

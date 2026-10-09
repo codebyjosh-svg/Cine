@@ -1,0 +1,3 @@
+package org.cine.dao.impl;
+import org.cine.dao.ProductoDAO;import org.cine.model.Producto;import org.cine.util.Conexion;import java.sql.*;import java.util.*;
+public class ProductoDAOImpl implements ProductoDAO {public List<Producto> listar()throws SQLException{List<Producto> out=new ArrayList<>();try(Connection c=Conexion.getInstance().getConnection();PreparedStatement s=c.prepareStatement("SELECT * FROM productos ORDER BY nombre_producto");ResultSet r=s.executeQuery()){while(r.next())out.add(new Producto(r.getInt("id_producto"),r.getInt("id_categoria_producto"),r.getString("nombre_producto"),r.getString("descripcion"),r.getBigDecimal("precio"),r.getInt("stock"),r.getInt("stock_minimo"),r.getBoolean("estado")));}return out;}}

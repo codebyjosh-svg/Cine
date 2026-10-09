@@ -74,6 +74,10 @@ public class UsuarioService {
         if (rol == null) {
             throw new IllegalArgumentException("Selecciona un rol válido de la base de datos.");
         }
+        if (!("admin".equalsIgnoreCase(rol.getNombreRol())
+                || "taquillero".equalsIgnoreCase(rol.getNombreRol()))) {
+            throw new IllegalArgumentException("Solo se permiten roles administrador y taquillero.");
+        }
         usuario.setNombreRol(rol.getNombreRol());
         Usuario anterior = null;
         if (usuario.getIdUsuario() != 0) {

@@ -1,0 +1,8 @@
+package org.cine.dao.impl;
+import org.cine.dao.CategoriaProductoDAO;import org.cine.model.CategoriaProducto;import org.cine.util.Conexion;import java.sql.*;import java.util.*;
+public class CategoriaProductoDAOImpl implements CategoriaProductoDAO {
+public List<CategoriaProducto> listar()throws SQLException{List<CategoriaProducto> out=new ArrayList<>();try(Connection c=Conexion.getInstance().getConnection();PreparedStatement s=c.prepareStatement("SELECT * FROM categorias_producto ORDER BY nombre_categoria");ResultSet r=s.executeQuery()){while(r.next())out.add(new CategoriaProducto(r.getInt("id_categoria_producto"),r.getString("nombre_categoria"),r.getString("descripcion"),r.getBoolean("estado")));}return out;}
+public void guardar(Integer id,String nombre,String descripcion)throws SQLException{String sql=id==null?"INSERT INTO categorias_producto(nombre_categoria,descripcion,estado) VALUES(?,?,1)":"UPDATE categorias_producto SET nombre_categoria=?,descripcion=? WHERE id_categoria_producto=?";try(Connection c=Conexion.getInstance().getConnection();PreparedStatement s=c.prepareStatement(sql)){s.setString(1,nombre.trim());s.setString(2,descripcion);if(id!=null)s.setInt(3,id);s.executeUpdate();}}
+public void cambiarEstado(int id,boolean activo)throws SQLException{try(Connection c=Conexion.getInstance().getConnection();PreparedStatement s=c.prepareStatement("UPDATE categorias_producto SET estado=? WHERE id_categoria_producto=?")){s.setBoolean(1,activo);s.setInt(2,id);s.executeUpdate();}}
+public void eliminar(int id)throws SQLException{try(Connection c=Conexion.getInstance().getConnection();PreparedStatement s=c.prepareStatement("DELETE FROM categorias_producto WHERE id_categoria_producto=?")){s.setInt(1,id);s.executeUpdate();}}
+}

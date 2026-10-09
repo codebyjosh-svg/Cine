@@ -346,6 +346,16 @@ public class Principal extends Application {
         cambiarEscena("/org/cine/view/Confiteria.fxml", "Cinema - Confitería");
     }
 
+    public static void mostrarInventario() throws IOException { verificarPersonalInventario(); cambiarEscena("/org/cine/view/Inventario.fxml", "Cine - Inventario"); }
+    public static void mostrarStockCritico() throws IOException { verificarPersonalInventario(); cambiarEscena("/org/cine/view/StockCritico.fxml", "Cine - Stock crítico"); }
+    public static void mostrarCategoriasProducto() throws IOException { verificarPersonalInventario(); cambiarEscena("/org/cine/view/CategoriasProducto.fxml", "Cine - Categorías"); }
+
+    private static void verificarPersonalInventario() {
+        Usuario u=SesionContext.getUsuarioActual();
+        if(u==null || !u.isEstado() || !("admin".equalsIgnoreCase(u.getNombreRol())))
+            throw new IllegalStateException("Se requiere un administrador activo.");
+    }
+
     // REPORTES - US-3.4
     public static void mostrarReportes() throws IOException {
         Usuario actual=SesionContext.getUsuarioActual();
