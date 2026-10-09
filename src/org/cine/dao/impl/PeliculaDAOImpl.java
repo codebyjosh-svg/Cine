@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,63 +22,15 @@ public class PeliculaDAOImpl implements PeliculaDAO {
         String sql = "{call sp_listarpeliculas()}";
 
         try (
-                Connection con = Conexion.getInstancia().conectar();
-                CallableStatement cs = con.prepareCall(sql);
-                ResultSet rs = cs.executeQuery()
-        ) {
+                Connection con = Conexion.getInstancia().conectar(); CallableStatement cs = con.prepareCall(sql); ResultSet rs = cs.executeQuery()) {
 
             while (rs.next()) {
-
-                Pelicula pelicula = new Pelicula();
-
-                pelicula.setIdPelicula(
-                        rs.getInt("id_pelicula")
-                );
-
-                pelicula.setTitulo(
-                        rs.getString("titulo")
-                );
-
-                pelicula.setSinopsis(
-                        rs.getString("sinopsis")
-                );
-
-                pelicula.setDirector(
-                        rs.getString("director")
-                );
-
-                pelicula.setDuracionMinutos(
-                        rs.getInt("duracion_minutos")
-                );
-
-                pelicula.setClasificacion(
-                        rs.getString("clasificacion")
-                );
-
-                pelicula.setIdioma(
-                        rs.getString("idioma")
-                );
-
-                pelicula.setFechaEstreno(
-                        rs.getDate("fecha_estreno")
-                );
-
-                pelicula.setIdGenero(
-                        rs.getInt("id_genero")
-                );
-
-                pelicula.setEstado(
-                        rs.getInt("estado")
-                );
-
-                lista.add(pelicula);
+                lista.add(mapearPelicula(rs));
             }
 
         } catch (SQLException e) {
-
             System.err.println(
-                    "Error listar peliculas: "
-                    + e.getMessage()
+                    "Error listar peliculas: " + e.getMessage()
             );
         }
 
@@ -89,103 +42,63 @@ public class PeliculaDAOImpl implements PeliculaDAO {
 
         String sql = "{call sp_buscarpelicula(?)}";
 
-        Pelicula pelicula = null;
-
         try (
-                Connection con = Conexion.getInstancia().conectar();
-                CallableStatement cs = con.prepareCall(sql)
-        ) {
+                Connection con = Conexion.getInstancia().conectar(); CallableStatement cs = con.prepareCall(sql)) {
 
             cs.setInt(1, idPelicula);
 
             try (ResultSet rs = cs.executeQuery()) {
 
                 if (rs.next()) {
-
-                    pelicula = new Pelicula(
-                            rs.getInt("id_pelicula"),
-                            rs.getString("titulo"),
-                            rs.getString("sinopsis"),
-                            rs.getString("director"),
-                            rs.getInt("duracion_minutos"),
-                            rs.getString("clasificacion"),
-                            rs.getString("idioma"),
-                            rs.getDate("fecha_estreno"),
-                            rs.getInt("id_genero"),
-                            rs.getInt("estado")
-                    );
+                    return mapearPelicula(rs);
                 }
             }
 
         } catch (SQLException e) {
-
             System.err.println(
-                    "Error buscar pelicula: "
-                    + e.getMessage()
+                    "Error buscar pelicula: " + e.getMessage()
             );
         }
 
-        return pelicula;
+        return null;
     }
 
     @Override
     public boolean insertar(Pelicula pelicula) {
 
-        String sql =
-                "{call sp_insertarpelicula(?, ?, ?, ?, ?, ?, ?, ?)}";
+        /*
+         * sp_insertarpelicula recibe:
+         *
+         * 1  titulo
+         * 2  sinopsis
+         * 3  director
+         * 4  duracion_minutos
+         * 5  clasificacion
+         * 6  idioma
+         * 7  fecha_estreno
+         * 8  imagen
+         * 9  id_genero
+         */
+        String sql
+                = "{call sp_insertarpelicula(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
         try (
-                Connection con = Conexion.getInstancia().conectar();
-                CallableStatement cs = con.prepareCall(sql)
-        ) {
+                Connection con = Conexion.getInstancia().conectar(); CallableStatement cs = con.prepareCall(sql)) {
 
-            cs.setString(
-                    1,
-                    pelicula.getTitulo()
-            );
+            cargarParametros(cs, pelicula, false);
 
-            cs.setString(
-                    2,
-                    pelicula.getSinopsis()
-            );
+            boolean tieneResultado = cs.execute();
 
-            cs.setString(
-                    3,
-                    pelicula.getDirector()
-            );
+            if (tieneResultado) {
 
-            cs.setInt(
-                    4,
-                    pelicula.getDuracionMinutos()
-            );
+                try (ResultSet rs = cs.getResultSet()) {
 
-            cs.setString(
-                    5,
-                    pelicula.getClasificacion()
-            );
+                    if (rs != null && rs.next()) {
 
-            cs.setString(
-                    6,
-                    pelicula.getIdioma()
-            );
-
-            cs.setDate(
-                    7,
-                    pelicula.getFechaEstreno()
-            );
-
-            cs.setInt(
-                    8,
-                    pelicula.getIdGenero()
-            );
-
-            try (ResultSet rs = cs.executeQuery()) {
-
-                if (rs.next()) {
-
-                    pelicula.setIdPelicula(
-                            rs.getInt("id_pelicula")
-                    );
+                        pelicula.setIdPelicula(
+                                rs.getInt("id_pelicula")
+                        );
+                    }
                 }
             }
 
@@ -205,58 +118,39 @@ public class PeliculaDAOImpl implements PeliculaDAO {
     @Override
     public boolean actualizar(Pelicula pelicula) {
 
-        String sql =
-                "{call sp_actualizarpelicula(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+        /*
+         * sp_actualizarpelicula recibe:
+         *
+         * 1  id_pelicula
+         * 2  titulo
+         * 3  sinopsis
+         * 4  director
+         * 5  duracion_minutos
+         * 6  clasificacion
+         * 7  idioma
+         * 8  fecha_estreno
+         * 9  imagen
+         * 10 id_genero
+         */
+        String sql
+                = "{call sp_actualizarpelicula(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
         try (
-                Connection con = Conexion.getInstancia().conectar();
-                CallableStatement cs = con.prepareCall(sql)
-        ) {
+                Connection con = Conexion.getInstancia().conectar(); CallableStatement cs = con.prepareCall(sql)) {
 
-            cs.setInt(
-                    1,
-                    pelicula.getIdPelicula()
-            );
+            System.out.println("=================================");
+            System.out.println("ACTUALIZANDO PELICULA");
+            System.out.println("ID película: "
+                    + pelicula.getIdPelicula());
+            System.out.println("Título: "
+                    + pelicula.getTitulo());
+            System.out.println("ID género: "
+                    + pelicula.getIdGenero());
+            System.out.println("Tiene imagen: "
+                    + (pelicula.getImagen() != null));
+            System.out.println("=================================");
 
-            cs.setString(
-                    2,
-                    pelicula.getTitulo()
-            );
-
-            cs.setString(
-                    3,
-                    pelicula.getSinopsis()
-            );
-
-            cs.setString(
-                    4,
-                    pelicula.getDirector()
-            );
-
-            cs.setInt(
-                    5,
-                    pelicula.getDuracionMinutos()
-            );
-
-            cs.setString(
-                    6,
-                    pelicula.getClasificacion()
-            );
-
-            cs.setString(
-                    7,
-                    pelicula.getIdioma()
-            );
-
-            cs.setDate(
-                    8,
-                    pelicula.getFechaEstreno()
-            );
-
-            cs.setInt(
-                    9,
-                    pelicula.getIdGenero()
-            );
+            cargarParametros(cs, pelicula, true);
 
             cs.executeUpdate();
 
@@ -279,14 +173,9 @@ public class PeliculaDAOImpl implements PeliculaDAO {
         String sql = "{call sp_eliminarpelicula(?)}";
 
         try (
-                Connection con = Conexion.getInstancia().conectar();
-                CallableStatement cs = con.prepareCall(sql)
-        ) {
+                Connection con = Conexion.getInstancia().conectar(); CallableStatement cs = con.prepareCall(sql)) {
 
-            cs.setInt(
-                    1,
-                    idPelicula
-            );
+            cs.setInt(1, idPelicula);
 
             cs.executeUpdate();
 
@@ -304,40 +193,213 @@ public class PeliculaDAOImpl implements PeliculaDAO {
     }
 
     @Override
-    public boolean cambiarEstado(
-            int idPelicula,
-            int estado) {
+    public boolean cambiarEstado(int idPelicula, int estado) {
 
-        String sql =
-                "{call sp_cambiarestadopelicula(?, ?)}";
+        String sql = "{call sp_cambiarestadopelicula(?, ?)}";
 
         try (
-                Connection con = Conexion.getInstancia().conectar();
-                CallableStatement cs = con.prepareCall(sql)
-        ) {
+                Connection con = Conexion.getInstancia().conectar(); CallableStatement cs = con.prepareCall(sql)) {
 
-            cs.setInt(
-                    1,
-                    idPelicula
+            System.out.println("=================================");
+            System.out.println("CAMBIANDO ESTADO DE PELICULA");
+            System.out.println("ID película: " + idPelicula);
+            System.out.println("Nuevo estado: " + estado);
+            System.out.println("=================================");
+
+            cs.setInt(1, idPelicula);
+            cs.setInt(2, estado);
+
+            int filas = cs.executeUpdate();
+
+            System.out.println(
+                    "Filas actualizadas: " + filas
             );
 
-            cs.setInt(
-                    2,
-                    estado
-            );
-
-            cs.executeUpdate();
-
-            return true;
+            return filas > 0;
 
         } catch (SQLException e) {
 
-            System.err.println(
-                    "Error cambiar estado pelicula: "
-                    + e.getMessage()
-            );
+            System.err.println("=================================");
+            System.err.println("ERROR CAMBIANDO ESTADO");
+            System.err.println("Mensaje: " + e.getMessage());
+            System.err.println("Código MySQL: " + e.getErrorCode());
+            System.err.println("SQLState: " + e.getSQLState());
+            System.err.println("=================================");
+
+            e.printStackTrace();
 
             return false;
         }
+    }
+
+    /**
+     * Carga los parámetros de los procedimientos de película.
+     *
+     * INSERT: titulo, sinopsis, director, duracion, clasificacion, idioma,
+     * fecha, imagen, genero
+     *
+     * UPDATE: id, titulo, sinopsis, director, duracion, clasificacion, idioma,
+     * fecha, imagen, genero
+     */
+    private void cargarParametros(
+            CallableStatement cs,
+            Pelicula pelicula,
+            boolean incluirId) throws SQLException {
+
+        int posicion = 1;
+
+        /*
+         * UPDATE comienza con id_pelicula.
+         */
+        if (incluirId) {
+
+            cs.setInt(
+                    posicion++,
+                    pelicula.getIdPelicula()
+            );
+        }
+
+        /*
+         * 1/2 - título
+         */
+        cs.setString(
+                posicion++,
+                pelicula.getTitulo()
+        );
+
+        /*
+         * 2/3 - sinopsis
+         */
+        cs.setString(
+                posicion++,
+                pelicula.getSinopsis()
+        );
+
+        /*
+         * 3/4 - director
+         */
+        cs.setString(
+                posicion++,
+                pelicula.getDirector()
+        );
+
+        /*
+         * 4/5 - duración
+         */
+        cs.setInt(
+                posicion++,
+                pelicula.getDuracionMinutos()
+        );
+
+        /*
+         * 5/6 - clasificación
+         */
+        cs.setString(
+                posicion++,
+                pelicula.getClasificacion()
+        );
+
+        /*
+         * 6/7 - idioma
+         */
+        cs.setString(
+                posicion++,
+                pelicula.getIdioma()
+        );
+
+        /*
+         * 7/8 - fecha
+         */
+        cs.setDate(
+                posicion++,
+                pelicula.getFechaEstreno()
+        );
+
+        /*
+         * 8/9 - IMAGEN
+         *
+         * IMPORTANTE:
+         * La imagen va ANTES del id_genero.
+         */
+        if (pelicula.getImagen() != null) {
+
+            cs.setBytes(
+                    posicion++,
+                    pelicula.getImagen()
+            );
+
+        } else {
+
+            cs.setNull(
+                    posicion++,
+                    Types.LONGVARBINARY
+            );
+        }
+
+        /*
+         * 9/10 - ID GENERO
+         */
+        cs.setInt(
+                posicion,
+                pelicula.getIdGenero()
+        );
+    }
+
+    /**
+     * Convierte un ResultSet en objeto Pelicula.
+     */
+    private Pelicula mapearPelicula(
+            ResultSet rs) throws SQLException {
+
+        Pelicula pelicula = new Pelicula();
+
+        pelicula.setIdPelicula(
+                rs.getInt("id_pelicula")
+        );
+
+        pelicula.setTitulo(
+                rs.getString("titulo")
+        );
+
+        pelicula.setSinopsis(
+                rs.getString("sinopsis")
+        );
+
+        pelicula.setDirector(
+                rs.getString("director")
+        );
+
+        pelicula.setDuracionMinutos(
+                rs.getInt("duracion_minutos")
+        );
+
+        pelicula.setClasificacion(
+                rs.getString("clasificacion")
+        );
+
+        pelicula.setIdioma(
+                rs.getString("idioma")
+        );
+
+        pelicula.setFechaEstreno(
+                rs.getDate("fecha_estreno")
+        );
+
+        /*
+         * Imagen LONGBLOB.
+         */
+        pelicula.setImagen(
+                rs.getBytes("imagen")
+        );
+
+        pelicula.setIdGenero(
+                rs.getInt("id_genero")
+        );
+
+        pelicula.setEstado(
+                rs.getInt("estado")
+        );
+
+        return pelicula;
     }
 }

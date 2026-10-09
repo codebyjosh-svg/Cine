@@ -2,6 +2,13 @@ package org.cine.model;
 
 import java.sql.Date;
 
+/**
+ * Modelo de una película del sistema.
+ *
+ * Contiene la información general de la película utilizada
+ * tanto por la gestión de películas como por la programación
+ * de funciones.
+ */
 public class Pelicula {
 
     private int idPelicula;
@@ -14,13 +21,22 @@ public class Pelicula {
     private Date fechaEstreno;
     private int idGenero;
     private int estado;
+    private byte[] imagen;
 
     public Pelicula() {
     }
 
-    public Pelicula(int idPelicula, String titulo, String sinopsis,
-            String director, int duracionMinutos, String clasificacion,
-            String idioma, Date fechaEstreno, int idGenero, int estado) {
+    public Pelicula(
+            int idPelicula,
+            String titulo,
+            String sinopsis,
+            String director,
+            int duracionMinutos,
+            String clasificacion,
+            String idioma,
+            Date fechaEstreno,
+            int idGenero,
+            int estado) {
 
         this.idPelicula = idPelicula;
         this.titulo = titulo;
@@ -32,6 +48,35 @@ public class Pelicula {
         this.fechaEstreno = fechaEstreno;
         this.idGenero = idGenero;
         this.estado = estado;
+    }
+
+    public Pelicula(
+            int idPelicula,
+            String titulo,
+            String sinopsis,
+            String director,
+            int duracionMinutos,
+            String clasificacion,
+            String idioma,
+            Date fechaEstreno,
+            int idGenero,
+            int estado,
+            byte[] imagen) {
+
+        this(
+                idPelicula,
+                titulo,
+                sinopsis,
+                director,
+                duracionMinutos,
+                clasificacion,
+                idioma,
+                fechaEstreno,
+                idGenero,
+                estado
+        );
+
+        this.imagen = imagen;
     }
 
     public int getIdPelicula() {
@@ -112,6 +157,14 @@ public class Pelicula {
 
     public void setEstado(int estado) {
         this.estado = estado;
+    }
+
+    public byte[] getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(byte[] imagen) {
+        this.imagen = imagen;
     }
 
     @Override

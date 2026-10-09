@@ -35,6 +35,7 @@ public class DashboardAdminController {
     // ==============================
     // USUARIOS
     // ==============================
+
     @FXML
     private void abrirUsuarios() throws IOException {
         Principal.mostrarUsuarios();
@@ -43,6 +44,7 @@ public class DashboardAdminController {
     // ==============================
     // PELÍCULAS
     // ==============================
+
     @FXML
     private void abrirPeliculas() throws IOException {
         Principal.mostrarPeliculas();
@@ -51,6 +53,7 @@ public class DashboardAdminController {
     // ==============================
     // GÉNEROS
     // ==============================
+
     @FXML
     private void abrirGeneros() throws IOException {
         Principal.mostrarGeneros();
@@ -59,14 +62,16 @@ public class DashboardAdminController {
     // ==============================
     // CLIENTES
     // ==============================
+
     @FXML
     private void abrirClientes() throws IOException {
         Principal.mostrarClientes();
     }
 
     // ==============================
-    // CERRAR SESIÓN
+    // VENTA DE BOLETOS
     // ==============================
+
     @FXML
     private void abrirVenta() throws IOException {
         System.out.println("=================================");
@@ -75,6 +80,19 @@ public class DashboardAdminController {
 
         Principal.mostrarVenta();
     }
+
+    // ==============================
+    // FUNCIONES
+    // ==============================
+
+    @FXML
+    private void abrirFunciones() throws IOException {
+        Principal.mostrarProgramacion();
+    }
+
+    // ==============================
+    // CERRAR SESIÓN
+    // ==============================
 
     @FXML
     private void cerrarSesion() throws IOException {
