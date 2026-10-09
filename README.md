@@ -145,3 +145,15 @@ El proyecto incluye el login y los dashboards de US-1.1 y la gestión de usuario
 El administrador puede abrir Usuarios desde su dashboard para guardar, editar, activar/desactivar y eliminar cuentas. El botón Volver regresa al dashboard. Los demás roles conservan sus pantallas.
 
 Consulta LEEME_US_1_2.txt para configurar y ejecutar el proyecto en NetBeans. Las clases están en src/, los scripts en sql/ y las pruebas y capturas en test/. La clase principal es org.cine.system.Principal.
+
+
+## US-3.3 — Stock crítico y venta de dulcería
+
+Se integraron las tareas T3.3.1 a T3.3.12 de Joshua: consulta y alertas de stock
+crítico, catálogo de dulcería en ventas, cantidades acumuladas por producto,
+validación de existencias, confirmación transaccional y factura con subtotales.
+
+Para una BD existente, ejecute `sql/actualizacion_US_3_3_stock_dulceria.sql`.
+Para abrir y utilizar el proyecto, consulte `LEEME_US_3_3.txt`.
+Las tareas están documentadas en `documentacion/US_3_3_Joshua.md` y la evidencia
+se encuentra en `test/evidencia/US_3_3/`.

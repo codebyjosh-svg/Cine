@@ -187,38 +187,10 @@
                         </HBox>
 
 
-                        <HBox alignment="CENTER_LEFT"
-                              prefHeight="36"
-                              styleClass="menu-disabled">
-
-                            <padding>
-                                <Insets left="10"/>
-                            </padding>
-
-                            <Label text="▤"
-                                   styleClass="menu-icon"/>
-
-                            <Label text="Confitería"
-                                   styleClass="menu-text"/>
-
-                        </HBox>
+                        <Button fx:id="btnStockCritico" text="Stock crítico" onAction="#abrirStockCritico" maxWidth="Infinity" mnemonicParsing="false" alignment="CENTER_LEFT" styleClass="menu-button"/>
 
 
-                        <HBox alignment="CENTER_LEFT"
-                              prefHeight="36"
-                              styleClass="menu-disabled">
-
-                            <padding>
-                                <Insets left="10"/>
-                            </padding>
-
-                            <Label text="V"
-                                   styleClass="menu-icon"/>
-
-                            <Label text="Ventas"
-                                   styleClass="menu-text"/>
-
-                        </HBox>
+                        <Button fx:id="btnVentas" text="Ventas" onAction="#abrirVentas" maxWidth="Infinity" mnemonicParsing="false" alignment="CENTER_LEFT" styleClass="menu-button"/>
 
 
                         <HBox alignment="CENTER_LEFT"

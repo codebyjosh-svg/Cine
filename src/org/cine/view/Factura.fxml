@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane prefWidth="1180" prefHeight="720" styleClass="cine-root"
+            stylesheets="@style/operaciones.css" xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cine.controller.FacturaController">
+    <left>
+        <VBox spacing="16" prefWidth="190" minWidth="190" maxWidth="190" styleClass="operacion-sidebar">
+            <Label text="CINEMA" styleClass="marca"/>
+            <Label text="COMPROBANTE DE VENTA" styleClass="sidebar-caption" wrapText="true"/>
+            <Label text="Factura" styleClass="sidebar-activo" maxWidth="Infinity"/>
+            <Label text="Gracias por elegir nuestro cine." styleClass="sidebar-texto" wrapText="true"/>
+            <Region VBox.vgrow="ALWAYS"/>
+            <Button fx:id="btnNuevaVenta" text="Nueva venta" onAction="#nuevaVenta" maxWidth="Infinity" styleClass="boton-primario"/>
+            <Button fx:id="btnVolver" text="Volver al inicio" onAction="#volver" maxWidth="Infinity" styleClass="boton-sidebar"/>
+        </VBox>
+    </left>
+    <center>
+        <VBox spacing="14">
+            <padding><Insets top="24" right="26" bottom="24" left="26"/></padding>
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <VBox spacing="4"><Label text="Detalle de la compra" styleClass="titulo"/><Label text="Boletos y productos de dulcería" styleClass="subtitulo"/></VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="btnReintentar" text="Actualizar factura" onAction="#reintentar" styleClass="boton-secundario"/>
+                <Button fx:id="btnImprimir" text="Imprimir factura" onAction="#imprimir" styleClass="boton-primario"/>
+            </HBox>
+            <Label fx:id="lblMensaje" text="Consultando factura..." wrapText="true" minHeight="44" maxWidth="Infinity" styleClass="mensaje"/>
+            <VBox spacing="12" styleClass="tarjeta" VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <VBox spacing="3"><Label text="CINEMA" styleClass="titulo"/><Label text="Comprobante de venta" styleClass="subtitulo"/></VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <VBox alignment="CENTER_RIGHT" spacing="4"><Label fx:id="lblNumero" text="Factura" styleClass="seccion"/><Label fx:id="lblFecha" text="—" styleClass="subtitulo"/></VBox>
+                </HBox>
+                <Separator/>
+                <HBox spacing="50">
+                    <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="CLIENTE" styleClass="kpi-etiqueta"/><Label fx:id="lblCliente" text="—" styleClass="campo-etiqueta" wrapText="true"/></VBox>
+                    <VBox spacing="4" HBox.hgrow="ALWAYS"><Label text="ATENDIDO POR" styleClass="kpi-etiqueta"/><Label fx:id="lblTaquillero" text="—" styleClass="campo-etiqueta" wrapText="true"/></VBox>
+                </HBox>
+                <TableView fx:id="tblFactura" VBox.vgrow="ALWAYS" minHeight="120">
+                    <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+                    <columns>
+                        <TableColumn fx:id="colTipo" text="Tipo" prefWidth="90"/>
+                        <TableColumn fx:id="colDescripcion" text="Descripción" prefWidth="360"/>
+                        <TableColumn fx:id="colCantidad" text="Cant." prefWidth="65"/>
+                        <TableColumn fx:id="colPrecio" text="Precio unitario" prefWidth="120"/>
+                        <TableColumn fx:id="colSubtotal" text="Subtotal" prefWidth="120"/>
+                    </columns>
+                </TableView>
+                <HBox alignment="CENTER_RIGHT" spacing="28">
+                    <VBox spacing="4"><Label text="SUBTOTAL BOLETOS" styleClass="kpi-etiqueta"/><Label fx:id="lblSubtotalBoletos" text="Q 0.00" styleClass="importe"/></VBox>
+                    <VBox spacing="4"><Label text="SUBTOTAL DULCERÍA" styleClass="kpi-etiqueta"/><Label fx:id="lblSubtotalProductos" text="Q 0.00" styleClass="importe"/></VBox>
+                    <VBox spacing="4"><Label text="TOTAL GENERAL" styleClass="kpi-etiqueta"/><Label fx:id="lblTotal" text="Q 0.00" styleClass="total"/></VBox>
+                </HBox>
+                <Label text="Gracias por su compra. Disfrute de la función." styleClass="subtitulo"/>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>

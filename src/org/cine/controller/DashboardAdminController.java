@@ -61,4 +61,13 @@ public class DashboardAdminController {
     private void cerrarSesion() throws IOException {
         Principal.cerrarSesion();
     }
+    @FXML
+    private void abrirStockCritico() throws IOException {
+        Principal.mostrarStockCritico();
+    }
+
+    @FXML
+    private void abrirVentas() throws IOException {
+        Principal.mostrarVentas();
+    }
 }

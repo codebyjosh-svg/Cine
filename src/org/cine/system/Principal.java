@@ -7,8 +7,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.Screen;
+import org.cine.controller.FacturaController;
 import org.cine.model.Usuario;
 import org.cine.service.NavegacionRol;
+import org.cine.service.PermisosVenta;
 import org.cine.service.SesionContext;
 
 public class Principal extends Application {
@@ -104,6 +107,25 @@ public class Principal extends Application {
         mostrarLogin();
     }
 
+    public static void mostrarStockCritico() throws IOException {
+        PermisosVenta.exigirStockCritico();
+        cambiarEscena("/org/cine/view/StockCritico.fxml", "Cine - Stock crítico");
+    }
+
+    public static void mostrarVentas() throws IOException {
+        PermisosVenta.exigirVendedor();
+        cambiarEscena("/org/cine/view/Venta.fxml", "Cine - Ventas de dulcería");
+    }
+
+    public static void mostrarFactura(int idVenta) throws IOException {
+        PermisosVenta.exigirVendedor();
+        FXMLLoader loader = new FXMLLoader(Principal.class.getResource("/org/cine/view/Factura.fxml"));
+        Parent root = loader.load();
+        aplicarEscena(root, "Cine - Factura #" + idVenta, true, true);
+        FacturaController controller = loader.getController();
+        controller.cargarFactura(idVenta);
+    }
+
     public static void cambiarEscena(
             String ruta,
             String titulo) throws IOException {
@@ -122,16 +144,18 @@ public class Principal extends Application {
         boolean peliculas = ruta.endsWith("/Peliculas.fxml");
         boolean generos = ruta.endsWith("/Generos.fxml");
 
-        boolean moduloGrande = usuarios || peliculas || generos;
+        boolean operacion = ruta.endsWith("/StockCritico.fxml")
+                || ruta.endsWith("/Venta.fxml") || ruta.endsWith("/Factura.fxml");
+        aplicarEscena(root, titulo, usuarios || peliculas || generos || operacion, operacion);
+    }
 
-        double ancho = moduloGrande ? 1100 : 860;
-        double alto = moduloGrande ? 700 : 540;
-
-        Scene scene = new Scene(root, ancho, alto);
-
-        stagePrincipal.setMinWidth(moduloGrande ? 1000 : 860);
-        stagePrincipal.setMinHeight(moduloGrande ? 650 : 540);
-        stagePrincipal.setScene(scene);
+    private static void aplicarEscena(Parent root, String titulo, boolean grande, boolean operacion) {
+        var pantalla = Screen.getPrimary().getVisualBounds();
+        double ancho = Math.min(operacion ? 1180 : grande ? 1100 : 860, pantalla.getWidth() - 48);
+        double alto = Math.min(operacion ? 720 : grande ? 700 : 540, pantalla.getHeight() - 48);
+        stagePrincipal.setMinWidth(Math.min(grande ? 1050 : 860, ancho));
+        stagePrincipal.setMinHeight(Math.min(grande ? 650 : 540, alto));
+        stagePrincipal.setScene(new Scene(root, ancho, alto));
         stagePrincipal.setTitle(titulo);
         stagePrincipal.sizeToScene();
         stagePrincipal.centerOnScreen();

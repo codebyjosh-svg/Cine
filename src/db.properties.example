@@ -1,0 +1,4 @@
+# Copiar este archivo a src/db.properties y completar sus credenciales.
+db.url=jdbc:mysql://localhost:3306/cinedb_in4cm?useSSL=false&serverTimezone=America/Guatemala
+db.user=IN4CM
+db.password=
