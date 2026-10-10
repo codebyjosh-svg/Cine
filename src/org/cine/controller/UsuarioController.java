@@ -64,7 +64,8 @@ public class UsuarioController {
     @FXML
     private void initialize() {
         Usuario usuarioSesion = SesionContext.getUsuarioActual();
-        if (usuarioSesion == null || !usuarioSesion.isEstado() || !"admin".equals(usuarioSesion.getNombreRol())) {
+        if (usuarioSesion == null || !usuarioSesion.isEstado()
+                || !"admin".equalsIgnoreCase(usuarioSesion.getNombreRol())) {
             throw new IllegalStateException("La gestión de usuarios requiere una sesión de administrador.");
         }
         setUsuarioActual(usuarioSesion);
@@ -94,8 +95,14 @@ public class UsuarioController {
         try {
             usuarios.setAll(servicio.listar());
             cmbRol.setItems(FXCollections.observableArrayList(servicio.listarRoles().stream()
-                    .filter(r -> "admin".equalsIgnoreCase(r.getNombreRol())
-                            || "taquillero".equalsIgnoreCase(r.getNombreRol())).toList()));
+                    .filter(r -> r.getNombreRol() != null)
+                    .filter(r -> {
+                        String nombre = r.getNombreRol().trim().toLowerCase(Locale.ROOT);
+                        return "admin".equals(nombre)
+                                || "taquillero".equals(nombre)
+                                || "bodega".equals(nombre)
+                                || "cliente".equals(nombre);
+                    }).toList()));
             cmbCliente.setItems(FXCollections.observableArrayList(servicio.listarClientes()));
             filtrar();
             if (seleccionarId != null) {
@@ -134,7 +141,8 @@ public class UsuarioController {
 
     private void mostrarCliente() {
         Rol rol = cmbRol.getValue();
-        boolean esCliente = false; // No existen cuentas con rol cliente.
+        boolean esCliente = rol != null
+                && "cliente".equalsIgnoreCase(rol.getNombreRol());
         bloqueCliente.setVisible(esCliente);
         bloqueCliente.setManaged(esCliente);
         cmbCliente.setDisable(!esCliente);
@@ -203,6 +211,8 @@ public class UsuarioController {
 
     @FXML
     private void onGuardar() {
+        // Actualizar la identidad de sesión antes de guardar.
+        setUsuarioActual(SesionContext.getUsuarioActual());
         Usuario usuario = new Usuario();
         usuario.setIdUsuario(idEdicion);
         usuario.setNombreUsuario(txtNombre.getText());
@@ -228,6 +238,7 @@ public class UsuarioController {
         if (usuario == null) {
             return;
         }
+        setUsuarioActual(SesionContext.getUsuarioActual());
         boolean activar = !usuario.isEstado();
         String accion = activar ? "Activar" : "Desactivar";
         if (!confirmar(accion + " a " + usuario.getUsername() + "?")) {
@@ -246,6 +257,12 @@ public class UsuarioController {
     private void onEliminar() {
         Usuario usuario = tblUsuarios.getSelectionModel().getSelectedItem();
         if (usuario == null) {
+            return;
+        }
+        setUsuarioActual(SesionContext.getUsuarioActual());
+        Usuario sesion = SesionContext.getUsuarioActual();
+        if (sesion != null && sesion.getIdUsuario() == usuario.getIdUsuario()) {
+            mostrarError(new IllegalArgumentException("No puedes eliminar tu propia cuenta."));
             return;
         }
         if (!confirmar("Eliminar a " + usuario.getUsername() + "? Se borrará la cuenta.")) {
@@ -279,7 +296,10 @@ public class UsuarioController {
         Usuario seleccionado = tblUsuarios.getSelectionModel().getSelectedItem();
         btnEditar.setDisable(seleccionado == null);
         btnEstado.setDisable(seleccionado == null);
-        btnEliminar.setDisable(seleccionado == null);
+        Usuario actual = SesionContext.getUsuarioActual();
+        boolean esMiCuenta = seleccionado != null && actual != null
+                && seleccionado.getIdUsuario() == actual.getIdUsuario();
+        btnEliminar.setDisable(seleccionado == null || esMiCuenta);
         btnEstado.setText(seleccionado != null && !seleccionado.isEstado() ? "Activar" : "Desactivar");
         btnGuardar.setText(idEdicion == 0 ? "Guardar" : "Guardar cambios");
     }
@@ -291,16 +311,19 @@ public class UsuarioController {
             if (sql.getErrorCode() == 1062) {
                 mensaje = "El username, correo o cliente ya está registrado.";
             } else if (sql.getErrorCode() == 1451) {
-                mensaje = "El usuario tiene historial. Usa Desactivar.";
+                mensaje = "No se puede eliminar porque la cuenta tiene registros relacionados. Usa Desactivar.";
             } else if (sql.getErrorCode() == 1452) {
-                mensaje = "El rol o cliente ya no existe. Actualiza la lista.";
+                mensaje = "El rol o cliente no existe. Actualiza la lista.";
             } else if (sql.getErrorCode() == 1305) {
-                mensaje = "Faltan procedimientos. Revisa que hayas cargado el DDL.";
-            } else if (!"45000".equals(sql.getSQLState())) {
-                mensaje = "No se pudo conectar a MySQL. Revisa src/db.properties.";
+                mensaje = "Falta un procedimiento almacenado en MySQL.";
+            } else if (sql.getErrorCode() == 1045 || sql.getErrorCode() == 1049
+                    || sql.getSQLState() != null && sql.getSQLState().startsWith("08")) {
+                mensaje = "No fue posible conectar con MySQL. Revisa db.properties.";
+            } else if (mensaje == null || mensaje.isBlank()) {
+                mensaje = "Error SQL " + sql.getErrorCode() + ".";
             }
         }
-        lblError.setText(mensaje);
+        lblError.setText(mensaje == null ? "Error desconocido." : mensaje);
         lblStatus.setText("Revisa los datos y vuelve a intentarlo.");
     }
 

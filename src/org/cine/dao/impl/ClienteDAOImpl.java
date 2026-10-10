@@ -69,7 +69,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 
         ultimoError = "";
 
-        String sql = "{call sp_insertarcliente(?, ?, ?, ?, ?)}";
+        String sql = "{call sp_insertarcliente(?, ?, ?, ?, ?, ?)}";
 
         try (Connection con = Conexion.getInstancia().conectar();
              CallableStatement cs = con.prepareCall(sql)) {
@@ -99,7 +99,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 
         ultimoError = "";
 
-        String sql = "{call sp_actualizarcliente(?, ?, ?, ?, ?, ?)}";
+        String sql = "{call sp_actualizarcliente(?, ?, ?, ?, ?, ?, ?)}";
 
         try (Connection con = Conexion.getInstancia().conectar();
              CallableStatement cs = con.prepareCall(sql)) {
@@ -201,9 +201,10 @@ public class ClienteDAOImpl implements ClienteDAO {
 
         cs.setString(posicion + 1, cliente.getNombreCliente());
         cs.setString(posicion + 2, cliente.getApellidoCliente());
-        cs.setString(posicion + 3, cliente.getCorreoElectronico());
+        cs.setString(posicion + 3, "CF"); // NIT: Consumidor Final
+        cs.setString(posicion + 4, cliente.getCorreoElectronico());
 
-        asignarOpcional(cs, posicion + 4, cliente.getTelefono());
+        asignarOpcional(cs, posicion + 5, cliente.getTelefono());
     }
 
     private void asignarOpcional(CallableStatement cs, int posicion,

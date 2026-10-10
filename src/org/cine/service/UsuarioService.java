@@ -74,9 +74,9 @@ public class UsuarioService {
         if (rol == null) {
             throw new IllegalArgumentException("Selecciona un rol válido de la base de datos.");
         }
-        if (!("admin".equalsIgnoreCase(rol.getNombreRol())
-                || "taquillero".equalsIgnoreCase(rol.getNombreRol()))) {
-            throw new IllegalArgumentException("Solo se permiten roles administrador y taquillero.");
+        String nombreRol = rol.getNombreRol() == null ? "" : rol.getNombreRol().trim().toLowerCase(Locale.ROOT);
+        if (!java.util.Set.of("admin", "taquillero", "bodega", "cliente").contains(nombreRol)) {
+            throw new IllegalArgumentException("Solo se permiten admin, taquillero, bodega y cliente.");
         }
         usuario.setNombreRol(rol.getNombreRol());
         Usuario anterior = null;
@@ -89,13 +89,13 @@ public class UsuarioService {
         if (anterior != null && esActual(usuario.getIdUsuario()) && anterior.getIdRol() != usuario.getIdRol()) {
             throw new IllegalArgumentException("No puedes cambiar tu propio rol durante la sesión.");
         }
-        if ("cliente".equals(rol.getNombreRol())) {
+        if ("cliente".equals(nombreRol)) {
             if (usuario.getIdCliente() == null) {
                 throw new IllegalArgumentException("Selecciona el cliente que estará vinculado a esta cuenta.");
             }
             ClienteVinculo cliente = null;
             for (ClienteVinculo disponible : dao.listarClientes()) {
-                if (disponible.getIdCliente() == usuario.getIdCliente()) {
+                if (java.util.Objects.equals(disponible.getIdCliente(), usuario.getIdCliente())) {
                     cliente = disponible;
                     break;
                 }

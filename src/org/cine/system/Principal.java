@@ -39,7 +39,8 @@ public class Principal extends Application {
     // =========================================================
     public static void mostrarDashboardSegunRol() throws IOException {
 
-        if (!SesionContext.haySesionActiva()) {
+        if (!SesionContext.haySesionActiva()
+                || !SesionContext.getUsuarioActual().isEstado()) {
             mostrarLogin();
             return;
         }
@@ -132,10 +133,11 @@ public class Principal extends Application {
 
         if (actual == null
                 || !actual.isEstado()
-                || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
+                || !("admin".equalsIgnoreCase(actual.getNombreRol())
+                || "taquillero".equalsIgnoreCase(actual.getNombreRol()))) {
 
             throw new IllegalStateException(
-                    "La gestión de clientes requiere una sesión de administrador."
+                    "La gestión de clientes requiere una sesión de administrador o taquillero."
             );
         }
 
@@ -310,59 +312,133 @@ public class Principal extends Application {
         );
     }
 
-    // =========================================================
-// CARTELERA - US-2.3
-// =========================================================
-    /**
-     * US-2.3 - Consulta de cartelera.
-     *
-     * La cartelera está disponible para administración y taquilla como consulta
-     * de las funciones programadas.
-     */
+    // ==========================================
+    // CARTELERA - US-2.3
+    // ==========================================
     public static void mostrarCartelera() throws IOException {
 
-        String rol = SesionContext.getRolActual();
+        Usuario actual = SesionContext.getUsuarioActual();
+
+        if (actual == null || !actual.isEstado()) {
+            throw new IllegalStateException(
+                    "Debes iniciar sesión para consultar la cartelera."
+            );
+        }
+
+        String rol = actual.getNombreRol();
 
         if (rol == null
                 || !("admin".equalsIgnoreCase(rol)
-                || "taquillero".equalsIgnoreCase(rol))) {
+                || "taquillero".equalsIgnoreCase(rol)
+                || "cliente".equalsIgnoreCase(rol))) {
 
             throw new IllegalStateException(
-                    "No autorizado para consultar la cartelera."
+                    "Tu rol no tiene permiso para consultar la cartelera."
             );
         }
 
         cambiarEscena(
                 "/org/cine/view/Cartelera.fxml",
-                "Cine - Cartelera"
+                "Cinema - Cartelera"
         );
     }
 
-    // CONFITERIA - productos, stock y ventas
+    // ==========================================
+    // CONFITERÍA - SPRINT 3
+    // ==========================================
     public static void mostrarConfiteria() throws IOException {
-        if (SesionContext.getUsuarioActual() == null) {
-            throw new IllegalStateException("Inicia sesión para entrar a confitería.");
-        }
-        cambiarEscena("/org/cine/view/Confiteria.fxml", "Cinema - Confitería");
+
+        verificarRoles("admin", "taquillero", "bodega");
+
+        cambiarEscena(
+                "/org/cine/view/Confiteria.fxml",
+                "Cinema - Confitería"
+        );
     }
 
-    public static void mostrarInventario() throws IOException { verificarPersonalInventario(); cambiarEscena("/org/cine/view/Inventario.fxml", "Cine - Inventario"); }
-    public static void mostrarStockCritico() throws IOException { verificarPersonalInventario(); cambiarEscena("/org/cine/view/StockCritico.fxml", "Cine - Stock crítico"); }
-    public static void mostrarCategoriasProducto() throws IOException { verificarPersonalInventario(); cambiarEscena("/org/cine/view/CategoriasProducto.fxml", "Cine - Categorías"); }
+    // ==========================================
+    // CATEGORÍAS DE PRODUCTOS
+    // ==========================================
+    public static void mostrarCategoriasProducto() throws IOException {
 
-    private static void verificarPersonalInventario() {
-        Usuario u=SesionContext.getUsuarioActual();
-        if(u==null || !u.isEstado() || !("admin".equalsIgnoreCase(u.getNombreRol())))
-            throw new IllegalStateException("Se requiere un administrador activo.");
+        verificarRoles("admin", "bodega");
+
+        cambiarEscena(
+                "/org/cine/view/CategoriasProducto.fxml",
+                "Cinema - Categorías de productos"
+        );
     }
 
-    // REPORTES - US-3.4
+    // ==========================================
+    // INVENTARIO
+    // ==========================================
+    public static void mostrarInventario() throws IOException {
+
+        verificarRoles("admin", "bodega");
+
+        cambiarEscena(
+                "/org/cine/view/Inventario.fxml",
+                "Cinema - Inventario"
+        );
+    }
+
+    // ==========================================
+    // STOCK CRÍTICO
+    // ==========================================
+    public static void mostrarStockCritico() throws IOException {
+
+        verificarRoles("admin", "bodega");
+
+        cambiarEscena(
+                "/org/cine/view/StockCritico.fxml",
+                "Cinema - Stock crítico"
+        );
+    }
+
+    // ==========================================
+    // REPORTES
+    // ==========================================
     public static void mostrarReportes() throws IOException {
-        Usuario actual=SesionContext.getUsuarioActual();
-        if(actual==null || !actual.isEstado() || !"admin".equalsIgnoreCase(actual.getNombreRol())) {
-            throw new IllegalStateException("Reportes requiere una sesión de administrador.");
+
+        verificarRoles("admin");
+
+        cambiarEscena(
+                "/org/cine/view/Reportes.fxml",
+                "Cinema - Reportes"
+        );
+    }
+
+    // ==========================================
+    // VERIFICAR PERMISOS
+    // ==========================================
+    private static void verificarRoles(String... rolesPermitidos) {
+
+        Usuario usuario = SesionContext.getUsuarioActual();
+
+        if (usuario == null || !usuario.isEstado()) {
+            throw new IllegalStateException(
+                    "Debes iniciar sesión para acceder a este módulo."
+            );
         }
-        cambiarEscena("/org/cine/view/Reportes.fxml","Cinema - Reportes");
+
+        String rolActual = usuario.getNombreRol();
+
+        if (rolActual == null) {
+            throw new IllegalStateException(
+                    "El usuario no tiene un rol asignado."
+            );
+        }
+
+        for (String permitido : rolesPermitidos) {
+
+            if (permitido.equalsIgnoreCase(rolActual.trim())) {
+                return;
+            }
+        }
+
+        throw new IllegalStateException(
+                "No tienes permiso para acceder a este módulo."
+        );
     }
 
     // =========================================================
