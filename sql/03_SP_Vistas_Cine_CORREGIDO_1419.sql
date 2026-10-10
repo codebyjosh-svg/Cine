@@ -1,3 +1,4 @@
+-- CINE: SP CORREGIDO 1419 - CORREO EN PROCEDIMIENTOS
 -- ============================================================
 -- ORDEN OFICIAL DE EJECUCION
 -- 1) 01_DDL_Cine.sql
@@ -10,6 +11,7 @@
 
 -- ============================================================
 -- 03_SP_Vistas_Cine.sql
+-- Correo validado en registro y edición. Stock crítico: stock <= stock_minimo.
 -- Vistas y procedimientos almacenados
 -- Compatible con cinedb_in4cm
 -- ============================================================
@@ -115,6 +117,14 @@ DROP PROCEDURE IF EXISTS sp_obtenerdashboard;
 DROP PROCEDURE IF EXISTS sp_reporte_ventas;
 DROP PROCEDURE IF EXISTS sp_mostrartablas;
 
+DROP PROCEDURE IF EXISTS sp_agregarproductoventa;
+DROP PROCEDURE IF EXISTS sp_actualizarcantidadproducto;
+DROP PROCEDURE IF EXISTS sp_quitarproductoventa;
+DROP PROCEDURE IF EXISTS sp_listarproductosventa;
+DROP PROCEDURE IF EXISTS sp_listarproductosdisponibles;
+DROP PROCEDURE IF EXISTS sp_validarstockventa;
+DROP PROCEDURE IF EXISTS sp_registrarmovimientoinventario;
+
 DELIMITER $$
 
 -- ============================================================
@@ -153,6 +163,13 @@ CREATE PROCEDURE sp_insertarusuario(
     IN _contrasena_hash VARCHAR(255)
 )
 BEGIN
+    SET _correo_electronico = LOWER(TRIM(_correo_electronico));
+    IF NOT (COALESCE(CHAR_LENGTH(_correo_electronico) BETWEEN 3 AND 120 AND CHAR_LENGTH(SUBSTRING_INDEX(_correo_electronico, '@', 1)) <= 64 AND REGEXP_LIKE(_correo_electronico, '^[A-Za-z0-9_%+-]+([.][A-Za-z0-9_%+-]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?([.][A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*[.][A-Za-z]{2,63}$', 'c'), 0) = 1) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Correo inválido: use nombre@dominio.com, sin espacios ni puntos vacíos.';
+    END IF;
+    IF EXISTS (SELECT 1 FROM usuarios WHERE correo_electronico = _correo_electronico) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El correo ya está registrado.';
+    END IF;
     INSERT INTO usuarios (
         nombre_usuario,
         apellido_usuario,
@@ -227,6 +244,13 @@ CREATE PROCEDURE sp_actualizarusuario(
     IN _id_cliente INT
 )
 BEGIN
+    SET _correo_electronico = LOWER(TRIM(_correo_electronico));
+    IF NOT (COALESCE(CHAR_LENGTH(_correo_electronico) BETWEEN 3 AND 120 AND CHAR_LENGTH(SUBSTRING_INDEX(_correo_electronico, '@', 1)) <= 64 AND REGEXP_LIKE(_correo_electronico, '^[A-Za-z0-9_%+-]+([.][A-Za-z0-9_%+-]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?([.][A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*[.][A-Za-z]{2,63}$', 'c'), 0) = 1) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Correo inválido: use nombre@dominio.com, sin espacios ni puntos vacíos.';
+    END IF;
+    IF EXISTS (SELECT 1 FROM usuarios WHERE correo_electronico = _correo_electronico AND id_usuario <> _id_usuario) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El correo ya está registrado.';
+    END IF;
     UPDATE usuarios
     SET
         nombre_usuario = TRIM(_nombre_usuario),
@@ -286,6 +310,13 @@ CREATE PROCEDURE sp_insertarcliente(
     IN _telefono VARCHAR(20)
 )
 BEGIN
+    SET _correo_electronico = LOWER(TRIM(_correo_electronico));
+    IF NOT (COALESCE(CHAR_LENGTH(_correo_electronico) BETWEEN 3 AND 120 AND CHAR_LENGTH(SUBSTRING_INDEX(_correo_electronico, '@', 1)) <= 64 AND REGEXP_LIKE(_correo_electronico, '^[A-Za-z0-9_%+-]+([.][A-Za-z0-9_%+-]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?([.][A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*[.][A-Za-z]{2,63}$', 'c'), 0) = 1) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Correo inválido: use nombre@dominio.com, sin espacios ni puntos vacíos.';
+    END IF;
+    IF EXISTS (SELECT 1 FROM clientes WHERE correo_electronico = _correo_electronico) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El correo ya está registrado.';
+    END IF;
     INSERT INTO clientes (
         cui, nombre_cliente, apellido_cliente, nit,
         correo_electronico, telefono, estado
@@ -343,6 +374,13 @@ CREATE PROCEDURE sp_actualizarcliente(
     IN _telefono VARCHAR(20)
 )
 BEGIN
+    SET _correo_electronico = LOWER(TRIM(_correo_electronico));
+    IF NOT (COALESCE(CHAR_LENGTH(_correo_electronico) BETWEEN 3 AND 120 AND CHAR_LENGTH(SUBSTRING_INDEX(_correo_electronico, '@', 1)) <= 64 AND REGEXP_LIKE(_correo_electronico, '^[A-Za-z0-9_%+-]+([.][A-Za-z0-9_%+-]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?([.][A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*[.][A-Za-z]{2,63}$', 'c'), 0) = 1) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Correo inválido: use nombre@dominio.com, sin espacios ni puntos vacíos.';
+    END IF;
+    IF EXISTS (SELECT 1 FROM clientes WHERE correo_electronico = _correo_electronico AND id_cliente <> _id_cliente) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El correo ya está registrado.';
+    END IF;
     UPDATE clientes
     SET
         cui = _cui,
@@ -1050,36 +1088,17 @@ BEGIN
     ORDER BY fila, numero, id_boleto;
 END $$
 
-CREATE PROCEDURE sp_abrirventa(
-    IN _id_cliente INT,
-    IN _id_usuario INT
-)
+CREATE PROCEDURE sp_abrirventa(IN _id_cliente INT, IN _id_usuario INT)
 BEGIN
-    IF NOT EXISTS (
-        SELECT 1
-        FROM clientes
-        WHERE id_cliente = _id_cliente
-          AND estado = 1
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Debe seleccionar un cliente activo.';
+IF NOT EXISTS (SELECT 1 FROM clientes WHERE id_cliente = _id_cliente AND estado = 1) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Seleccione un cliente activo.';
     END IF;
-
-    INSERT INTO ventas(
-        id_cliente,
-        id_usuario,
-        total,
-        metodo_pago,
-        estado
-    )
-    VALUES(
-        _id_cliente,
-        _id_usuario,
-        0.00,
-        'EFECTIVO',
-        'abierta'
-    );
-
+    IF NOT EXISTS (SELECT 1 FROM usuarios u JOIN roles r ON r.id_rol = u.id_rol
+        WHERE u.id_usuario = _id_usuario AND u.estado = 1 AND r.nombre_rol IN ('admin','taquillero')) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Se requiere un administrador o taquillero activo.';
+    END IF;
+    INSERT INTO ventas(id_cliente, id_usuario, total, metodo_pago, estado)
+    VALUES (_id_cliente, _id_usuario, 0, 'EFECTIVO', 'abierta');
     SELECT LAST_INSERT_ID() AS id_venta;
 END $$
 
@@ -1099,243 +1118,77 @@ BEGIN
     WHERE id_venta = _id_venta;
 END $$
 
-CREATE PROCEDURE sp_actualizarclienteventa(
-    IN _id_venta INT,
-    IN _id_cliente INT
-)
+CREATE PROCEDURE sp_actualizarclienteventa(IN _id_venta INT, IN _id_cliente INT)
 BEGIN
-    UPDATE ventas
-    SET id_cliente = _id_cliente
-    WHERE id_venta = _id_venta
-      AND estado = 'abierta';
-END $$
-
-CREATE PROCEDURE sp_agregarboleto(
-    IN _id_venta INT,
-    IN _id_funcion INT,
-    IN _id_butaca INT
-)
-BEGIN
-    DECLARE _precio DECIMAL(10,2);
-    DECLARE _sala INT;
-
-    IF NOT EXISTS (
-        SELECT 1 FROM ventas
-        WHERE id_venta = _id_venta
-          AND estado = 'abierta'
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La venta no existe o ya fue confirmada.';
-    END IF;
-
-    SELECT id_sala, precio_boleto
-    INTO _sala, _precio
-    FROM funciones
-    WHERE id_funcion = _id_funcion
-      AND estado = 'programada'
-      AND fecha_inicio > NOW();
-
-    IF _sala IS NULL THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La funcion no esta disponible.';
-    END IF;
-
-    IF NOT EXISTS (
-        SELECT 1
-        FROM butacas
-        WHERE id_butaca = _id_butaca
-          AND id_sala = _sala
-          AND estado = 1
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La butaca no pertenece a la sala o esta inactiva.';
-    END IF;
-
-    IF EXISTS (
-        SELECT 1
-        FROM boletos
-        WHERE id_funcion = _id_funcion
-          AND id_butaca = _id_butaca
-          AND estado IN ('reservado','vendido')
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La butaca ya esta ocupada.';
-    END IF;
-
-    INSERT INTO boletos(
-        id_venta,
-        id_funcion,
-        id_butaca,
-        id_sala,
-        precio_unitario,
-        estado
-    )
-    VALUES(
-        _id_venta,
-        _id_funcion,
-        _id_butaca,
-        _sala,
-        _precio,
-        'reservado'
-    );
-
-    UPDATE ventas
-    SET total = (
-        SELECT COALESCE(SUM(precio_unitario),0)
-        FROM boletos
-        WHERE id_venta = _id_venta
-          AND estado IN ('reservado','vendido')
-    )
-    WHERE id_venta = _id_venta;
-
-    SELECT LAST_INSERT_ID() AS id_boleto;
-END $$
-
-CREATE PROCEDURE sp_eliminarboleto(
-    IN _id_boleto INT
-)
-BEGIN
-    DECLARE _id_venta INT;
-
-    SELECT id_venta
-    INTO _id_venta
-    FROM boletos
-    WHERE id_boleto = _id_boleto;
-
-    DELETE FROM boletos
-    WHERE id_boleto = _id_boleto
-      AND estado = 'reservado';
-
-    UPDATE ventas
-    SET total = (
-        SELECT COALESCE(SUM(precio_unitario),0)
-        FROM boletos
-        WHERE id_venta = _id_venta
-          AND estado IN ('reservado','vendido')
-    )
-    WHERE id_venta = _id_venta
-      AND estado = 'abierta';
-END $$
-
-CREATE PROCEDURE sp_confirmarventa(
-    IN _id_venta INT,
-    IN _metodo_pago VARCHAR(30)
-)
-BEGIN
-    DECLARE _id_usuario INT;
+DECLARE _estado VARCHAR(20) DEFAULT NULL;
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         ROLLBACK;
         RESIGNAL;
     END;
-
     START TRANSACTION;
-
-    SELECT id_usuario
-    INTO _id_usuario
-    FROM ventas
-    WHERE id_venta = _id_venta
-      AND estado = 'abierta'
-    FOR UPDATE;
-
-    IF _id_usuario IS NULL THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La venta no esta abierta.';
+    SELECT estado INTO _estado FROM ventas WHERE id_venta = _id_venta FOR UPDATE;
+    IF _estado IS NULL OR _estado <> 'abierta' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La venta no existe o ya no está abierta.';
     END IF;
 
-    IF NOT EXISTS (
-        SELECT 1
-        FROM boletos
-        WHERE id_venta = _id_venta
-          AND estado = 'reservado'
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Debe existir al menos un boleto para confirmar la venta.';
+    IF NOT EXISTS (SELECT 1 FROM clientes WHERE id_cliente = _id_cliente AND estado = 1) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Seleccione un cliente activo.';
     END IF;
-
-    IF EXISTS (
-        SELECT 1
-        FROM detalle_venta_productos d
-        INNER JOIN productos p
-            ON p.id_producto = d.id_producto
-        WHERE d.id_venta = _id_venta
-          AND p.stock < d.cantidad
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'No hay suficiente stock para confirmar la venta.';
-    END IF;
-
-    UPDATE boletos
-    SET estado = 'vendido'
-    WHERE id_venta = _id_venta
-      AND estado = 'reservado';
-
-    INSERT INTO movimientos_inventario(
-        id_producto,
-        id_usuario,
-        id_venta,
-        tipo_movimiento,
-        cantidad,
-        observacion
-    )
-    SELECT
-        d.id_producto,
-        _id_usuario,
-        _id_venta,
-        'SALIDA',
-        d.cantidad,
-        CONCAT('Venta #', _id_venta)
-    FROM detalle_venta_productos d
-    WHERE d.id_venta = _id_venta;
-
-    UPDATE productos p
-    INNER JOIN (
-        SELECT id_producto, SUM(cantidad) AS cantidad_total
-        FROM detalle_venta_productos
-        WHERE id_venta = _id_venta
-        GROUP BY id_producto
-    ) d
-        ON d.id_producto = p.id_producto
-    SET p.stock = p.stock - d.cantidad_total;
-
-    UPDATE ventas
-    SET
-        estado = 'confirmada',
-        metodo_pago = COALESCE(NULLIF(TRIM(_metodo_pago), ''), 'EFECTIVO'),
-        fecha_confirmacion = NOW(),
-        total =
-            COALESCE((
-                SELECT SUM(precio_unitario)
-                FROM boletos
-                WHERE id_venta = _id_venta
-                  AND estado = 'vendido'
-            ),0)
-            +
-            COALESCE((
-                SELECT SUM(subtotal)
-                FROM detalle_venta_productos
-                WHERE id_venta = _id_venta
-            ),0)
-    WHERE id_venta = _id_venta;
-
+    UPDATE ventas SET id_cliente = _id_cliente WHERE id_venta = _id_venta;
     COMMIT;
-
-    SELECT
-        id_venta,
-        total,
-        metodo_pago,
-        estado
-    FROM ventas
-    WHERE id_venta = _id_venta;
 END $$
 
-CREATE PROCEDURE sp_anularventa(
-    IN _id_venta INT,
-    IN _motivo VARCHAR(200)
-)
+CREATE PROCEDURE sp_agregarboleto(IN _id_venta INT, IN _id_funcion INT, IN _id_butaca INT)
 BEGIN
-    DECLARE _estado VARCHAR(20);
-    DECLARE _id_usuario INT;
+DECLARE _estado VARCHAR(20) DEFAULT NULL;
+    DECLARE _sala INT DEFAULT NULL;
+    DECLARE _precio DECIMAL(10,2);
+    DECLARE _inicio DATETIME;
+    DECLARE _estado_funcion VARCHAR(20);
+    DECLARE _pelicula_activa TINYINT;
+    DECLARE _sala_activa TINYINT;
+    DECLARE _boleto INT;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    START TRANSACTION;
+    SELECT estado INTO _estado FROM ventas WHERE id_venta = _id_venta FOR UPDATE;
+    IF _estado IS NULL OR _estado <> 'abierta' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La venta no existe o ya no está abierta.';
+    END IF;
+
+    SELECT f.id_sala, f.precio_boleto, f.fecha_inicio, f.estado, p.estado, s.estado
+    INTO _sala, _precio, _inicio, _estado_funcion, _pelicula_activa, _sala_activa
+    FROM funciones f JOIN peliculas p ON p.id_pelicula = f.id_pelicula
+    JOIN salas s ON s.id_sala = f.id_sala WHERE f.id_funcion = _id_funcion FOR UPDATE;
+    IF _sala IS NULL OR _estado_funcion <> 'programada' OR _inicio <= NOW()
+        OR _pelicula_activa <> 1 OR _sala_activa <> 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La función no está disponible para la venta.';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM butacas WHERE id_butaca = _id_butaca AND id_sala = _sala AND estado = 1) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La butaca no está activa o pertenece a otra sala.';
+    END IF;
+    IF EXISTS (SELECT 1 FROM boletos WHERE id_funcion = _id_funcion AND id_butaca = _id_butaca AND estado IN ('reservado','vendido')) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La butaca ya está ocupada para esta función.';
+    END IF;
+    INSERT INTO boletos(id_venta, id_funcion, id_butaca, id_sala, precio_unitario, estado)
+    VALUES (_id_venta, _id_funcion, _id_butaca, _sala, _precio, 'reservado');
+    SET _boleto = LAST_INSERT_ID();
+    UPDATE ventas v SET v.total =
+        (SELECT COALESCE(SUM(precio_unitario), 0) FROM boletos WHERE id_venta = _id_venta AND estado IN ('reservado','vendido'))
+        + (SELECT COALESCE(SUM(subtotal), 0) FROM detalle_venta_productos WHERE id_venta = _id_venta)
+    WHERE v.id_venta = _id_venta;
+    COMMIT;
+    SELECT _boleto AS id_boleto;
+END $$
+
+CREATE PROCEDURE sp_eliminarboleto(IN _id_boleto INT)
+BEGIN
+DECLARE _id_venta INT DEFAULT NULL;
+    DECLARE _estado VARCHAR(20) DEFAULT NULL;
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
         ROLLBACK;
@@ -1343,66 +1196,158 @@ BEGIN
     END;
 
     START TRANSACTION;
-
-    SELECT estado, id_usuario
-    INTO _estado, _id_usuario
-    FROM ventas
-    WHERE id_venta = _id_venta
-    FOR UPDATE;
-
-    IF _estado IS NULL THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La venta no existe.';
+    SELECT id_venta INTO _id_venta FROM boletos WHERE id_boleto = _id_boleto;
+    IF _id_venta IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El boleto no existe.';
+    END IF;
+    SELECT estado INTO _estado FROM ventas WHERE id_venta = _id_venta FOR UPDATE;
+    IF _estado IS NULL OR _estado <> 'abierta' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La venta no existe o ya no está abierta.';
     END IF;
 
-    IF _estado = 'anulada' THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La venta ya esta anulada.';
+    DELETE FROM boletos WHERE id_boleto = _id_boleto AND estado = 'reservado';
+    IF ROW_COUNT() <> 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Solo se pueden quitar boletos reservados.';
     END IF;
+    UPDATE ventas v SET v.total =
+        (SELECT COALESCE(SUM(precio_unitario), 0) FROM boletos WHERE id_venta = _id_venta AND estado IN ('reservado','vendido'))
+        + (SELECT COALESCE(SUM(subtotal), 0) FROM detalle_venta_productos WHERE id_venta = _id_venta)
+    WHERE v.id_venta = _id_venta;
+    COMMIT;
+END $$
 
-    IF _estado = 'confirmada' THEN
+CREATE PROCEDURE sp_confirmarventa(IN _id_venta INT, IN _metodo_pago VARCHAR(30))
+BEGIN
+DECLARE _estado VARCHAR(20) DEFAULT NULL;
+    DECLARE _id_usuario INT;
+    DECLARE _id_cliente INT;
+    DECLARE _pago VARCHAR(30);
+    DECLARE _fin TINYINT DEFAULT 0;
+    DECLARE _id_producto INT;
+    DECLARE _cantidad BIGINT;
+    DECLARE _stock INT DEFAULT NULL;
+    DECLARE _activo TINYINT;
+    DECLARE productos_venta CURSOR FOR SELECT id_producto, SUM(cantidad)
+        FROM detalle_venta_productos WHERE id_venta = _id_venta GROUP BY id_producto ORDER BY id_producto;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET _fin = 1;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
 
-        INSERT INTO movimientos_inventario(
-            id_producto,
-            id_usuario,
-            id_venta,
-            tipo_movimiento,
-            cantidad,
-            observacion
-        )
-        SELECT
-            d.id_producto,
-            _id_usuario,
-            _id_venta,
-            'ENTRADA',
-            d.cantidad,
-            CONCAT('Devolucion de venta #', _id_venta)
-        FROM detalle_venta_productos d
-        WHERE d.id_venta = _id_venta;
-
-        UPDATE productos p
-        INNER JOIN (
-            SELECT id_producto, SUM(cantidad) AS cantidad_total
-            FROM detalle_venta_productos
-            WHERE id_venta = _id_venta
-            GROUP BY id_producto
-        ) d
-            ON d.id_producto = p.id_producto
-        SET p.stock = p.stock + d.cantidad_total;
+    SET _pago = UPPER(TRIM(COALESCE(_metodo_pago, '')));
+    IF _pago NOT IN ('EFECTIVO','TARJETA','TRANSFERENCIA') THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Seleccione un método de pago válido.';
     END IF;
+    START TRANSACTION;
+    SELECT estado, id_usuario, id_cliente INTO _estado, _id_usuario, _id_cliente
+    FROM ventas WHERE id_venta = _id_venta FOR UPDATE;
+    IF _estado IS NULL OR _estado <> 'abierta' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La venta no existe o ya no está abierta.';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM clientes WHERE id_cliente = _id_cliente AND estado = 1)
+        OR NOT EXISTS (SELECT 1 FROM usuarios u JOIN roles r ON r.id_rol = u.id_rol
+            WHERE u.id_usuario = _id_usuario AND u.estado = 1 AND r.nombre_rol IN ('admin','taquillero')) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente o vendedor de la venta ya no está activo.';
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM boletos WHERE id_venta = _id_venta AND estado = 'reservado')
+        AND NOT EXISTS (SELECT 1 FROM detalle_venta_productos WHERE id_venta = _id_venta) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No se puede confirmar una venta vacía.';
+    END IF;
+    -- Bloqueo y revalidación de funciones: evita confirmar reservas canceladas o vencidas.
+    BEGIN
+        DECLARE _terminado TINYINT DEFAULT 0;
+        DECLARE _funcion INT;
+        DECLARE _inicio DATETIME;
+        DECLARE _estado_f VARCHAR(20);
+        DECLARE _pelicula_a TINYINT;
+        DECLARE _sala_a TINYINT;
+        DECLARE funciones_venta CURSOR FOR SELECT DISTINCT id_funcion FROM boletos
+            WHERE id_venta = _id_venta AND estado = 'reservado' ORDER BY id_funcion;
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET _terminado = 1;
+        OPEN funciones_venta;
+        funciones_loop: LOOP
+            FETCH funciones_venta INTO _funcion;
+            IF _terminado = 1 THEN LEAVE funciones_loop; END IF;
+            SELECT f.fecha_inicio, f.estado, p.estado, s.estado
+            INTO _inicio, _estado_f, _pelicula_a, _sala_a
+            FROM funciones f JOIN peliculas p ON p.id_pelicula = f.id_pelicula
+            JOIN salas s ON s.id_sala = f.id_sala WHERE f.id_funcion = _funcion FOR UPDATE;
+            IF _estado_f <> 'programada' OR _inicio <= NOW() OR _pelicula_a <> 1 OR _sala_a <> 1 THEN
+                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Una función ya no está disponible para confirmar.';
+            END IF;
+        END LOOP;
+        CLOSE funciones_venta;
+    END;
+    SET _fin = 0;
+    OPEN productos_venta;
+    productos_loop: LOOP
+        FETCH productos_venta INTO _id_producto, _cantidad;
+        IF _fin = 1 THEN LEAVE productos_loop; END IF;
+        SELECT stock, estado INTO _stock, _activo FROM productos WHERE id_producto = _id_producto FOR UPDATE;
+        IF _stock IS NULL OR _activo <> 1 OR _stock < _cantidad THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Stock insuficiente o producto inactivo al confirmar.';
+        END IF;
+        UPDATE productos SET stock = stock - _cantidad WHERE id_producto = _id_producto;
+        INSERT INTO movimientos_inventario(id_producto, id_usuario, id_venta, tipo_movimiento, cantidad, observacion)
+        VALUES (_id_producto, _id_usuario, _id_venta, 'SALIDA', _cantidad, CONCAT('Venta #', _id_venta));
+    END LOOP;
+    CLOSE productos_venta;
+    UPDATE boletos SET estado = 'vendido' WHERE id_venta = _id_venta AND estado = 'reservado';
+    UPDATE ventas v SET v.total =
+        (SELECT COALESCE(SUM(precio_unitario), 0) FROM boletos WHERE id_venta = _id_venta AND estado IN ('reservado','vendido'))
+        + (SELECT COALESCE(SUM(subtotal), 0) FROM detalle_venta_productos WHERE id_venta = _id_venta)
+    WHERE v.id_venta = _id_venta;
 
-    UPDATE boletos
-    SET estado = 'anulado'
-    WHERE id_venta = _id_venta
-      AND estado IN ('reservado','vendido');
-
-    UPDATE ventas
-    SET
-        estado = 'anulada',
-        fecha_anulacion = NOW(),
-        motivo_anulacion = _motivo
+    UPDATE ventas SET estado = 'confirmada', metodo_pago = _pago, fecha_confirmacion = NOW()
     WHERE id_venta = _id_venta;
+    COMMIT;
+    SELECT * FROM vw_lista_ventas WHERE id_venta = _id_venta;
+END $$
 
+CREATE PROCEDURE sp_anularventa(IN _id_venta INT, IN _motivo VARCHAR(200))
+BEGIN
+DECLARE _estado VARCHAR(20) DEFAULT NULL;
+    DECLARE _id_usuario INT;
+    DECLARE _fin TINYINT DEFAULT 0;
+    DECLARE _id_producto INT;
+    DECLARE _cantidad BIGINT;
+    DECLARE _stock INT DEFAULT NULL;
+    DECLARE _activo TINYINT;
+    DECLARE productos_venta CURSOR FOR SELECT id_producto, SUM(cantidad)
+        FROM detalle_venta_productos WHERE id_venta = _id_venta GROUP BY id_producto ORDER BY id_producto;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET _fin = 1;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+
+    IF _motivo IS NULL OR CHAR_LENGTH(TRIM(_motivo)) = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Indique el motivo de anulación.';
+    END IF;
+    START TRANSACTION;
+    SELECT estado, id_usuario INTO _estado, _id_usuario FROM ventas WHERE id_venta = _id_venta FOR UPDATE;
+    IF _estado IS NULL OR _estado = 'anulada' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La venta no existe o ya está anulada.';
+    END IF;
+    IF _estado = 'confirmada' THEN
+        SET _fin = 0;
+        OPEN productos_venta;
+        productos_loop: LOOP
+            FETCH productos_venta INTO _id_producto, _cantidad;
+            IF _fin = 1 THEN LEAVE productos_loop; END IF;
+            SELECT stock INTO _stock FROM productos WHERE id_producto = _id_producto FOR UPDATE;
+            UPDATE productos SET stock = stock + _cantidad WHERE id_producto = _id_producto;
+            INSERT INTO movimientos_inventario(id_producto, id_usuario, id_venta, tipo_movimiento, cantidad, observacion)
+            VALUES (_id_producto, _id_usuario, _id_venta, 'ENTRADA', _cantidad, CONCAT('Devolución de venta #', _id_venta));
+        END LOOP;
+        CLOSE productos_venta;
+    END IF;
+    UPDATE boletos SET estado = 'anulado' WHERE id_venta = _id_venta AND estado IN ('reservado','vendido');
+    UPDATE ventas SET estado = 'anulada', fecha_anulacion = NOW(), motivo_anulacion = TRIM(_motivo)
+    WHERE id_venta = _id_venta;
     COMMIT;
 END $$
 
@@ -1594,280 +1539,79 @@ END $$
 -- DETALLE DE PRODUCTOS
 -- ============================================================
 
-CREATE PROCEDURE sp_agregardetalleproducto(
-    IN _id_venta INT,
-    IN _id_producto INT,
-    IN _cantidad INT
-)
+CREATE PROCEDURE sp_agregardetalleproducto(IN _id_venta INT, IN _id_producto INT, IN _cantidad INT)
 BEGIN
-    DECLARE _precio DECIMAL(10,2);
-    DECLARE _stock INT;
-    DECLARE _cantidad_actual INT DEFAULT 0;
-    DECLARE _cantidad_nueva INT;
-
-    IF _cantidad <= 0 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La cantidad debe ser mayor que cero.';
-    END IF;
-
-    IF NOT EXISTS (
-        SELECT 1 FROM ventas
-        WHERE id_venta = _id_venta
-          AND estado = 'abierta'
-    ) THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La venta no esta abierta.';
-    END IF;
-
-    SELECT precio, stock
-    INTO _precio, _stock
-    FROM productos
-    WHERE id_producto = _id_producto
-      AND estado = 1;
-
-    IF _precio IS NULL THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El producto no existe o esta inactivo.';
-    END IF;
-
-    SELECT COALESCE(SUM(cantidad),0)
-    INTO _cantidad_actual
-    FROM detalle_venta_productos
-    WHERE id_venta = _id_venta
-      AND id_producto = _id_producto;
-
-    SET _cantidad_nueva = _cantidad_actual + _cantidad;
-
-    IF _stock < _cantidad_nueva THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Stock insuficiente.';
-    END IF;
-
-    IF _cantidad_actual > 0 THEN
-        UPDATE detalle_venta_productos
-        SET
-            cantidad = _cantidad_nueva,
-            subtotal = _cantidad_nueva * precio_unitario
-        WHERE id_venta = _id_venta
-          AND id_producto = _id_producto;
-    ELSE
-        INSERT INTO detalle_venta_productos(
-            id_venta,
-            id_producto,
-            cantidad,
-            precio_unitario,
-            subtotal
-        )
-        VALUES(
-            _id_venta,
-            _id_producto,
-            _cantidad,
-            _precio,
-            _cantidad * _precio
-        );
-    END IF;
-
-    UPDATE ventas
-    SET total =
-        COALESCE((
-            SELECT SUM(precio_unitario)
-            FROM boletos
-            WHERE id_venta = _id_venta
-              AND estado IN ('reservado','vendido')
-        ),0)
-        +
-        COALESCE((
-            SELECT SUM(subtotal)
-            FROM detalle_venta_productos
-            WHERE id_venta = _id_venta
-        ),0)
-    WHERE id_venta = _id_venta;
-
-    SELECT id_venta, total
-    FROM ventas
-    WHERE id_venta = _id_venta;
+CALL sp_agregarproductoventa(_id_venta, _id_producto, _cantidad);
 END $$
 
-CREATE PROCEDURE sp_actualizardetalleproducto(
-    IN _id_detalle_producto INT,
-    IN _cantidad INT
-)
+CREATE PROCEDURE sp_actualizardetalleproducto(IN _id_detalle_producto INT, IN _cantidad INT)
 BEGIN
-    DECLARE _id_venta INT;
-    DECLARE _id_producto INT;
-    DECLARE _precio DECIMAL(10,2);
-    DECLARE _stock INT;
-
-    SELECT id_venta, id_producto, precio_unitario
-    INTO _id_venta, _id_producto, _precio
-    FROM detalle_venta_productos
+DECLARE _id_venta INT DEFAULT NULL;
+    DECLARE _id_producto INT DEFAULT NULL;
+    SELECT id_venta, id_producto INTO _id_venta, _id_producto FROM detalle_venta_productos
     WHERE id_detalle_producto = _id_detalle_producto;
-
-    SELECT stock
-    INTO _stock
-    FROM productos
-    WHERE id_producto = _id_producto;
-
-    IF _cantidad <= 0 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La cantidad debe ser mayor que cero.';
+    IF _id_venta IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La línea de producto no existe.';
     END IF;
-
-    IF _stock < _cantidad THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Stock insuficiente.';
-    END IF;
-
-    UPDATE detalle_venta_productos
-    SET
-        cantidad = _cantidad,
-        subtotal = _cantidad * _precio
-    WHERE id_detalle_producto = _id_detalle_producto;
-
-    UPDATE ventas
-    SET total =
-        COALESCE((
-            SELECT SUM(precio_unitario)
-            FROM boletos
-            WHERE id_venta = _id_venta
-              AND estado IN ('reservado','vendido')
-        ),0)
-        +
-        COALESCE((
-            SELECT SUM(subtotal)
-            FROM detalle_venta_productos
-            WHERE id_venta = _id_venta
-        ),0)
-    WHERE id_venta = _id_venta
-      AND estado = 'abierta';
+    CALL sp_actualizarcantidadproducto(_id_venta, _id_producto, _cantidad);
 END $$
 
-CREATE PROCEDURE sp_eliminardetalleproducto(
-    IN _id_detalle_producto INT
-)
+CREATE PROCEDURE sp_eliminardetalleproducto(IN _id_detalle_producto INT)
 BEGIN
-    DECLARE _id_venta INT;
-
-    SELECT id_venta
-    INTO _id_venta
-    FROM detalle_venta_productos
+DECLARE _id_venta INT DEFAULT NULL;
+    DECLARE _id_producto INT DEFAULT NULL;
+    SELECT id_venta, id_producto INTO _id_venta, _id_producto FROM detalle_venta_productos
     WHERE id_detalle_producto = _id_detalle_producto;
-
-    DELETE FROM detalle_venta_productos
-    WHERE id_detalle_producto = _id_detalle_producto;
-
-    IF _id_venta IS NOT NULL THEN
-        UPDATE ventas
-        SET total =
-            COALESCE((
-                SELECT SUM(precio_unitario)
-                FROM boletos
-                WHERE id_venta = _id_venta
-                  AND estado IN ('reservado','vendido')
-            ),0)
-            +
-            COALESCE((
-                SELECT SUM(subtotal)
-                FROM detalle_venta_productos
-                WHERE id_venta = _id_venta
-            ),0)
-        WHERE id_venta = _id_venta
-          AND estado = 'abierta';
+    IF _id_venta IS NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La línea de producto no existe.';
     END IF;
+    CALL sp_quitarproductoventa(_id_venta, _id_producto);
 END $$
 
-CREATE PROCEDURE sp_listardetallesventa(
-    IN _id_venta INT
-)
+CREATE PROCEDURE sp_listardetallesventa(IN _id_venta INT)
 BEGIN
-    SELECT
-        d.id_detalle_producto,
-        d.id_venta,
-        d.id_producto,
-        p.nombre_producto,
-        d.cantidad,
-        d.precio_unitario,
-        d.subtotal
-    FROM detalle_venta_productos d
-    INNER JOIN productos p
-        ON p.id_producto = d.id_producto
-    WHERE d.id_venta = _id_venta
-    ORDER BY d.id_detalle_producto;
+CALL sp_listarproductosventa(_id_venta);
 END $$
 
 -- ============================================================
 -- INVENTARIO
 -- ============================================================
 
-CREATE PROCEDURE sp_registrarmovimiento(
-    IN _id_producto INT,
-    IN _id_usuario INT,
-    IN _id_venta INT,
-    IN _tipo_movimiento VARCHAR(10),
-    IN _cantidad INT,
-    IN _observacion VARCHAR(255)
-)
+CREATE PROCEDURE sp_registrarmovimiento(IN _id_producto INT, IN _id_usuario INT, IN _id_venta INT, IN _tipo_movimiento VARCHAR(20), IN _cantidad INT, IN _observacion VARCHAR(255))
 BEGIN
-    DECLARE _stock_actual INT;
+DECLARE _stock INT DEFAULT NULL;
+    DECLARE _tipo VARCHAR(20);
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
 
-    SELECT stock
-    INTO _stock_actual
-    FROM productos
-    WHERE id_producto = _id_producto
-      AND estado = 1
-    FOR UPDATE;
-
-    IF _stock_actual IS NULL THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'El producto no existe o esta inactivo.';
+    SET _tipo = UPPER(TRIM(COALESCE(_tipo_movimiento, '')));
+    IF _tipo NOT IN ('ENTRADA','SALIDA','AJUSTE') OR _cantidad IS NULL OR _cantidad <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Tipo de movimiento o cantidad inválidos.';
     END IF;
-
-    IF _cantidad <= 0 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'La cantidad debe ser mayor que cero.';
+    IF _observacion IS NULL OR CHAR_LENGTH(TRIM(_observacion)) = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Indique la observación del movimiento.';
     END IF;
-
-    IF _tipo_movimiento = 'SALIDA' AND _stock_actual < _cantidad THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Stock insuficiente.';
+    IF NOT EXISTS (SELECT 1 FROM usuarios u JOIN roles r ON r.id_rol = u.id_rol
+        WHERE u.id_usuario = _id_usuario AND u.estado = 1 AND r.nombre_rol IN ('admin','bodega')) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El movimiento requiere un administrador o encargado de bodega activo.';
     END IF;
-
-    INSERT INTO movimientos_inventario(
-        id_producto,
-        id_usuario,
-        id_venta,
-        tipo_movimiento,
-        cantidad,
-        observacion
-    )
-    VALUES(
-        _id_producto,
-        _id_usuario,
-        _id_venta,
-        _tipo_movimiento,
-        _cantidad,
-        _observacion
-    );
-
-    IF _tipo_movimiento = 'ENTRADA' THEN
-        UPDATE productos
-        SET stock = stock + _cantidad
-        WHERE id_producto = _id_producto;
-
-    ELSEIF _tipo_movimiento = 'SALIDA' THEN
-        UPDATE productos
-        SET stock = stock - _cantidad
-        WHERE id_producto = _id_producto;
-
-    ELSEIF _tipo_movimiento = 'AJUSTE' THEN
-        UPDATE productos
-        SET stock = _cantidad
-        WHERE id_producto = _id_producto;
-
-    ELSE
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Tipo de movimiento invalido.';
+    IF _id_venta IS NOT NULL THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Los movimientos vinculados a ventas se generan al confirmar o anular.';
     END IF;
+    START TRANSACTION;
+    SELECT stock INTO _stock FROM productos WHERE id_producto = _id_producto FOR UPDATE;
+    IF _stock IS NULL THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El producto no existe.'; END IF;
+    IF _tipo = 'SALIDA' AND _cantidad > _stock THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Stock insuficiente para la salida de inventario.';
+    END IF;
+    UPDATE productos SET stock = CASE _tipo WHEN 'ENTRADA' THEN stock + _cantidad
+        WHEN 'SALIDA' THEN stock - _cantidad ELSE _cantidad END WHERE id_producto = _id_producto;
+    INSERT INTO movimientos_inventario(id_producto, id_usuario, id_venta, tipo_movimiento, cantidad, observacion)
+    VALUES (_id_producto, _id_usuario, NULL, _tipo, _cantidad, TRIM(_observacion));
+    COMMIT;
 END $$
 
 CREATE PROCEDURE sp_listarmovimientosinventario()
@@ -1893,9 +1637,7 @@ END $$
 
 CREATE PROCEDURE sp_listarstockcritico()
 BEGIN
-    SELECT *
-    FROM vw_stock_critico
-    ORDER BY stock ASC, nombre_producto;
+SELECT * FROM vw_stock_critico ORDER BY stock, stock_minimo, nombre_producto;
 END $$
 
 -- ============================================================
@@ -1906,6 +1648,9 @@ CREATE PROCEDURE sp_verfactura(
     IN _id_venta INT
 )
 BEGIN
+    IF NOT EXISTS (SELECT 1 FROM ventas WHERE id_venta = _id_venta AND estado = 'confirmada') THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La factura requiere una venta confirmada.';
+    END IF;
 
     -- Encabezado
     SELECT *
@@ -1931,7 +1676,7 @@ BEGIN
         ON s.id_sala = b.id_sala
     INNER JOIN butacas bu
         ON bu.id_butaca = b.id_butaca
-    WHERE b.id_venta = _id_venta;
+    WHERE b.id_venta = _id_venta AND b.estado = 'vendido' ORDER BY b.id_boleto;
 
     -- Productos
     SELECT
@@ -1943,7 +1688,7 @@ BEGIN
     FROM detalle_venta_productos d
     INNER JOIN productos p
         ON p.id_producto = d.id_producto
-    WHERE d.id_venta = _id_venta;
+    WHERE d.id_venta = _id_venta ORDER BY d.id_detalle_producto;
 END $$
 
 -- ============================================================
@@ -2028,6 +1773,154 @@ BEGIN
     WHERE TABLE_SCHEMA = DATABASE()
       AND TABLE_TYPE = 'BASE TABLE'
     ORDER BY TABLE_NAME;
+END $$
+
+-- Consultas usadas por el flujo de venta de dulcería en Java.
+CREATE PROCEDURE sp_agregarproductoventa(IN _id_venta INT, IN _id_producto INT, IN _cantidad INT)
+BEGIN
+DECLARE _estado VARCHAR(20) DEFAULT NULL;
+    DECLARE _stock INT DEFAULT NULL;
+    DECLARE _activo TINYINT DEFAULT 0;
+    DECLARE _precio DECIMAL(10,2);
+    DECLARE _actual BIGINT DEFAULT 0;
+    DECLARE _nueva BIGINT;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    IF _cantidad IS NULL OR _cantidad <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La cantidad debe ser mayor que cero.';
+    END IF;
+    START TRANSACTION;
+    SELECT estado INTO _estado FROM ventas WHERE id_venta = _id_venta FOR UPDATE;
+    IF _estado IS NULL OR _estado <> 'abierta' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La venta no existe o ya no está abierta.';
+    END IF;
+    SELECT stock, estado, precio INTO _stock, _activo, _precio
+    FROM productos WHERE id_producto = _id_producto FOR UPDATE;
+    IF _stock IS NULL OR _activo <> 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El producto no existe o está inactivo.';
+    END IF;
+    SELECT COALESCE(SUM(cantidad), 0) INTO _actual FROM detalle_venta_productos
+    WHERE id_venta = _id_venta AND id_producto = _id_producto;
+    SET _nueva = _actual + _cantidad;
+    IF _nueva > _stock THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Stock insuficiente para la cantidad acumulada.';
+    END IF;
+    IF _actual = 0 THEN
+        INSERT INTO detalle_venta_productos(id_venta, id_producto, cantidad, precio_unitario, subtotal)
+        VALUES (_id_venta, _id_producto, _nueva, _precio, _nueva * _precio);
+    ELSE
+        UPDATE detalle_venta_productos SET cantidad = _nueva, subtotal = _nueva * precio_unitario
+        WHERE id_venta = _id_venta AND id_producto = _id_producto;
+    END IF;
+    UPDATE ventas v SET v.total =
+        (SELECT COALESCE(SUM(precio_unitario), 0) FROM boletos WHERE id_venta = _id_venta AND estado IN ('reservado','vendido'))
+        + (SELECT COALESCE(SUM(subtotal), 0) FROM detalle_venta_productos WHERE id_venta = _id_venta)
+    WHERE v.id_venta = _id_venta;
+    COMMIT;
+    SELECT id_venta, total FROM ventas WHERE id_venta = _id_venta;
+END $$
+
+CREATE PROCEDURE sp_actualizarcantidadproducto(IN _id_venta INT, IN _id_producto INT, IN _cantidad INT)
+BEGIN
+DECLARE _estado VARCHAR(20) DEFAULT NULL;
+    DECLARE _stock INT DEFAULT NULL;
+    DECLARE _activo TINYINT DEFAULT 0;
+    DECLARE _precio DECIMAL(10,2);
+    DECLARE _actual BIGINT DEFAULT 0;
+    DECLARE _nueva BIGINT;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    IF _cantidad IS NULL OR _cantidad <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La cantidad debe ser mayor que cero.';
+    END IF;
+    START TRANSACTION;
+    SELECT estado INTO _estado FROM ventas WHERE id_venta = _id_venta FOR UPDATE;
+    IF _estado IS NULL OR _estado <> 'abierta' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La venta no existe o ya no está abierta.';
+    END IF;
+    SELECT stock, estado, precio INTO _stock, _activo, _precio
+    FROM productos WHERE id_producto = _id_producto FOR UPDATE;
+    IF _stock IS NULL OR _activo <> 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El producto no existe o está inactivo.';
+    END IF;
+    SELECT COALESCE(SUM(cantidad), 0) INTO _actual FROM detalle_venta_productos
+    WHERE id_venta = _id_venta AND id_producto = _id_producto;
+    IF _actual = 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El producto no pertenece a esta venta.';
+    END IF;
+    SET _nueva = _cantidad;
+    IF _nueva > _stock THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Stock insuficiente para la cantidad acumulada.';
+    END IF;
+    IF _actual = 0 THEN
+        INSERT INTO detalle_venta_productos(id_venta, id_producto, cantidad, precio_unitario, subtotal)
+        VALUES (_id_venta, _id_producto, _nueva, _precio, _nueva * _precio);
+    ELSE
+        UPDATE detalle_venta_productos SET cantidad = _nueva, subtotal = _nueva * precio_unitario
+        WHERE id_venta = _id_venta AND id_producto = _id_producto;
+    END IF;
+    UPDATE ventas v SET v.total =
+        (SELECT COALESCE(SUM(precio_unitario), 0) FROM boletos WHERE id_venta = _id_venta AND estado IN ('reservado','vendido'))
+        + (SELECT COALESCE(SUM(subtotal), 0) FROM detalle_venta_productos WHERE id_venta = _id_venta)
+    WHERE v.id_venta = _id_venta;
+    COMMIT;
+    SELECT id_venta, total FROM ventas WHERE id_venta = _id_venta;
+END $$
+
+CREATE PROCEDURE sp_quitarproductoventa(IN _id_venta INT, IN _id_producto INT)
+BEGIN
+DECLARE _estado VARCHAR(20) DEFAULT NULL;
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    START TRANSACTION;
+    SELECT estado INTO _estado FROM ventas WHERE id_venta = _id_venta FOR UPDATE;
+    IF _estado IS NULL OR _estado <> 'abierta' THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La venta no existe o ya no está abierta.';
+    END IF;
+
+    DELETE FROM detalle_venta_productos WHERE id_venta = _id_venta AND id_producto = _id_producto;
+    UPDATE ventas v SET v.total =
+        (SELECT COALESCE(SUM(precio_unitario), 0) FROM boletos WHERE id_venta = _id_venta AND estado IN ('reservado','vendido'))
+        + (SELECT COALESCE(SUM(subtotal), 0) FROM detalle_venta_productos WHERE id_venta = _id_venta)
+    WHERE v.id_venta = _id_venta;
+    COMMIT;
+END $$
+
+CREATE PROCEDURE sp_listarproductosventa(IN _id_venta INT)
+BEGIN
+SELECT d.id_detalle_producto, d.id_venta, d.id_producto, p.nombre_producto,
+        d.cantidad, d.precio_unitario, d.subtotal
+    FROM detalle_venta_productos d JOIN productos p ON p.id_producto = d.id_producto
+    WHERE d.id_venta = _id_venta ORDER BY d.id_detalle_producto;
+END $$
+
+CREATE PROCEDURE sp_listarproductosdisponibles()
+BEGIN
+SELECT * FROM vw_lista_productos WHERE estado = 1 ORDER BY nombre_producto, id_producto;
+END $$
+
+CREATE PROCEDURE sp_validarstockventa(IN _id_venta INT)
+BEGIN
+SELECT d.id_producto, p.nombre_producto, SUM(d.cantidad) AS cantidad, p.stock, p.estado
+    FROM detalle_venta_productos d JOIN productos p ON p.id_producto = d.id_producto
+    WHERE d.id_venta = _id_venta
+    GROUP BY d.id_producto, p.nombre_producto, p.stock, p.estado
+    HAVING SUM(d.cantidad) > p.stock OR p.estado <> 1
+    ORDER BY d.id_producto;
+END $$
+
+CREATE PROCEDURE sp_registrarmovimientoinventario(IN _id_producto INT, IN _id_usuario INT, IN _tipo_movimiento VARCHAR(20), IN _cantidad INT, IN _observacion VARCHAR(200))
+BEGIN
+CALL sp_registrarmovimiento(_id_producto, _id_usuario, NULL, _tipo_movimiento, _cantidad, _observacion);
 END $$
 
 DELIMITER ;
