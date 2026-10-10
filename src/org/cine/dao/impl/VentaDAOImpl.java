@@ -21,9 +21,9 @@ public class VentaDAOImpl implements VentaDAO {
     }
 
     @Override
-    public List<Opcion> clientes() throws SQLException {
+    public List<VentaDAO.Opcion> clientes() throws SQLException {
 
-        List<Opcion> l = new ArrayList<>();
+        List<VentaDAO.Opcion> l = new ArrayList<>();
 
         try (
                 Connection c = con(); CallableStatement s
@@ -31,7 +31,7 @@ public class VentaDAOImpl implements VentaDAO {
 
             while (rs.next()) {
                 l.add(
-                        new Opcion(
+                        new VentaDAO.Opcion(
                                 rs.getInt("id_cliente"),
                                 rs.getString("nombre_cliente")
                                 + " "
@@ -45,7 +45,7 @@ public class VentaDAOImpl implements VentaDAO {
     }
 
     @Override
-    public Opcion crearCliente(
+    public VentaDAO.Opcion crearCliente(
             String cui,
             String nombre,
             String apellido,
@@ -60,7 +60,7 @@ public class VentaDAOImpl implements VentaDAO {
 
         try (Connection c = con(); CallableStatement s
                 = c.prepareCall(
-                        "{call sp_insertarcliente(?,?,?,?,?)}"
+                        "{call sp_insertarcliente(?,?,?,?,?,?)}"
                 )) {
 
             if (cui == null || cui.isBlank()) {
@@ -78,9 +78,11 @@ public class VentaDAOImpl implements VentaDAO {
                     3,
                     apellido.trim()
             );
+            
+            s.setString(4, "CF");
 
             s.setString(
-                    4,
+                    5,
                     correo.trim()
             );
 
@@ -88,7 +90,7 @@ public class VentaDAOImpl implements VentaDAO {
                 s.setNull(5, java.sql.Types.VARCHAR);
             } else {
                 s.setString(
-                        5,
+                        6,
                         telefono.trim()
                 );
             }
@@ -100,7 +102,7 @@ public class VentaDAOImpl implements VentaDAO {
                     int idCliente
                             = rs.getInt("id_cliente");
 
-                    return new Opcion(
+                    return new VentaDAO.Opcion(
                             idCliente,
                             nombreCompleto
                     );
@@ -114,9 +116,9 @@ public class VentaDAOImpl implements VentaDAO {
     }
 
     @Override
-    public List<Funcion> funciones() throws SQLException {
+    public List<VentaDAO.Funcion> funciones() throws SQLException {
 
-        List<Funcion> l = new ArrayList<>();
+        List<VentaDAO.Funcion> l = new ArrayList<>();
 
         String q
                 = "SELECT "
@@ -142,7 +144,7 @@ public class VentaDAOImpl implements VentaDAO {
             while (rs.next()) {
 
                 l.add(
-                        new Funcion(
+                        new VentaDAO.Funcion(
                                 rs.getInt("id_funcion"),
                                 rs.getString("titulo")
                                 + " / "
@@ -159,9 +161,9 @@ public class VentaDAOImpl implements VentaDAO {
     }
 
     @Override
-    public List<Butaca> butacas(int f) throws SQLException {
+    public List<VentaDAO.Butaca> butacas(int f) throws SQLException {
 
-        List<Butaca> l = new ArrayList<>();
+        List<VentaDAO.Butaca> l = new ArrayList<>();
 
         try (
                 Connection c = con(); CallableStatement s
@@ -183,7 +185,7 @@ public class VentaDAOImpl implements VentaDAO {
                             );
 
                     l.add(
-                            new Butaca(
+                            new VentaDAO.Butaca(
                                     rs.getInt("id_butaca"),
                                     rs.getString("fila")
                                     + rs.getInt("numero"),

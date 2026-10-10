@@ -42,4 +42,51 @@ public class ReporteDAOImpl implements ReporteDAO {
     rs.getInt("funciones_pendientes"),rs.getInt("productos_stock_critico"),rs.getInt("ventas_confirmadas"),rs.getBigDecimal("ventas_totales"));
   }
  }
+
+ /** Filtro SQL usando la fecha de venta, igual que el listado existente. */
+ private String condicionFecha(String periodo) {
+  return switch (periodo == null ? "Todas" : periodo) {
+   case "Día" -> " AND DATE(v.fecha_venta)=?";
+   case "Semana" -> " AND YEARWEEK(v.fecha_venta,3)=YEARWEEK(?,3)";
+   case "Mes" -> " AND YEAR(v.fecha_venta)=YEAR(?) AND MONTH(v.fecha_venta)=MONTH(?)";
+   default -> "";
+  };
+ }
+ private void fechaParametros(PreparedStatement ps,String periodo,LocalDate fecha) throws SQLException {
+  if ("Todas".equals(periodo) || periodo == null) return;
+  if (fecha == null) throw new SQLException("Selecciona una fecha.");
+  ps.setDate(1,java.sql.Date.valueOf(fecha));
+  if ("Mes".equals(periodo)) ps.setDate(2,java.sql.Date.valueOf(fecha));
+ }
+ private static final String JOIN_BOLETOS = " FROM ventas v JOIN boletos b ON b.id_venta=v.id_venta "
+     + " JOIN funciones f ON f.id_funcion=b.id_funcion "
+     + " JOIN peliculas p ON p.id_pelicula=f.id_pelicula "
+     + " WHERE v.estado='confirmada' AND b.estado='vendido'";
+ @Override public List<PeliculaEstadistica> peliculasMasVistas(String periodo,LocalDate fecha) throws SQLException {
+  String sql="SELECT p.titulo AS pelicula, COUNT(*) AS boletos, "
+    + "COALESCE(SUM(b.precio_unitario),0) AS ingresos" + JOIN_BOLETOS
+    + condicionFecha(periodo) + " GROUP BY p.id_pelicula,p.titulo ORDER BY boletos DESC, ingresos DESC, p.titulo LIMIT 5";
+  List<PeliculaEstadistica> out=new ArrayList<>();
+  try(Connection c=Conexion.getInstance().getConnection();PreparedStatement ps=c.prepareStatement(sql)) {
+   fechaParametros(ps,periodo,fecha);
+   try(ResultSet rs=ps.executeQuery()){while(rs.next())out.add(new PeliculaEstadistica(rs.getString("pelicula"),rs.getInt("boletos"),rs.getBigDecimal("ingresos")));}
+  }
+  return out;
+ }
+ private java.math.BigDecimal numero(String expresion,String periodo,LocalDate fecha) throws SQLException {
+  String sql="SELECT "+expresion+" AS resultado"+JOIN_BOLETOS+condicionFecha(periodo);
+  try(Connection c=Conexion.getInstance().getConnection();PreparedStatement ps=c.prepareStatement(sql)) {
+   fechaParametros(ps,periodo,fecha);
+   try(ResultSet rs=ps.executeQuery()){return rs.next()?rs.getBigDecimal("resultado"):java.math.BigDecimal.ZERO;}
+  }
+ }
+ @Override public int totalBoletos(String periodo,LocalDate fecha) throws SQLException {
+  return numero("COUNT(*)",periodo,fecha).intValue();
+ }
+ @Override public int funcionesConVentas(String periodo,LocalDate fecha) throws SQLException {
+  return numero("COUNT(DISTINCT f.id_funcion)",periodo,fecha).intValue();
+ }
+ @Override public java.math.BigDecimal ingresosBoletos(String periodo,LocalDate fecha) throws SQLException {
+  return numero("COALESCE(SUM(b.precio_unitario),0)",periodo,fecha);
+ }
 }

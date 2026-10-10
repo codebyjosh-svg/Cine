@@ -1,6 +1,8 @@
 package org.cine.controller;
 
 import java.io.IOException;
+import java.sql.*;
+import org.cine.util.Conexion;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import org.cine.model.Usuario;
@@ -14,6 +16,7 @@ public class DashboardAdminController {
 
     @FXML
     private Label lblRol;
+    @FXML private Label lblKpiUsuarios, lblKpiPeliculas, lblKpiGeneros, lblKpiSalas;
 
     @FXML
     private void initialize() {
@@ -29,6 +32,31 @@ public class DashboardAdminController {
             if (lblRol != null) {
                 lblRol.setText(usuario.getNombreRol());
             }
+        }
+        cargarIndicadoresReales();
+    }
+
+    private void cargarIndicadoresReales() {
+        String sql = "SELECT "
+            + "(SELECT COUNT(*) FROM usuarios) AS usuarios, "
+            + "(SELECT COUNT(*) FROM peliculas) AS peliculas, "
+            + "(SELECT COUNT(*) FROM generos) AS generos, "
+            + "(SELECT COUNT(*) FROM salas) AS salas";
+        try (Connection c = Conexion.getInstance().getConnection();
+             PreparedStatement st = c.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
+            if (rs.next()) {
+                if (lblKpiUsuarios != null) lblKpiUsuarios.setText(rs.getString("usuarios"));
+                if (lblKpiPeliculas != null) lblKpiPeliculas.setText(rs.getString("peliculas"));
+                if (lblKpiGeneros != null) lblKpiGeneros.setText(rs.getString("generos"));
+                if (lblKpiSalas != null) lblKpiSalas.setText(rs.getString("salas"));
+            }
+        } catch (SQLException ex) {
+            System.err.println("No se pudieron cargar los indicadores del Dashboard: " + ex.getMessage());
+            if (lblKpiUsuarios != null) lblKpiUsuarios.setText("—");
+            if (lblKpiPeliculas != null) lblKpiPeliculas.setText("—");
+            if (lblKpiGeneros != null) lblKpiGeneros.setText("—");
+            if (lblKpiSalas != null) lblKpiSalas.setText("—");
         }
     }
 

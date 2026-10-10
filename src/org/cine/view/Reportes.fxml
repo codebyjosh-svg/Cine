@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.chart.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cine.controller.ReportesController" stylesheets="@style/reportes.css">
@@ -8,12 +9,34 @@
   <Label text="Consulta todas las ventas confirmadas por día, semana o mes." styleClass="subtitle"/>
   <HBox spacing="12" alignment="CENTER_LEFT"><Label text="Período:"/><ComboBox fx:id="cmbPeriodo" prefWidth="150"/><Label text="Fecha de referencia:"/><DatePicker fx:id="dpFecha"/><Button text="Actualizar" onAction="#filtrar"/><Button text="Volver al dashboard" onAction="#volver"/></HBox>
  </VBox></top>
- <center><VBox spacing="14"><padding><Insets top="18" right="24" bottom="18" left="24"/></padding>
+ <center><TabPane tabClosingPolicy="UNAVAILABLE">
+  <tabs>
+   <Tab text="Listado de ventas" closable="false"><content><VBox spacing="14"><padding><Insets top="18" right="24" bottom="18" left="24"/></padding>
   <TableView fx:id="tablaVentas" VBox.vgrow="ALWAYS">
    <placeholder><Label text="No hay ventas para mostrar"/></placeholder>
    <columns><TableColumn fx:id="colId" text="No. venta" prefWidth="90"/><TableColumn fx:id="colFecha" text="Fecha" prefWidth="145"/><TableColumn fx:id="colCliente" text="Cliente" prefWidth="210"/><TableColumn fx:id="colTaquillero" text="Taquillero" prefWidth="180"/><TableColumn fx:id="colBoletos" text="Boletos" prefWidth="90"/><TableColumn fx:id="colTotal" text="Total" prefWidth="140"/></columns>
   </TableView>
   <HBox alignment="CENTER_RIGHT" spacing="28"><Label fx:id="lblCantidad" text="Ventas: 0" styleClass="summary"/><Label fx:id="lblTotal" text="Total: Q 0.00" styleClass="summary"/></HBox>
   <Label fx:id="lblEstado" text="" wrapText="true" styleClass="status"/>
- </VBox></center>
+ </VBox></content></Tab>
+   <Tab text="Estadísticas y películas más vistas" closable="false"><content>
+ <VBox spacing="12" style="-fx-padding: 15 22 15 22; -fx-background-color: #f5f7fb;">
+  <HBox spacing="12" alignment="CENTER_LEFT">
+   <VBox spacing="4" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 7;"><Label text="PELÍCULA MÁS VISTA"/><Label fx:id="lblMasVista" text="—" style="-fx-font-size: 17px; -fx-font-weight: bold;"/></VBox>
+   <VBox spacing="4" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 7;"><Label text="BOLETOS VENDIDOS"/><Label fx:id="lblBoletosPeriodo" text="0" style="-fx-font-size: 17px; -fx-font-weight: bold;"/></VBox>
+   <VBox spacing="4" style="-fx-background-color: white; -fx-padding: 12; -fx-background-radius: 7;"><Label text="FUNCIONES CON VENTAS"/><Label fx:id="lblFuncionesConVentas" text="0" style="-fx-font-size: 17px; -fx-font-weight: bold;"/></VBox>
+  </HBox>
+  <HBox spacing="16"><Label text="Ingresos boletos:"/><Label fx:id="lblIngresosBoletos" text="Q 0.00"/><Label text="Ingresos Confitería (estimados):"/><Label fx:id="lblIngresosConfiteria" text="Q 0.00"/></HBox>
+  <Label text="Películas más vistas — Top 5" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+  <BarChart fx:id="graficaPeliculas" animated="false" legendVisible="false" prefHeight="225" VBox.vgrow="ALWAYS">
+   <xAxis><CategoryAxis label="Película"/></xAxis><yAxis><NumberAxis label="Boletos" tickUnit="1"/></yAxis>
+  </BarChart>
+  <TableView fx:id="tablaPeliculas" prefHeight="150" VBox.vgrow="ALWAYS">
+   <columns><TableColumn fx:id="colPelicula" text="Película" prefWidth="320"/><TableColumn fx:id="colAsistencia" text="Boletos vendidos" prefWidth="160"/><TableColumn fx:id="colIngresosPelicula" text="Ingresos boletos" prefWidth="190"/></columns>
+  </TableView>
+  <Label text="Se cuentan únicamente boletos vendidos de ventas confirmadas. Los filtros superiores aplican a ambas pestañas." wrapText="true"/>
+ </VBox>
+</content></Tab>
+  </tabs>
+ </TabPane></center>
 </BorderPane>

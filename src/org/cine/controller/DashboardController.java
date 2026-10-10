@@ -29,6 +29,11 @@ public class DashboardController {
     private void abrirConfiteria() throws IOException { Principal.mostrarConfiteria(); }
 
     @FXML
+    private void abrirCartelera() throws IOException {
+        Principal.mostrarCartelera();
+    }
+
+    @FXML
     private void cerrarSesion() throws IOException {
         Principal.cerrarSesion();
     }

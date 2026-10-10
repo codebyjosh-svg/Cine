@@ -416,7 +416,7 @@
                                     <Label text="U"
                                            styleClass="kpi-letter"/>
 
-                                    <Label text="4"
+                                    <Label fx:id="lblKpiUsuarios" text="—"
                                            styleClass="kpi-number"/>
 
                                 </HBox>
@@ -439,7 +439,7 @@
                                     <Label text="P"
                                            styleClass="kpi-letter"/>
 
-                                    <Label text="10"
+                                    <Label fx:id="lblKpiPeliculas" text="—"
                                            styleClass="kpi-number"/>
 
                                 </HBox>
@@ -462,7 +462,7 @@
                                     <Label text="G"
                                            styleClass="kpi-letter"/>
 
-                                    <Label text="10"
+                                    <Label fx:id="lblKpiGeneros" text="—"
                                            styleClass="kpi-number"/>
 
                                 </HBox>
@@ -485,7 +485,7 @@
                                     <Label text="S"
                                            styleClass="kpi-letter"/>
 
-                                    <Label text="0"
+                                    <Label fx:id="lblKpiSalas" text="—"
                                            styleClass="kpi-number"/>
 
                                 </HBox>
@@ -493,7 +493,7 @@
                                 <Label text="Salas"
                                        styleClass="kpi-title"/>
 
-                                <Label text="Módulo en desarrollo"
+                                <Label text="Salas registradas"
                                        styleClass="kpi-description"/>
 
                             </VBox>
