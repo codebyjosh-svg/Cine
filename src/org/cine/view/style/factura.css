@@ -1,0 +1,334 @@
+/* =========================================================
+   CINEMA - FACTURA
+   ========================================================= */
+
+.factura-root {
+    -fx-background-color: #f3f6fb;
+    -fx-font-family: "Segoe UI";
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+    -fx-background-color: #0b1730;
+}
+
+.brand-logo {
+    -fx-background-color: #ef1838;
+    -fx-background-radius: 7;
+}
+
+.brand-letter {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.brand-title {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.header-separator {
+    -fx-text-fill: #71809c;
+    -fx-font-size: 18px;
+}
+
+.header-section {
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.header-back-button {
+    -fx-background-color: #263a5d;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-padding: 8 14 8 14;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.header-back-button:hover {
+    -fx-background-color: #31517e;
+}
+
+
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
+
+.main-content {
+    -fx-background-color: #f3f6fb;
+}
+
+
+/* =========================================================
+   FACTURA
+   ========================================================= */
+
+.invoice-paper {
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-border-color: #dce3ed;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-padding: 24;
+    -fx-effect: dropshadow(
+        gaussian,
+        rgba(30, 50, 80, 0.13),
+        12,
+        0.15,
+        0,
+        3
+    );
+}
+
+.invoice-company {
+    -fx-text-fill: #071b3d;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.invoice-subtitle {
+    -fx-text-fill: #71809a;
+    -fx-font-size: 9px;
+}
+
+.small-label {
+    -fx-text-fill: #77849a;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+}
+
+.invoice-number {
+    -fx-text-fill: #142b53;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.field-label {
+    -fx-text-fill: #7a8799;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.field-value {
+    -fx-text-fill: #162744;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.status-confirmed {
+    -fx-background-color: #d8f8e5;
+    -fx-text-fill: #138449;
+    -fx-background-radius: 4;
+    -fx-padding: 5 9 5 9;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+
+/* =========================================================
+   DETALLE
+   ========================================================= */
+
+.detail-title {
+    -fx-text-fill: #172c4d;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.invoice-detail {
+    -fx-background-color: #fbfcfe;
+    -fx-control-inner-background: #fbfcfe;
+    -fx-border-color: #e2e7ef;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-font-family: "Consolas";
+    -fx-font-size: 11px;
+    -fx-text-fill: #283a55;
+    -fx-padding: 10;
+}
+
+.invoice-detail .content {
+    -fx-background-color: #fbfcfe;
+}
+
+.invoice-detail:focused {
+    -fx-border-color: #cdd7e5;
+}
+
+
+/* =========================================================
+   TOTAL
+   ========================================================= */
+
+.total-section {
+    -fx-border-color: #dfe5ed transparent transparent transparent;
+    -fx-border-width: 1;
+    -fx-padding: 12 0 4 0;
+}
+
+.total-label {
+    -fx-text-fill: #77849a;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.total-value {
+    -fx-text-fill: #164ce0;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+
+/* =========================================================
+   CODIGO
+   ========================================================= */
+
+.barcode-section {
+    -fx-padding: 5 0 0 0;
+}
+
+.barcode {
+    -fx-text-fill: #17243a;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 2px;
+}
+
+.barcode-text {
+    -fx-text-fill: #8894a7;
+    -fx-font-size: 7px;
+}
+
+.invoice-footer {
+    -fx-text-fill: #8a95a7;
+    -fx-font-size: 8px;
+    -fx-alignment: center;
+}
+
+
+/* =========================================================
+   PANEL LATERAL
+   ========================================================= */
+
+.side-card {
+    -fx-background-color: white;
+    -fx-background-radius: 6;
+    -fx-border-color: #dce3ed;
+    -fx-border-radius: 6;
+    -fx-border-width: 1;
+    -fx-padding: 15;
+}
+
+.side-title {
+    -fx-text-fill: #173158;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.side-button {
+    -fx-background-color: #f6f8fb;
+    -fx-border-color: #dce3ed;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-text-fill: #263a58;
+    -fx-font-size: 10px;
+    -fx-padding: 8 10 8 10;
+}
+
+.side-button:hover {
+    -fx-background-color: #edf2f9;
+}
+
+.side-button-disabled {
+    -fx-background-color: #f1f3f6;
+    -fx-border-color: #e1e5ea;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-text-fill: #aab2bd;
+    -fx-font-size: 10px;
+}
+
+.invoice-search {
+    -fx-background-color: white;
+    -fx-border-color: #cfd8e6;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 8;
+    -fx-font-size: 11px;
+}
+
+.invoice-search:focused {
+    -fx-border-color: #2860e8;
+}
+
+.consult-button {
+    -fx-background-color: #2860e8;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+    -fx-padding: 9;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.consult-button:hover {
+    -fx-background-color: #1f4fc7;
+}
+
+
+/* =========================================================
+   EMISOR
+   ========================================================= */
+
+.emisor-main {
+    -fx-text-fill: #233a5d;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.emisor-detail {
+    -fx-text-fill: #7d899a;
+    -fx-font-size: 9px;
+}
+
+
+/* =========================================================
+   ESTADO DEL SISTEMA
+   ========================================================= */
+
+.system-status {
+    -fx-background-color: #e8f8ee;
+    -fx-background-radius: 5;
+    -fx-padding: 9;
+}
+
+.status-dot {
+    -fx-text-fill: #11a85a;
+    -fx-font-size: 10px;
+}
+
+.system-status-text {
+    -fx-text-fill: #267448;
+    -fx-font-size: 9px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.footer {
+    -fx-background-color: #0b1730;
+}
+
+.footer-text {
+    -fx-text-fill: #aebbd0;
+    -fx-font-size: 8px;
+}

@@ -1,0 +1,19 @@
+Bibliotecas incluidas, con rutas relativas al proyecto.
+
+JavaFX 21.0.11 para Windows x64:
+  javafx-21.0.11/javafx.base.jar
+  javafx-21.0.11/javafx.graphics.jar
+  javafx-21.0.11/javafx.controls.jar
+  javafx-21.0.11/javafx.fxml.jar
+Artefactos oficiales org.openjfx con classifier win, renombrados para NetBeans.
+javafx.graphics.jar incluye las bibliotecas nativas DLL de Windows.
+Licencia: GPL version 2 con Classpath Exception. Ver LICENSE-JAVAFX.txt.
+Documentacion: https://openjfx.io/openjfx-docs/
+
+MySQL Connector/J 8.0.33:
+  mysql-connector-j-8.0.33.jar
+Se conserva la version que venia en el proyecto recibido.
+Licencias y avisos en LICENSE, INFO_BIN e INFO_SRC dentro del JAR.
+Documentacion: https://dev.mysql.com/doc/connector-j/en/
+
+Se necesitan JDK 21 y MySQL Server instalados en el equipo.

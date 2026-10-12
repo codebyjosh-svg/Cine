@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<AnchorPane prefHeight="540.0" prefWidth="860.0" stylesheets="@style/login.css" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cine.controller.LoginController">
+    <children>
+        <VBox alignment="CENTER" layoutX="230.0" layoutY="70.0" prefHeight="400.0" prefWidth="400.0" spacing="16.0" styleClass="login-card">
+            <children>
+                <Label text="CINEMA" styleClass="title" />
+                <Label text="Inicio de sesión" styleClass="subtitle" />
+                <TextField fx:id="txtUsername" maxWidth="290.0" promptText="Usuario" onAction="#iniciarSesion" />
+                <PasswordField fx:id="txtPassword" maxWidth="290.0" promptText="Contraseña" onAction="#iniciarSesion" />
+                <Label fx:id="lblMensaje" maxWidth="290.0" wrapText="true" styleClass="message" />
+                <Button fx:id="btnIngresar" maxWidth="290.0" mnemonicParsing="false" onAction="#iniciarSesion" text="Ingresar" styleClass="primary-button" />
+                <Button maxWidth="290.0" mnemonicParsing="false" onAction="#limpiar" text="Limpiar" styleClass="secondary-button" />
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

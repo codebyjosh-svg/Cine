@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cine.controller.GeneroController"
+            stylesheets="@style/generos.css"
+            styleClass="generos-root"
+            prefWidth="1100.0"
+            prefHeight="700.0"
+            minWidth="900.0"
+            minHeight="620.0">
+
+    <!-- ========================= -->
+    <!-- BARRA SUPERIOR -->
+    <!-- ========================= -->
+
+    <top>
+
+        <HBox alignment="CENTER_LEFT"
+              spacing="15.0"
+              prefHeight="64.0"
+              styleClass="top-bar">
+
+            <padding>
+                <Insets top="10.0"
+                        right="22.0"
+                        bottom="10.0"
+                        left="22.0"/>
+            </padding>
+
+            <VBox spacing="1.0">
+
+                <Label text="CINE"
+                       styleClass="brand-label"/>
+
+                <Label text="Sistema de Gestión"
+                       styleClass="brand-subtitle"/>
+
+            </VBox>
+
+            <Label text="Gestión de Géneros"
+                   styleClass="top-section-title"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Button text="← Regresar al Dashboard"
+                    styleClass="back-button"
+                    onAction="#regresarDashboard"/>
+
+        </HBox>
+
+    </top>
+
+
+    <!-- ========================= -->
+    <!-- CONTENIDO -->
+    <!-- ========================= -->
+
+    <center>
+
+        <VBox spacing="14.0"
+              fillWidth="true"
+              styleClass="content-container">
+
+            <!-- TÍTULO -->
+
+            <VBox spacing="3.0"
+                  styleClass="page-heading">
+
+                <Label text="Gestión de Géneros"
+                       styleClass="page-title"/>
+
+                <Label text="Administra los géneros disponibles para las películas del cine."
+                       styleClass="page-subtitle"/>
+
+            </VBox>
+
+
+            <!-- ========================= -->
+            <!-- FORMULARIO -->
+            <!-- ========================= -->
+
+            <VBox spacing="12.0"
+                  styleClass="card"
+                  minHeight="205.0"
+                  maxHeight="225.0">
+
+                <!-- ENCABEZADO -->
+
+                <HBox alignment="CENTER_LEFT">
+
+                    <VBox spacing="2.0">
+
+                        <Label text="Información del género"
+                               styleClass="section-title"/>
+
+                        <Label text="Complete los datos del género"
+                               styleClass="section-subtitle"/>
+
+                    </VBox>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <HBox alignment="CENTER_RIGHT"
+                          spacing="7.0">
+
+                        <Label text="Estado:"
+                               styleClass="state-caption"/>
+
+                        <Label fx:id="lblEstado"
+                               text="Nuevo - se guardará como Activo"
+                               styleClass="status-badge"/>
+
+                    </HBox>
+
+                </HBox>
+
+                <Separator/>
+
+
+                <!-- CAMPOS -->
+
+                <GridPane hgap="18.0"
+                          vgap="6.0"
+                          maxHeight="90.0">
+
+                    <columnConstraints>
+
+                        <ColumnConstraints percentWidth="42.0"/>
+
+                        <ColumnConstraints percentWidth="58.0"/>
+
+                    </columnConstraints>
+
+                    <rowConstraints>
+
+                        <RowConstraints minHeight="22.0"/>
+
+                        <RowConstraints minHeight="58.0"/>
+
+                    </rowConstraints>
+
+
+                    <!-- NOMBRE -->
+
+                    <VBox spacing="4.0"
+                          GridPane.columnIndex="0"
+                          GridPane.rowIndex="0">
+
+                        <Label text="NOMBRE *"
+                               styleClass="field-label"/>
+
+                        <TextField fx:id="txtNombreGenero"
+                                   promptText="Nombre del género"
+                                   styleClass="form-field"
+                                   prefHeight="32.0"/>
+
+                    </VBox>
+
+
+                    <!-- DESCRIPCIÓN -->
+
+                    <VBox spacing="4.0"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="0"
+                          GridPane.rowSpan="2">
+
+                        <Label text="DESCRIPCIÓN"
+                               styleClass="field-label"/>
+
+                        <TextArea fx:id="txtDescripcion"
+                                  promptText="Descripción del género"
+                                  wrapText="true"
+                                  prefHeight="58.0"
+                                  maxHeight="58.0"
+                                  styleClass="form-textarea"/>
+
+                    </VBox>
+
+
+                    <!-- AYUDA -->
+
+                    <Label text="Nombre único con el que se identificará el género en cartelera."
+                           styleClass="field-help"
+                           GridPane.columnIndex="0"
+                           GridPane.rowIndex="1"/>
+
+                </GridPane>
+
+
+                <!-- ========================= -->
+                <!-- BOTONES -->
+                <!-- ========================= -->
+
+                <HBox alignment="CENTER_LEFT"
+                      spacing="8.0">
+
+                    <Button fx:id="btnGuardar"
+                            text="▣  Guardar"
+                            onAction="#guardarGenero"
+                            styleClass="button-primary"/>
+
+                    <Button fx:id="btnEditar"
+                            text="✎  Editar"
+                            onAction="#editarGenero"
+                            styleClass="button-edit"/>
+
+                    <Button fx:id="btnEliminar"
+                            text="▣  Eliminar"
+                            onAction="#eliminarGenero"
+                            styleClass="button-danger"/>
+
+                    <Button fx:id="btnActivar"
+                            text="●  Activar"
+                            onAction="#activarGenero"
+                            styleClass="button-success"/>
+
+                    <Button fx:id="btnDesactivar"
+                            text="●  Desactivar"
+                            onAction="#desactivarGenero"
+                            styleClass="button-warning"/>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Button fx:id="btnLimpiar"
+                            text="↻  Limpiar"
+                            onAction="#limpiarFormulario"
+                            styleClass="button-secondary"/>
+
+                </HBox>
+
+            </VBox>
+
+
+            <!-- ========================= -->
+            <!-- TABLA -->
+            <!-- ========================= -->
+
+            <VBox spacing="10.0"
+                  styleClass="card table-card"
+                  VBox.vgrow="ALWAYS">
+
+                <!-- ENCABEZADO DE TABLA -->
+
+                <HBox alignment="CENTER_LEFT">
+
+                    <VBox spacing="2.0">
+
+                        <Label text="Géneros registrados"
+                               styleClass="section-title"/>
+
+                        <Label text="Catálogo de géneros del cine"
+                               styleClass="section-subtitle"/>
+
+                    </VBox>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <HBox spacing="8.0"
+                          alignment="CENTER_RIGHT">
+
+                        <Label text="Catálogo"
+                               styleClass="table-count-badge"/>
+
+                        <TextField promptText="Buscar género..."
+                                   prefWidth="145.0"
+                                   styleClass="search-field"/>
+
+                        <Button text="↻"
+                                styleClass="refresh-button"/>
+
+                    </HBox>
+
+                </HBox>
+
+                <Separator/>
+
+
+                <!-- TABLEVIEW -->
+
+                <TableView fx:id="tbGeneros"
+                           onMouseClicked="#seleccionarGenero"
+                           styleClass="generos-table"
+                           VBox.vgrow="ALWAYS"
+                           minHeight="250.0">
+
+                    <columns>
+
+                        <TableColumn fx:id="colIdGenero"
+                                     text="ID"
+                                     prefWidth="65.0"
+                                     minWidth="55.0"/>
+
+                        <TableColumn fx:id="colNombreGenero"
+                                     text="NOMBRE"
+                                     prefWidth="190.0"
+                                     minWidth="130.0"/>
+
+                        <TableColumn fx:id="colDescripcion"
+                                     text="DESCRIPCIÓN"
+                                     prefWidth="520.0"
+                                     minWidth="250.0"/>
+
+                        <TableColumn fx:id="colEstado"
+                                     text="ESTADO"
+                                     prefWidth="125.0"
+                                     minWidth="100.0"/>
+
+                    </columns>
+
+                    <placeholder>
+
+                        <Label text="No hay géneros registrados."
+                               styleClass="empty-table-label"/>
+
+                    </placeholder>
+
+                </TableView>
+
+
+                <!-- PIE -->
+
+                <HBox alignment="CENTER_LEFT">
+
+                    <Label text="Seleccione un género para consultar o editar."
+                           styleClass="table-help-label"/>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Label text="Los cambios se reflejan inmediatamente."
+                           styleClass="table-help-label"/>
+
+                </HBox>
+
+            </VBox>
+
+        </VBox>
+
+    </center>
+
+</BorderPane>

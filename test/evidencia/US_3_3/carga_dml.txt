@@ -1,0 +1,118 @@
+id_funcion
+1
+id_funcion
+2
+id_funcion
+3
+id_funcion
+4
+id_funcion
+5
+id_funcion
+6
+id_funcion
+7
+id_funcion
+8
+id_funcion
+9
+id_venta
+1
+id_boleto
+1
+id_boleto
+2
+id_venta	fecha_venta	id_cliente	cui	cliente	correo_electronico	id_usuario	taquillero	estado	fecha_confirmacion	fecha_anulacion	motivo_anulacion	cantidad_boletos	total_boletos	total_productos	total_venta
+1	2026-10-09 10:07:50	1	2000100010101	Ana López	cliente01@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	2	70.00	80.00	150.00
+id_venta
+2
+id_boleto
+3
+id_venta	fecha_venta	id_cliente	cui	cliente	correo_electronico	id_usuario	taquillero	estado	fecha_confirmacion	fecha_anulacion	motivo_anulacion	cantidad_boletos	total_boletos	total_productos	total_venta
+2	2026-10-09 10:07:50	2	2000100020101	Carlos Méndez	cliente02@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	1	40.00	50.00	90.00
+id_venta
+3
+id_boleto
+4
+id_boleto
+5
+id_venta	fecha_venta	id_cliente	cui	cliente	correo_electronico	id_usuario	taquillero	estado	fecha_confirmacion	fecha_anulacion	motivo_anulacion	cantidad_boletos	total_boletos	total_productos	total_venta
+3	2026-10-09 10:07:50	3	2000100030101	Luis Pérez	cliente03@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	2	90.00	24.00	114.00
+id_venta
+4
+id_boleto
+6
+id_venta	fecha_venta	id_cliente	cui	cliente	correo_electronico	id_usuario	taquillero	estado	fecha_confirmacion	fecha_anulacion	motivo_anulacion	cantidad_boletos	total_boletos	total_productos	total_venta
+4	2026-10-09 10:07:50	4	2000100040101	María García	cliente04@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	1	35.00	30.00	65.00
+id_venta
+5
+id_boleto
+7
+id_venta	fecha_venta	id_cliente	cui	cliente	correo_electronico	id_usuario	taquillero	estado	fecha_confirmacion	fecha_anulacion	motivo_anulacion	cantidad_boletos	total_boletos	total_productos	total_venta
+5	2026-10-09 10:07:50	5	2000100050101	Jorge Castillo	cliente05@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	1	35.00	25.00	60.00
+id_cliente	cui	nombre_cliente	apellido_cliente	cliente	correo_electronico	telefono	estado	fecha_registro
+1	2000100010101	Ana	López	Ana López	cliente01@example.com	50000001	1	2026-10-09 10:07:50
+2	2000100020101	Carlos	Méndez	Carlos Méndez	cliente02@example.com	50000002	1	2026-10-09 10:07:50
+3	2000100030101	Luis	Pérez	Luis Pérez	cliente03@example.com	50000003	1	2026-10-09 10:07:50
+4	2000100040101	María	García	María García	cliente04@example.com	50000004	1	2026-10-09 10:07:50
+5	2000100050101	Jorge	Castillo	Jorge Castillo	cliente05@example.com	50000005	1	2026-10-09 10:07:50
+6	2000100060101	Lucía	Fernández	Lucía Fernández	cliente06@example.com	50000006	1	2026-10-09 10:07:50
+7	2000100070101	Mario	Gómez	Mario Gómez	cliente07@example.com	50000007	1	2026-10-09 10:07:50
+8	2000100080101	Elena	Morales	Elena Morales	cliente08@example.com	50000008	1	2026-10-09 10:07:50
+9	2000100090101	Pedro	Ramírez	Pedro Ramírez	cliente09@example.com	50000009	1	2026-10-09 10:07:50
+10	2000100100101	Sofía	Vásquez	Sofía Vásquez	cliente10@example.com	50000010	1	2026-10-09 10:07:50
+11	NULL	Diego	Hernández	Diego Hernández	cliente11@example.com	50000011	1	2026-10-09 10:07:50
+12	NULL	Camila	Cruz	Camila Cruz	cliente12@example.com	50000012	0	2026-10-09 10:07:50
+id_pelicula	titulo	sinopsis	director	duracion_minutos	clasificacion	idioma	fecha_estreno	id_genero	nombre_genero	estado
+1	La última misión	Un equipo intenta recuperar un dispositivo perdido.	Daniel Ríos	100	12+	Español	2026-09-01	1	Acción	1
+2	Un día de locos	Dos amigos confunden sus maletas durante un viaje.	Laura Montes	95	Todo público	Español	2026-09-05	2	Comedia	1
+3	Amigos del bosque	Un grupo de animales busca un nuevo hogar.	Pablo Luna	90	Todo público	Español	2026-09-08	4	Animación	1
+4	El faro escondido	Una familia descubre un secreto en la costa.	Elena Solís	110	12+	Español	2026-09-10	3	Drama	1
+5	La casa del silencio	Un visitante escucha sonidos en una casa abandonada.	Óscar Vega	105	15+	Español	2026-09-12	5	Terror	1
+6	Ruta a las estrellas	Un grupo de estudiantes participa en una misión espacial.	Marina Cruz	120	12+	Español	2026-09-15	7	Ciencia ficción	1
+7	El mapa perdido	Dos hermanos siguen las pistas de un antiguo mapa.	Tomás Lara	100	Todo público	Español	2026-09-18	6	Aventura	1
+8	Puertas del mañana	Una inventora construye una máquina para observar el futuro.	Sara Peña	115	12+	Español	2026-09-20	7	Ciencia ficción	0
+id_sala	nombre_sala	formato	estado	capacidad
+1	Sala 1	2D	1	24
+2	Sala 2	2D	1	24
+3	Sala 3	3D	1	23
+id_funcion	id_pelicula	titulo	id_genero	nombre_genero	duracion_minutos	clasificacion	idioma	id_sala	nombre_sala	formato	fecha_inicio	fecha_fin	precio_boleto	estado	capacidad	boletos_reservados	boletos_vendidos	butacas_disponibles
+1	1	La última misión	1	Acción	100	12+	Español	1	Sala 1	2D	2026-10-10 14:00:00	2026-10-10 16:00:00	35.00	programada	24	0	2	22
+2	2	Un día de locos	2	Comedia	95	Todo público	Español	2	Sala 2	2D	2026-10-10 14:00:00	2026-10-10 15:55:00	40.00	programada	24	0	1	23
+3	3	Amigos del bosque	4	Animación	90	Todo público	Español	3	Sala 3	3D	2026-10-10 14:00:00	2026-10-10 15:50:00	45.00	programada	23	0	2	21
+4	4	El faro escondido	3	Drama	110	12+	Español	1	Sala 1	2D	2026-10-10 18:00:00	2026-10-10 20:10:00	35.00	programada	24	0	1	23
+5	5	La casa del silencio	5	Terror	105	15+	Español	2	Sala 2	2D	2026-10-10 18:00:00	2026-10-10 20:05:00	40.00	programada	24	0	0	24
+6	6	Ruta a las estrellas	7	Ciencia ficción	120	12+	Español	3	Sala 3	3D	2026-10-10 18:00:00	2026-10-10 20:20:00	45.00	programada	23	0	0	23
+7	7	El mapa perdido	6	Aventura	100	Todo público	Español	1	Sala 1	2D	2026-10-11 14:00:00	2026-10-11 16:00:00	35.00	programada	24	0	0	24
+8	4	El faro escondido	3	Drama	110	12+	Español	2	Sala 2	2D	2026-10-11 14:00:00	2026-10-11 16:10:00	40.00	programada	24	0	0	24
+9	3	Amigos del bosque	4	Animación	90	Todo público	Español	3	Sala 3	3D	2026-10-11 14:00:00	2026-10-11 15:50:00	45.00	programada	23	0	0	23
+id_venta	fecha_venta	id_cliente	cui	cliente	correo_electronico	id_usuario	taquillero	estado	fecha_confirmacion	fecha_anulacion	motivo_anulacion	cantidad_boletos	total_boletos	total_productos	total_venta
+1	2026-10-09 10:07:50	1	2000100010101	Ana López	cliente01@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	2	70.00	80.00	150.00
+2	2026-10-09 10:07:50	2	2000100020101	Carlos Méndez	cliente02@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	1	40.00	50.00	90.00
+3	2026-10-09 10:07:50	3	2000100030101	Luis Pérez	cliente03@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	2	90.00	24.00	114.00
+4	2026-10-09 10:07:50	4	2000100040101	María García	cliente04@example.com	2	Carlos Mejía	anulada	2026-10-09 10:07:50	2026-10-09 10:07:50	Anulación de demostración solicitada por el cliente	1	35.00	30.00	65.00
+5	2026-10-09 10:07:50	5	2000100050101	Jorge Castillo	cliente05@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	1	35.00	25.00	60.00
+id_producto	nombre_producto	descripcion	precio	stock	stock_minimo	id_categoria_producto	nombre_categoria	estado
+8	Bolsa de dulces	Bolsa individual de golosinas.	10.00	8	10	4	Dulces	1
+id_venta	fecha_emision	id_cliente	cui	cliente	correo_electronico	id_usuario	taquillero	estado_venta	tipo_articulo	id_linea	descripcion	cantidad	precio_unitario	subtotal	total_venta
+1	2026-10-09 10:07:50	1	2000100010101	Ana López	cliente01@example.com	2	Carlos Mejía	confirmada	boleto	1	Boleto: La última misión / Sala 1 / A1 / 2026-10-10 14:00	1	35.00	35.00	150.00
+1	2026-10-09 10:07:50	1	2000100010101	Ana López	cliente01@example.com	2	Carlos Mejía	confirmada	boleto	2	Boleto: La última misión / Sala 1 / A2 / 2026-10-10 14:00	1	35.00	35.00	150.00
+1	2026-10-09 10:07:50	1	2000100010101	Ana López	cliente01@example.com	2	Carlos Mejía	confirmada	producto	1	Palomitas pequeñas	2	25.00	50.00	150.00
+1	2026-10-09 10:07:50	1	2000100010101	Ana López	cliente01@example.com	2	Carlos Mejía	confirmada	producto	3	Refresco mediano	2	15.00	30.00	150.00
+id_venta	fecha_venta	id_cliente	cui	cliente	correo_electronico	id_usuario	taquillero	estado	fecha_confirmacion	fecha_anulacion	motivo_anulacion	cantidad_boletos	total_boletos	total_productos	total_venta
+1	2026-10-09 10:07:50	1	2000100010101	Ana López	cliente01@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	2	70.00	80.00	150.00
+2	2026-10-09 10:07:50	2	2000100020101	Carlos Méndez	cliente02@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	1	40.00	50.00	90.00
+3	2026-10-09 10:07:50	3	2000100030101	Luis Pérez	cliente03@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	2	90.00	24.00	114.00
+5	2026-10-09 10:07:50	5	2000100050101	Jorge Castillo	cliente05@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	1	35.00	25.00	60.00
+id_venta	fecha_venta	id_cliente	cui	cliente	correo_electronico	id_usuario	taquillero	estado	fecha_confirmacion	fecha_anulacion	motivo_anulacion	cantidad_boletos	total_boletos	total_productos	total_venta
+1	2026-10-09 10:07:50	1	2000100010101	Ana López	cliente01@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	2	70.00	80.00	150.00
+2	2026-10-09 10:07:50	2	2000100020101	Carlos Méndez	cliente02@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	1	40.00	50.00	90.00
+3	2026-10-09 10:07:50	3	2000100030101	Luis Pérez	cliente03@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	2	90.00	24.00	114.00
+5	2026-10-09 10:07:50	5	2000100050101	Jorge Castillo	cliente05@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	1	35.00	25.00	60.00
+id_venta	fecha_venta	id_cliente	cui	cliente	correo_electronico	id_usuario	taquillero	estado	fecha_confirmacion	fecha_anulacion	motivo_anulacion	cantidad_boletos	total_boletos	total_productos	total_venta
+1	2026-10-09 10:07:50	1	2000100010101	Ana López	cliente01@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	2	70.00	80.00	150.00
+2	2026-10-09 10:07:50	2	2000100020101	Carlos Méndez	cliente02@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	1	40.00	50.00	90.00
+3	2026-10-09 10:07:50	3	2000100030101	Luis Pérez	cliente03@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	2	90.00	24.00	114.00
+5	2026-10-09 10:07:50	5	2000100050101	Jorge Castillo	cliente05@example.com	2	Carlos Mejía	confirmada	2026-10-09 10:07:50	NULL	NULL	1	35.00	25.00	60.00
+peliculas_activas	clientes_activos	usuarios_activos	funciones_pendientes	productos_stock_critico	ventas_confirmadas	ventas_totales
+7	11	4	9	1	4	414.00

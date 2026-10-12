@@ -1,0 +1,32 @@
+CINE(6) - CORRECCION DEL ARRANQUE EN NETBEANS
+
+1. Cierra el proyecto anterior y extrae TODO el ZIP en una carpeta nueva.
+   Abre en NetBeans la carpeta Cine que contiene build.xml y nbproject.
+2. Selecciona JDK 21 en Properties > Libraries > Java Platform.
+3. JavaFX 21.0.11 para Windows x64 y MySQL Connector/J 8.0.33 estan incluidos
+   en lib/. Las cinco bibliotecas ya estan en Classpath con rutas relativas.
+   No necesitas crear bibliotecas globales de NetBeans ni copiar un SDK.
+4. La clase principal es org.cine.system.Lanzador. Run > VM Options queda
+   vacio. Modulepath tambien queda vacio. Usa Run Project (F6).
+5. En src/db.properties escribe tu contrasena MySQL de IN4CM, la que usas
+   en Workbench. La configuracion incluida usa localhost:3306/cinedb_in4cm.
+   La contrasena MySQL recibida estaba vacia y se conserva asi.
+6. Ejecuta Clean and Build y despues Run Project.
+
+Se retiro de run.jvmargs la ruta C:\Users\emili\... que no existe en tu equipo.
+Se eliminaron las dependencias de bibliotecas globales JavaFX21, javafx21,
+Mysql_Connector_8 y connection_sql_8. Tambien se retiro la ruta local de
+NetBeans 29 que venia en las propiedades privadas del archivo adjunto.
+
+Los dos SQL existentes se conservan. Para una base nueva, usa primero el
+DDL y despues el DML del proyecto. Para una base ya instalada, configura
+la conexion con esa base; esta correccion de JavaFX no requiere reinstalarla.
+
+La cuenta de ejemplo de la aplicacion es admin.cine / AdminCine2026!.
+Esa clave es del login del cine; db.password debe llevar la de MySQL.
+
+Al ejecutar JavaFX desde Classpath puede aparecer el aviso
+"Unsupported JavaFX configuration: classes were loaded from 'unnamed module'".
+En las pruebas no impidio abrir ni utilizar las pantallas.
+
+Consulta VERIFICACION_JAVAFX.txt para las comprobaciones realizadas.

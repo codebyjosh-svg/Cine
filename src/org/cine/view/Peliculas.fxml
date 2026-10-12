@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane minHeight="700" minWidth="1050" styleClass="peliculas-root" stylesheets="@style/peliculas.css" xmlns="http://javafx.com/javafx/21.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.cine.controller.PeliculasController">
+
+    <!-- ===================================================== -->
+    <!-- BARRA SUPERIOR -->
+    <!-- ===================================================== -->
+
+    <top>
+
+        <HBox alignment="CENTER_LEFT" prefHeight="64" spacing="15" styleClass="top-bar">
+
+            <padding>
+                <Insets bottom="10" left="22" right="22" top="10" />
+            </padding>
+
+            <VBox spacing="2">
+
+                <Label styleClass="brand-label" text="CINE" />
+
+                <Label styleClass="brand-subtitle" text="Sistema de Gestión" />
+
+            </VBox>
+
+            <Label styleClass="top-section-title" text="Gestión de Películas" />
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <Button onAction="#regresarDashboard" styleClass="back-button" text="← Regresar al Dashboard" />
+
+        </HBox>
+
+    </top>
+
+
+    <!-- ===================================================== -->
+    <!-- CONTENIDO PRINCIPAL -->
+    <!-- ===================================================== -->
+
+    <center>
+
+        <VBox fillWidth="true" spacing="8" styleClass="content-container">
+
+
+            <!-- ================================================= -->
+            <!-- TITULO DE LA PANTALLA -->
+            <!-- ================================================= -->
+
+            <VBox maxHeight="46" minHeight="46" prefHeight="46" spacing="2" styleClass="page-heading">
+
+                <Label styleClass="page-title" text="Gestión de Películas" />
+
+                <Label styleClass="page-subtitle" text="Administra el catálogo de películas del cine" />
+
+            </VBox>
+
+
+            <!-- ================================================= -->
+            <!-- FICHA DE PELÍCULA -->
+            <!-- ================================================= -->
+
+            <VBox maxHeight="340" minHeight="320.0" prefHeight="320.0" prefWidth="1219.0" spacing="8" styleClass="card">
+
+
+                <!-- ENCABEZADO -->
+
+                <HBox alignment="CENTER_LEFT">
+
+                    <VBox spacing="2">
+
+                        <Label styleClass="section-title" text="Ficha Técnica de la Película" />
+
+                        <Label styleClass="section-subtitle" text="Complete los datos del catálogo" />
+
+                    </VBox>
+
+                    <Region HBox.hgrow="ALWAYS" />
+
+                    <Label styleClass="section-badge" text="DATOS" />
+
+                </HBox>
+
+
+                <Separator />
+
+
+                <!-- ================================================= -->
+                <!-- DATOS + POSTER -->
+                <!-- ================================================= -->
+
+                <HBox spacing="12">
+
+
+                    <!-- ============================== -->
+                    <!-- CAMPOS -->
+                    <!-- ============================== -->
+
+                    <VBox spacing="7" HBox.hgrow="ALWAYS">
+
+
+                        <!-- TITULO / DIRECTOR / DURACION -->
+
+                        <HBox spacing="12">
+
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+
+                                <Label styleClass="field-label" text="Título *" />
+
+                                <TextField fx:id="txtTitulo" promptText="Ingrese el título de la película" styleClass="form-field" />
+
+                            </VBox>
+
+
+                            <VBox prefWidth="230" spacing="4">
+
+                                <Label styleClass="field-label" text="Director *" />
+
+                                <TextField fx:id="txtDirector" promptText="Nombre del director" styleClass="form-field" />
+
+                            </VBox>
+
+
+                            <VBox prefWidth="150" spacing="4">
+
+                                <Label styleClass="field-label" text="Duración (min) *" />
+
+                                <TextField fx:id="txtDuracion" promptText="Minutos" styleClass="form-field" />
+
+                            </VBox>
+
+                        </HBox>
+
+
+                        <!-- CLASIFICACION / IDIOMA / FECHA / GENERO -->
+
+                        <HBox spacing="12">
+
+
+                            <VBox prefWidth="180" spacing="4">
+
+                                <Label styleClass="field-label" text="Clasificación *" />
+
+                                <ComboBox fx:id="cmbClasificacion" maxWidth="Infinity" promptText="Seleccione" styleClass="form-combo" />
+
+                            </VBox>
+
+
+                            <VBox prefWidth="180" spacing="4">
+
+                                <Label styleClass="field-label" text="Idioma *" />
+
+                                <TextField fx:id="txtIdioma" promptText="Ej. Español" styleClass="form-field" />
+
+                            </VBox>
+
+
+                            <VBox prefWidth="205" spacing="4">
+
+                                <Label styleClass="field-label" text="Fecha de estreno *" />
+
+                                <DatePicker fx:id="dpFechaEstreno" maxWidth="Infinity" promptText="Seleccione una fecha" styleClass="form-date" />
+
+                            </VBox>
+
+
+                            <VBox spacing="4" HBox.hgrow="ALWAYS">
+
+                                <Label styleClass="field-label" text="Género *" />
+
+                                <ComboBox fx:id="cmbGenero" maxWidth="Infinity" promptText="Seleccione un género" styleClass="form-combo" />
+
+                            </VBox>
+
+                        </HBox>
+
+
+                        <!-- SINOPSIS -->
+
+                        <VBox spacing="4">
+
+                            <Label styleClass="field-label" text="Sinopsis" />
+
+                            <TextArea fx:id="txtSinopsis" maxHeight="52" minHeight="52" prefHeight="52" promptText="Escriba una breve descripción de la película..." styleClass="form-textarea" wrapText="true" />
+
+
+                                  <!-- ================================================= -->
+                         <!-- BOTONES -->
+                         <!-- ================================================= -->
+
+                                  <HBox alignment="CENTER_LEFT" prefHeight="31.0" prefWidth="1015.0" spacing="7">
+
+                                                        <Button onAction="#guardar" styleClass="button-primary" text="Guardar película" />
+
+                                               <Button onAction="#editar" styleClass="button-edit" text="Editar" />
+
+                                      <Button onAction="#eliminar" styleClass="button-danger" text="Eliminar" />
+
+                                      <Button onAction="#activar" styleClass="button-success" text="Activar" />
+
+                                      <Button onAction="#desactivar" styleClass="button-warning" text="Desactivar" />
+
+                                      <Button onAction="#limpiar" styleClass="button-secondary" text="Limpiar" />
+
+                                  </HBox>
+
+                        </VBox>
+
+                    </VBox>
+
+
+                    <!-- ================================================= -->
+                    <!-- POSTER -->
+                    <!-- ================================================= -->
+
+                    <VBox alignment="TOP_CENTER" maxWidth="205" minWidth="205" prefWidth="205" spacing="4" styleClass="poster-card">
+
+
+                        <HBox alignment="CENTER_LEFT">
+
+                            <Label styleClass="poster-title" text="Póster / Cartelera" />
+
+                            <Region HBox.hgrow="ALWAYS" />
+
+                            <Label styleClass="poster-ratio" text="2:3" />
+
+                        </HBox>
+
+
+                        <ImageView fx:id="imgPoster" fitHeight="130" fitWidth="95" preserveRatio="true" styleClass="poster-image" />
+
+
+                        <Label fx:id="lblNombreImagen" maxWidth="175" styleClass="image-name" text="Sin imagen seleccionada" wrapText="true" />
+
+
+                        <HBox alignment="CENTER" spacing="5">
+
+                            <Button fx:id="btnSeleccionarImagen" onAction="#seleccionarImagen" styleClass="button-primary" text="Seleccionar imagen" />
+
+                            <Button fx:id="btnQuitarImagen" onAction="#quitarImagen" styleClass="button-link-danger" text="Quitar" />
+
+                        </HBox>
+
+                    </VBox>
+
+                </HBox>
+
+            </VBox>
+
+
+            <!-- ================================================= -->
+            <!-- TABLA DE PELICULAS -->
+            <!-- ================================================= -->
+
+            <VBox minHeight="0" spacing="7" styleClass="card" VBox.vgrow="ALWAYS">
+
+
+                <!-- ENCABEZADO TABLA -->
+
+                <HBox alignment="CENTER_LEFT">
+
+                    <VBox spacing="2">
+
+                        <Label styleClass="section-title" text="Películas registradas" />
+
+                        <Label styleClass="section-subtitle" text="Catálogo actual del cine" />
+
+                    </VBox>
+
+                    <Region HBox.hgrow="ALWAYS" />
+
+                    <Label styleClass="section-badge" text="PELÍCULAS" />
+
+                </HBox>
+
+
+                <Separator />
+
+
+                <!-- ================================================= -->
+                <!-- TABLEVIEW -->
+                <!-- ================================================= -->
+
+                <TableView fx:id="tblPeliculas" minHeight="0.0" prefHeight="0.0" prefWidth="1189.0" styleClass="movies-table" VBox.vgrow="ALWAYS">
+
+
+                    <columns>
+
+                        <TableColumn fx:id="colId" prefWidth="55" text="ID" />
+
+
+                        <TableColumn fx:id="colImagen" prefWidth="85" text="IMAGEN" />
+
+
+                        <TableColumn fx:id="colTitulo" prefWidth="210" text="TÍTULO" />
+
+
+                        <TableColumn fx:id="colDirector" prefWidth="170" text="DIRECTOR" />
+
+
+                        <TableColumn fx:id="colDuracion" prefWidth="100" text="DURACIÓN" />
+
+
+                        <TableColumn fx:id="colClasificacion" prefWidth="125" text="CLASIFICACIÓN" />
+
+
+                        <TableColumn fx:id="colIdioma" prefWidth="110" text="IDIOMA" />
+
+
+                        <TableColumn fx:id="colFechaEstreno" prefWidth="120" text="ESTRENO" />
+
+
+                        <TableColumn fx:id="colGenero" prefWidth="110" text="GÉNERO" />
+
+
+                        <TableColumn fx:id="colEstado" prefWidth="100" text="ESTADO" />
+
+                    </columns>
+
+
+                    <placeholder>
+
+                        <Label styleClass="empty-table-label" text="No hay películas registradas." />
+
+                    </placeholder>
+
+                </TableView>
+
+
+                <!-- AYUDA DE TABLA -->
+
+                <HBox alignment="CENTER_LEFT" spacing="6">
+
+                    <Label styleClass="table-help-label" text="Seleccione una película para consultar." />
+
+                    <Region HBox.hgrow="ALWAYS" />
+
+                    <Label styleClass="table-help-label" text="La edición se activa con el botón Editar." />
+
+                </HBox>
+
+            </VBox>
+
+        </VBox>
+
+    </center>
+
+
+    <!-- ===================================================== -->
+    <!-- FOOTER -->
+    <!-- ===================================================== -->
+
+    <bottom>
+
+        <HBox alignment="CENTER_LEFT" prefHeight="32" styleClass="footer-container">
+
+            <padding>
+                <Insets bottom="6" left="22" right="22" top="6" />
+            </padding>
+
+
+            <Label styleClass="footer-label" text="Sistema de Gestión Integral para Cine" />
+
+
+            <Region HBox.hgrow="ALWAYS" />
+
+
+            <Label styleClass="footer-label" text="Catálogo de películas" />
+
+        </HBox>
+
+    </bottom>
+
+</BorderPane>

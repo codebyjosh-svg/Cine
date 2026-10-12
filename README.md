@@ -1,145 +1,39 @@
-# Cinema - Sistema de Gestión Integral para Cine
+# Cinema — Proyecto de cine
 
-## Descripción
+## US-3.2 — Movimientos de inventario
 
-Cinema es un sistema de escritorio desarrollado para gestionar los principales procesos administrativos y operativos de un cine.
+### Descripción
 
-El sistema busca centralizar la información de películas, clientes, salas, funciones, ventas y productos de dulcería en una sola aplicación.
+Se implementó el módulo de **Inventario** para el proyecto Cinema, enfocado en la gestión y consulta de movimientos de inventario de productos de dulcería.
 
-## Objetivo
+### Cambios realizados
 
-Desarrollar una aplicación que permita administrar y controlar las operaciones principales de un cine de forma organizada, reduciendo errores y facilitando el acceso a la información.
+- Se implementaron las tareas Java **T3.2.3 a T3.2.12**.
+- Se agregaron los modelos necesarios para inventario.
+- Se implementaron los DAO y sus respectivas implementaciones.
+- Se agregaron los controladores y vistas del módulo Inventario.
+- Se integró el módulo con la aplicación.
+- Se agregó la consulta de movimientos de inventario.
+- Se implementaron las operaciones de entradas y salidas.
+- Se realizaron pruebas de la funcionalidad.
 
-## Tecnologías
+### Base de datos
 
-- Java 21
-- JavaFX
-- FXML
-- MySQL
-- JDBC
-- MVC
-- DAO
-- Git
-- GitHub
-- NetBeans
+En la documentación original de esta historia se indicaba que las tareas SQL **T3.2.1 y T3.2.2** estaban pendientes y que los scripts existentes se conservaron sin cambios. Este estado debe verificarse con la versión final de la base de datos.
 
-## Arquitectura
+### Pruebas
 
-El proyecto utiliza una estructura basada en MVC complementada con DAO y servicios.
+- Se verificó la compilación del proyecto.
+- Se verificó la apertura del módulo Inventario.
+- Se probaron las operaciones principales.
+- Se revisó la integración con el proyecto.
 
-Flujo general:
+### Integración
 
-FXML
-    ↓
-Controller
-    ↓
-Service
-    ↓
-DAO
-    ↓
-JDBC
-    ↓
-MySQL
+Rama de origen de la historia: `feat/US-3.2_Movimientos_inventario_diego`.
 
-## Estructura del proyecto
+## Notas de ejecución de una versión anterior
 
-src/
-└── org/
-    └── cine/
-        ├── controller/
-        ├── dao/
-        │   └── impl/
-        ├── model/
-        ├── service/
-        ├── system/
-        ├── util/
-        └── view/
-            └── style/
+En el README original de una de las ramas se indicaba que la configuración de NetBeans se explicaba en `LEEME_JAVAFX_CORREGIDO.txt`, que las bibliotecas estaban en `lib/`, y que se utilizaba `org.cine.system.Lanzador` como clase principal. Verifica estas indicaciones con la versión fusionada antes de seguirlas.
 
-## Equipo Scrum
-
-### Product Owner
-Profesor
-
-### Scrum Master
-Emilio
-
-### Desarrolladores
-- Joshua
-- Diego
-- Manuel
-
-## Roles del sistema
-
-### Administrador
-Gestiona la información principal del sistema y tiene acceso a las funciones administrativas.
-
-### Taquillero
-Realiza ventas de boletos y atiende a los clientes.
-
-### Encargado de sala
-Gestiona y consulta la información relacionada con salas, asientos y funciones.
-
-### Encargado de dulcería
-Gestiona productos de comida y el inventario de dulcería.
-
-## Épicas
-
-### Épica 1 - Administración y configuración del cine
-Incluye la gestión de usuarios, películas y clientes.
-
-### Épica 2 - Operación y ventas del cine
-Incluye la gestión de salas, asientos, funciones y venta de boletos.
-
-### Épica 3 - Control administrativo y mejora del sistema
-Incluye la gestión de dulcería, inventario, dashboards y reportes.
-
-## Sprints
-
-### Sprint 1 - Administración y configuración del cine
-Desarrollo de la base administrativa del sistema, usuarios, películas y clientes.
-
-### Sprint 2 - Operación y ventas del cine
-Desarrollo de salas, asientos, funciones y venta de boletos.
-
-### Sprint 3 - Control administrativo y mejora del sistema
-Desarrollo de dulcería, inventario, dashboards, reportes e integración final.
-
-## Estrategia de Git
-
-La rama `main` contendrá las versiones estables del proyecto.
-
-La rama `develop` será utilizada para integrar el trabajo realizado durante cada Sprint.
-
-Cada desarrollador trabajará en una rama propia creada a partir de `develop`.
-
-Flujo de trabajo:
-
-feature
-    ↓
-Pull Request
-    ↓
-Revisión
-    ↓
-Correcciones
-    ↓
-develop
-    ↓
-Pruebas de integración
-    ↓
-main
-
-## Reglas de trabajo
-
-- No trabajar directamente sobre `main`.
-- Las ramas de funcionalidades deben partir de `develop`.
-- Cada cambio debe tener commits claros.
-- Antes de integrar una rama se debe realizar una revisión.
-- Al finalizar cada Sprint se realizará la integración de las funcionalidades en `develop`.
-- Se realizarán pruebas después de la integración.
-
-## Estado del proyecto
-
-Actualmente se encuentra en la etapa inicial de configuración del proyecto.
-
-La estructura de packages está preparada y las clases serán creadas conforme se desarrollen las historias de usuario de cada Sprint.
+El módulo de programación se documentó bajo **Administrador → Funciones** y `TAREAS_US_2_2_JAVA.md`.

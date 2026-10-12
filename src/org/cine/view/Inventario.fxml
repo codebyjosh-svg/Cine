@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cine.controller.InventarioController"
+            prefWidth="1100" prefHeight="700" styleClass="inventario-root"
+            stylesheets="@style/inventario.css">
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="18" styleClass="page-header">
+            <padding><Insets top="20" right="24" bottom="18" left="24"/></padding>
+            <VBox spacing="4" HBox.hgrow="ALWAYS">
+                <Label text="CONFITERÍA DEL CINE" styleClass="eyebrow"/>
+                <Label text="Inventario de productos" styleClass="page-title"/>
+                <Label fx:id="lblUsuarioActual" styleClass="muted"/>
+            </VBox>
+            <Button fx:id="btnVolver" text="Volver al dashboard" onAction="#volver" styleClass="button-secondary"/>
+        </HBox>
+    </top>
+    <center>
+        <HBox spacing="20" alignment="TOP_LEFT">
+            <padding><Insets right="24" bottom="12" left="24"/></padding>
+            <VBox spacing="10" HBox.hgrow="ALWAYS" minWidth="0">
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <TextField fx:id="txtBusqueda" promptText="Buscar producto, usuario u observación" HBox.hgrow="ALWAYS" minWidth="100"/>
+                    <ComboBox fx:id="cmbFiltroTipo" prefWidth="130"/>
+                    <Button fx:id="btnActualizar" text="Actualizar" onAction="#actualizarLista" styleClass="button-secondary"/>
+                </HBox>
+                <Label fx:id="lblResumen" text="Cargando historial…" styleClass="muted"/>
+                <TableView fx:id="tblMovimientos" fixedCellSize="42" VBox.vgrow="ALWAYS" minWidth="0" minHeight="160">
+                    <columns>
+                        <TableColumn fx:id="colId" text="ID" prefWidth="42" minWidth="38"/>
+                        <TableColumn fx:id="colProducto" text="Producto" prefWidth="136" minWidth="95"/>
+                        <TableColumn fx:id="colUsuario" text="Usuario" prefWidth="108" minWidth="92"/>
+                        <TableColumn fx:id="colTipo" text="Tipo" prefWidth="78" minWidth="72"/>
+                        <TableColumn fx:id="colCantidad" text="Unid." prefWidth="50" minWidth="45"/>
+                        <TableColumn fx:id="colFecha" text="Fecha y hora" prefWidth="143" minWidth="137"/>
+                        <TableColumn fx:id="colObservacion" text="Observación" prefWidth="147" minWidth="110"/>
+                    </columns>
+                </TableView>
+                <Label fx:id="lblDetalle" wrapText="true" maxWidth="Infinity" minHeight="54" styleClass="selection-note"/>
+                <Label text="El historial conserva las entradas, salidas, ventas y devoluciones." styleClass="muted"/>
+            </VBox>
+            <VBox spacing="8" prefWidth="300" minWidth="300" maxWidth="300" styleClass="form-card">
+                <padding><Insets top="16" right="18" bottom="16" left="18"/></padding>
+                <Label text="Registrar movimiento" styleClass="form-title"/>
+                <VBox spacing="4">
+                    <Label text="Producto activo" styleClass="field-label"/>
+                    <ComboBox fx:id="cmbProducto" promptText="Seleccionar producto" maxWidth="Infinity"/>
+                </VBox>
+                <HBox alignment="CENTER_LEFT" spacing="12" styleClass="stock-card">
+                    <Label text="Stock actual" styleClass="field-label" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                    <Label fx:id="lblStockActual" text="—" styleClass="stock-value"/>
+                    <Label text="unid." styleClass="muted"/>
+                </HBox>
+                <VBox spacing="4">
+                    <Label text="Tipo de movimiento" styleClass="field-label"/>
+                    <ComboBox fx:id="cmbTipo" maxWidth="Infinity"/>
+                </VBox>
+                <VBox spacing="4">
+                    <Label text="Cantidad de unidades" styleClass="field-label"/>
+                    <TextField fx:id="txtCantidad" promptText="Número entero positivo"/>
+                </VBox>
+                <VBox spacing="4">
+                    <Label text="Observación (hasta 200 caracteres)" styleClass="field-label"/>
+                    <TextArea fx:id="txtObservacion" promptText="Motivo del ingreso o salida" wrapText="true"
+                              prefHeight="76" minHeight="76" maxHeight="76"/>
+                </VBox>
+                <Label fx:id="lblStockResultante" wrapText="true" maxWidth="Infinity" minHeight="48" styleClass="stock-preview"/>
+                <HBox spacing="8">
+                    <Button fx:id="btnRegistrar" text="Registrar" onAction="#registrarMovimiento"
+                            HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="button-primary"/>
+                    <Button fx:id="btnLimpiar" text="Limpiar" onAction="#limpiarFormulario" styleClass="button-secondary"/>
+                </HBox>
+            </VBox>
+        </HBox>
+    </center>
+    <bottom>
+        <VBox styleClass="page-footer">
+            <padding><Insets top="10" right="24" bottom="14" left="24"/></padding>
+            <Label fx:id="lblMensaje" wrapText="true" maxWidth="Infinity" minHeight="30" styleClass="status-ok"/>
+        </VBox>
+    </bottom>
+</BorderPane>

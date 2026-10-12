@@ -1,0 +1,5 @@
+Roles permitidos: ADMIN y TAQUILLERO.
+Los CLIENTES siguen siendo registros del módulo Clientes, NO cuentas con rol cliente.
+Inventario y Stock Crítico quedan bajo administrador.
+Las cuentas antiguas con rol bodega/cliente ya no pueden iniciar sesión.
+Para deshabilitarlas también en MySQL (sin borrar datos) ejecutar sql/04_Deshabilitar_Roles_Legados.sql tras respaldo.

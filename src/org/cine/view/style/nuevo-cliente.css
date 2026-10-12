@@ -1,0 +1,80 @@
+.cliente-root {
+    -fx-background-color: #f4f7fb;
+    -fx-font-family: "Segoe UI";
+}
+
+.cliente-header {
+    -fx-background-color: #14233b;
+}
+
+.cliente-title {
+    -fx-text-fill: #ffd21c;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+.cliente-subtitle {
+    -fx-text-fill: #aebdd0;
+    -fx-font-size: 9px;
+}
+
+.cliente-form {
+    -fx-background-color: #ffffff;
+}
+
+.field-label {
+    -fx-text-fill: #52647a;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #cbd7e5;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-pref-height: 32px;
+    -fx-font-size: 10px;
+    -fx-padding: 5px 8px;
+}
+
+.text-field:focused {
+    -fx-border-color: #2563eb;
+}
+
+.message {
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.cliente-footer {
+    -fx-background-color: #ffffff;
+}
+
+.cancel-button {
+    -fx-background-color: #e2e8f0;
+    -fx-text-fill: #334155;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 14px;
+    -fx-cursor: hand;
+}
+
+.cancel-button:hover {
+    -fx-background-color: #cbd5e1;
+}
+
+.save-button {
+    -fx-background-color: #16a36a;
+    -fx-text-fill: white;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+}
+
+.save-button:hover {
+    -fx-background-color: #128555;
+}

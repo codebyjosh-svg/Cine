@@ -1,0 +1,466 @@
+/* =========================================================
+   CINEMA - VENTA DE BOLETOS
+   ========================================================= */
+
+.venta-root {
+    -fx-background-color: #f4f7fb;
+    -fx-font-family: "Segoe UI";
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+    -fx-background-color: #14233b;
+}
+
+.header-title {
+    -fx-text-fill: #ffd21c;
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+}
+
+.header-section {
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.header-role {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-background-color: #263b5d;
+    -fx-background-radius: 4px;
+    -fx-padding: 5px 8px;
+}
+
+.header-status {
+    -fx-text-fill: #76e0a4;
+    -fx-font-size: 9px;
+}
+
+.header-button {
+    -fx-background-color: #344a6b;
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 4px;
+    -fx-padding: 7px 11px;
+    -fx-cursor: hand;
+}
+
+.header-button:hover {
+    -fx-background-color: #42608a;
+}
+
+
+/* =========================================================
+   CONTENIDO
+   ========================================================= */
+
+.main-content {
+    -fx-background-color: #f4f7fb;
+}
+
+.left-panel {
+    -fx-background-color: transparent;
+}
+
+.selection-bar {
+    -fx-background-color: white;
+    -fx-border-color: #d7e0ec;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 8px;
+}
+
+.field-group {
+    -fx-padding: 0 2px;
+}
+
+.field-label {
+    -fx-text-fill: #63748b;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+}
+
+.combo {
+    -fx-background-color: white;
+    -fx-border-color: #cbd7e5;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-font-size: 10px;
+    -fx-pref-height: 29px;
+}
+
+.combo:focused {
+    -fx-border-color: #2563eb;
+}
+
+.new-client-button {
+    -fx-background-color: #2563eb;
+    -fx-text-fill: white;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-padding: 7px 9px;
+    -fx-cursor: hand;
+}
+
+.new-client-button:hover {
+    -fx-background-color: #1d4ed8;
+}
+
+
+/* =========================================================
+   INFORMACIÓN FUNCIÓN
+   ========================================================= */
+
+.function-info {
+    -fx-padding: 0 2px 0 0;
+}
+
+.info-badge {
+    -fx-background-color: #e8eef8;
+    -fx-text-fill: #31547e;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-padding: 5px 8px;
+}
+
+.price-badge {
+    -fx-background-color: #dff7e9;
+    -fx-text-fill: #15803d;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-padding: 5px 8px;
+}
+
+
+/* =========================================================
+   PANEL DE BUTACAS
+   ========================================================= */
+
+.seat-panel {
+    -fx-background-color: white;
+    -fx-border-color: #d7e0ec;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 9px;
+}
+
+.section-title {
+    -fx-text-fill: #253a57;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.section-title-secondary {
+    -fx-text-fill: #7a8ba2;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+}
+
+.helper-text {
+    -fx-text-fill: #8a99aa;
+    -fx-font-size: 8px;
+}
+
+.available-dot {
+    -fx-text-fill: #08a66a;
+    -fx-font-size: 10px;
+}
+
+.screen-container {
+    -fx-padding: 2px 0 5px 0;
+}
+
+.screen-label {
+    -fx-background-color: #d9e5f2;
+    -fx-text-fill: #8ca0b6;
+    -fx-font-size: 7px;
+    -fx-font-weight: bold;
+    -fx-padding: 3px 70px;
+    -fx-background-radius: 8px;
+}
+
+
+/* =========================================================
+   SCROLL DE BUTACAS
+   ========================================================= */
+
+.seat-scroll {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.seat-scroll > .viewport {
+    -fx-background-color: white;
+}
+
+.seat-container {
+    -fx-padding: 12px;
+    -fx-alignment: center;
+}
+
+
+/* =========================================================
+   BUTACAS GENERADAS POR EL CONTROLLER
+   ========================================================= */
+
+.seat-container .toggle-button {
+    -fx-background-color: #09a66a;
+    -fx-text-fill: white;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-border-radius: 3px;
+    -fx-border-color: #078653;
+    -fx-cursor: hand;
+}
+
+.seat-container .toggle-button:hover {
+    -fx-background-color: #078f5b;
+}
+
+.seat-container .toggle-button:selected {
+    -fx-background-color: #2563eb;
+    -fx-border-color: #174ea6;
+}
+
+.seat-container .toggle-button:disabled {
+    -fx-background-color: #e4e9ef;
+    -fx-text-fill: #9aa8b7;
+    -fx-border-color: #d1d9e2;
+}
+
+
+/* =========================================================
+   LEYENDA
+   ========================================================= */
+
+.legend {
+    -fx-padding: 4px 0 0 0;
+}
+
+.legend-text {
+    -fx-text-fill: #6d7c90;
+    -fx-font-size: 8px;
+}
+
+.legend-available {
+    -fx-text-fill: #08a66a;
+    -fx-font-size: 10px;
+}
+
+.legend-selected {
+    -fx-text-fill: #2563eb;
+    -fx-font-size: 10px;
+}
+
+.legend-occupied {
+    -fx-text-fill: #aab3bd;
+    -fx-font-size: 10px;
+}
+
+
+/* =========================================================
+   CARRITO
+   ========================================================= */
+
+.cart-panel {
+    -fx-background-color: white;
+    -fx-border-color: #d7e0ec;
+    -fx-border-radius: 4px;
+    -fx-background-radius: 4px;
+    -fx-padding: 9px;
+}
+
+.cart-title {
+    -fx-text-fill: #253a57;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+}
+
+.cart-subtitle {
+    -fx-text-fill: #8492a5;
+    -fx-font-size: 8px;
+}
+
+.items-badge {
+    -fx-background-color: #edf2f7;
+    -fx-text-fill: #64748b;
+    -fx-font-size: 7px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10px;
+    -fx-padding: 4px 7px;
+}
+
+
+/* =========================================================
+   ENCABEZADO DEL CARRITO
+   ========================================================= */
+
+.cart-header {
+    -fx-background-color: #e8eef6;
+    -fx-padding: 6px;
+}
+
+.cart-column {
+    -fx-text-fill: #52647a;
+    -fx-font-size: 7px;
+    -fx-font-weight: bold;
+}
+
+.cart-column-location {
+    -fx-text-fill: #52647a;
+    -fx-font-size: 7px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 65px;
+}
+
+.cart-column-price {
+    -fx-text-fill: #52647a;
+    -fx-font-size: 7px;
+    -fx-font-weight: bold;
+    -fx-pref-width: 45px;
+}
+
+
+/* =========================================================
+   LISTA CARRITO
+   ========================================================= */
+
+.cart-list {
+    -fx-background-color: white;
+    -fx-border-color: #e0e7ef;
+}
+
+.cart-list .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: #34445a;
+    -fx-font-size: 9px;
+    -fx-padding: 7px;
+    -fx-border-color: transparent transparent #edf1f5 transparent;
+}
+
+.cart-list .list-cell:selected {
+    -fx-background-color: #e8f0ff;
+    -fx-text-fill: #1d4ed8;
+}
+
+
+/* =========================================================
+   RESUMEN
+   ========================================================= */
+
+.cart-summary {
+    -fx-background-color: #f8fafc;
+    -fx-border-color: #e0e7ef;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 8px;
+}
+
+.summary-label {
+    -fx-text-fill: #78879a;
+    -fx-font-size: 8px;
+}
+
+.summary-value {
+    -fx-text-fill: #46566c;
+    -fx-font-size: 8px;
+    -fx-font-weight: bold;
+}
+
+.total-label {
+    -fx-text-fill: #263b57;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.total-value {
+    -fx-text-fill: #08a66a;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+
+/* =========================================================
+   PARTE INFERIOR
+   ========================================================= */
+
+.bottom-panel {
+    -fx-background-color: #14233b;
+}
+
+.action-button {
+    -fx-background-color: #344a6b;
+    -fx-text-fill: white;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-padding: 7px 10px;
+    -fx-cursor: hand;
+}
+
+.action-button:hover {
+    -fx-background-color: #456188;
+}
+
+.dark-button {
+    -fx-background-color: #344a6b;
+    -fx-text-fill: white;
+    -fx-font-size: 9px;
+    -fx-background-radius: 3px;
+    -fx-padding: 7px 10px;
+    -fx-cursor: hand;
+}
+
+.dark-button:hover {
+    -fx-background-color: #456188;
+}
+
+.cancel-button {
+    -fx-background-color: #d32f2f;
+    -fx-text-fill: white;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-padding: 7px 11px;
+    -fx-cursor: hand;
+}
+
+.cancel-button:hover {
+    -fx-background-color: #b91c1c;
+}
+
+.confirm-button {
+    -fx-background-color: #16a36a;
+    -fx-text-fill: white;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 3px;
+    -fx-padding: 7px 13px;
+    -fx-cursor: hand;
+}
+
+.confirm-button:hover {
+    -fx-background-color: #128555;
+}
+
+.footer-total {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+}
+
+.footer-text {
+    -fx-text-fill: #7f91aa;
+    -fx-font-size: 7px;
+}
