@@ -52,6 +52,11 @@
                 maxWidth="Infinity"
                 styleClass="functions-button"/>
 
+        <Button text="Confitería"
+                onAction="#abrirConfiteria"
+                maxWidth="Infinity"
+                styleClass="functions-button"/>
+
         <Button text="Cerrar sesión"
                 onAction="#cerrarSesion"
                 maxWidth="Infinity"

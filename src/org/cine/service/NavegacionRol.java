@@ -1,14 +1,15 @@
 package org.cine.service;
 
+import java.util.Locale;
+
 public final class NavegacionRol {
-    private NavegacionRol() {
-    }
+    private NavegacionRol() { }
 
     public static String vistaPorRol(String rol) {
-        if (rol == null) {
+        if (rol == null || rol.isBlank()) {
             return "/org/cine/view/Login.fxml";
         }
-        return switch (rol.trim().toLowerCase()) {
+        return switch (rol.trim().toLowerCase(Locale.ROOT)) {
             case "admin" -> "/org/cine/view/DashboardAdmin.fxml";
             case "taquillero" -> "/org/cine/view/DashboardTaquillero.fxml";
             case "bodega" -> "/org/cine/view/DashboardBodega.fxml";

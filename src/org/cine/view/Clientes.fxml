@@ -20,8 +20,11 @@
         <VBox spacing="10.0"
               style="-fx-padding: 20;">
 
-            <Label text="Gestión de Clientes"
+            <HBox spacing="20" alignment="CENTER_LEFT">
+                <Label text="Gestión de Clientes"
                    style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+                <Button text="Volver al dashboard" onAction="#volver"/>
+            </HBox>
 
             <GridPane hgap="10.0"
                       vgap="10.0">

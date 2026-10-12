@@ -40,6 +40,15 @@ public class DashboardTaquilleroController {
     }
 
     // ==============================
+    // CONFITERÍA
+    // ==============================
+
+    @FXML
+    private void abrirConfiteria() throws IOException {
+        Principal.mostrarConfiteria();
+    }
+
+    // ==============================
     // CERRAR SESIÓN
     // ==============================
 

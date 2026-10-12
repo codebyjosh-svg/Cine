@@ -37,6 +37,14 @@ public final class DashboardController {
     }
 
     // ==============================
+    // CARTELERA - CLIENTE
+    // ==============================
+    @FXML
+    private void abrirCartelera() throws IOException {
+        Principal.mostrarCartelera();
+    }
+
+    // ==============================
     // VENTAS
     // ==============================
 

@@ -1,0 +1,7 @@
+US-3.4 Dashboard administrativo y reportes
+Incluye T3.4.1–T3.4.13, con prueba manual pendiente de base de datos MySQL real.
+Importante: el ZIP conserva la configuración de JavaFX 21 de Windows del proyecto original.
+La validación XML de los FXML pasó, pero Ant no pudo compilar en este entorno sin los módulos JavaFX instalados.
+Abra el proyecto en NetBeans JDK 21 con javafx.controls y javafx.fxml en modulepath.
+El DDL original ya define sp_reporteventasdia, sp_reporteventassemana, sp_reporteventasmes y sp_indicadoresadmin.
+Se conserva el código original de los demás módulos.

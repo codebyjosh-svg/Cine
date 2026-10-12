@@ -74,7 +74,6 @@ public class PeliculasController {
 
     @FXML
     public void initialize() {
-        
         configurarClasificacion();
         configurarGenero();
         configurarTabla();

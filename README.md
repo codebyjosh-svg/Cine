@@ -1,8 +1,10 @@
+# Cinema — Proyecto de cine
+
 ## US-3.2 — Movimientos de inventario
 
 ### Descripción
 
-Se implementó el módulo de **Inventario** para el proyecto Cinema, enfocado en la gestión y consulta de los movimientos de inventario de productos de dulcería.
+Se implementó el módulo de **Inventario** para el proyecto Cinema, enfocado en la gestión y consulta de movimientos de inventario de productos de dulcería.
 
 ### Cambios realizados
 
@@ -17,17 +19,21 @@ Se implementó el módulo de **Inventario** para el proyecto Cinema, enfocado en
 
 ### Base de datos
 
-Las tareas SQL **T3.2.1 y T3.2.2 quedan pendientes** y los scripts SQL existentes se conservaron sin cambios.
+En la documentación original de esta historia se indicaba que las tareas SQL **T3.2.1 y T3.2.2** estaban pendientes y que los scripts existentes se conservaron sin cambios. Este estado debe verificarse con la versión final de la base de datos.
 
 ### Pruebas
 
 - Se verificó la compilación del proyecto.
 - Se verificó la apertura del módulo Inventario.
 - Se probaron las operaciones principales.
-- Se revisó la integración con el proyecto actual.
+- Se revisó la integración con el proyecto.
 
 ### Integración
 
-La rama está preparada para revisión e integración mediante Pull Request hacia `develop`.
+Rama de origen de la historia: `feat/US-3.2_Movimientos_inventario_diego`.
 
-**Rama:** `feat/US-3.2_Movimientos_inventario_diego`
+## Notas de ejecución de una versión anterior
+
+En el README original de una de las ramas se indicaba que la configuración de NetBeans se explicaba en `LEEME_JAVAFX_CORREGIDO.txt`, que las bibliotecas estaban en `lib/`, y que se utilizaba `org.cine.system.Lanzador` como clase principal. Verifica estas indicaciones con la versión fusionada antes de seguirlas.
+
+El módulo de programación se documentó bajo **Administrador → Funciones** y `TAREAS_US_2_2_JAVA.md`.

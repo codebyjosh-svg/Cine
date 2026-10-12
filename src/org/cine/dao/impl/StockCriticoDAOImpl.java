@@ -10,14 +10,16 @@ import org.cine.dao.StockCriticoDAO;
 import org.cine.model.StockCritico;
 import org.cine.util.Conexion;
 
-/** Usa el procedimiento existente y propaga los errores para mostrarlos en la vista. */
+/**
+ * Usa el procedimiento existente y propaga los errores para mostrarlos en la
+ * vista.
+ */
 public final class StockCriticoDAOImpl implements StockCriticoDAO {
+
     @Override
     public List<StockCritico> listar() throws SQLException {
         List<StockCritico> productos = new ArrayList<>();
-        try (Connection cn = Conexion.getInstancia().getConnection();
-                CallableStatement cs = cn.prepareCall("{call sp_listarstockcritico()}");
-                ResultSet rs = cs.executeQuery()) {
+        try (Connection cn = Conexion.getInstancia().getConnection(); CallableStatement cs = cn.prepareCall("{call sp_listarstockcritico()}"); ResultSet rs = cs.executeQuery()) {
             while (rs.next()) {
                 productos.add(new StockCritico(rs.getInt("id_producto"),
                         rs.getString("nombre_producto"), rs.getString("nombre_categoria"),

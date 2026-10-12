@@ -93,6 +93,15 @@ public class Producto {
         this.estado = estado ? 1 : 0;
     }
 
+    /** Resumen ligero de producto para movimientos de inventario. */
+    public Producto(int idProducto, String nombreProducto, int stock, int stockMinimo) {
+        this();
+        this.idProducto = idProducto;
+        this.nombreProducto = nombreProducto;
+        this.stock = stock;
+        this.stockMinimo = stockMinimo;
+    }
+
     public int getIdProducto() {
         return idProducto;
     }

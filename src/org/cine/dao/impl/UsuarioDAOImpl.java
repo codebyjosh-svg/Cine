@@ -9,6 +9,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Locale;
+import java.util.Set;
 import org.cine.dao.UsuarioDAO;
 import org.cine.model.ClienteVinculo;
 import org.cine.model.Rol;
@@ -91,6 +93,14 @@ public class UsuarioDAOImpl implements UsuarioDAO {
                         AutenticacionException.Motivo.CREDENCIALES_INVALIDAS,
                         "Usuario o contraseña incorrectos."
                 );
+            }
+
+            String rol = usuario.getNombreRol();
+            if (rol == null || !Set.of("admin", "taquillero", "bodega", "cliente")
+                    .contains(rol.trim().toLowerCase(Locale.ROOT))) {
+                throw new AutenticacionException(
+                        AutenticacionException.Motivo.CREDENCIALES_INVALIDAS,
+                        "El usuario no tiene un rol autorizado.");
             }
 
             if (!usuario.isEstado()) {

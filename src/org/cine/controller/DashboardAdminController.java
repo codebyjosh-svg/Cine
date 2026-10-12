@@ -1,6 +1,8 @@
 package org.cine.controller;
 
 import java.io.IOException;
+import java.sql.*;
+import org.cine.util.Conexion;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import org.cine.model.Usuario;
@@ -14,6 +16,7 @@ public class DashboardAdminController {
 
     @FXML
     private Label lblRol;
+    @FXML private Label lblKpiUsuarios, lblKpiPeliculas, lblKpiGeneros, lblKpiSalas;
 
     @FXML
     private void initialize() {
@@ -23,16 +26,37 @@ public class DashboardAdminController {
         if (usuario != null) {
 
             if (lblUsuario != null) {
-                lblUsuario.setText(
-                        usuario.getNombreCompleto()
-                );
+                lblUsuario.setText(usuario.getNombreCompleto());
             }
 
             if (lblRol != null) {
-                lblRol.setText(
-                        usuario.getNombreRol()
-                );
+                lblRol.setText(usuario.getNombreRol());
             }
+        }
+        cargarIndicadoresReales();
+    }
+
+    private void cargarIndicadoresReales() {
+        String sql = "SELECT "
+            + "(SELECT COUNT(*) FROM usuarios) AS usuarios, "
+            + "(SELECT COUNT(*) FROM peliculas) AS peliculas, "
+            + "(SELECT COUNT(*) FROM generos) AS generos, "
+            + "(SELECT COUNT(*) FROM salas) AS salas";
+        try (Connection c = Conexion.getInstance().getConnection();
+             PreparedStatement st = c.prepareStatement(sql);
+             ResultSet rs = st.executeQuery()) {
+            if (rs.next()) {
+                if (lblKpiUsuarios != null) lblKpiUsuarios.setText(rs.getString("usuarios"));
+                if (lblKpiPeliculas != null) lblKpiPeliculas.setText(rs.getString("peliculas"));
+                if (lblKpiGeneros != null) lblKpiGeneros.setText(rs.getString("generos"));
+                if (lblKpiSalas != null) lblKpiSalas.setText(rs.getString("salas"));
+            }
+        } catch (SQLException ex) {
+            System.err.println("No se pudieron cargar los indicadores del Dashboard: " + ex.getMessage());
+            if (lblKpiUsuarios != null) lblKpiUsuarios.setText("—");
+            if (lblKpiPeliculas != null) lblKpiPeliculas.setText("—");
+            if (lblKpiGeneros != null) lblKpiGeneros.setText("—");
+            if (lblKpiSalas != null) lblKpiSalas.setText("—");
         }
     }
 
@@ -73,30 +97,26 @@ public class DashboardAdminController {
     }
 
     // ==============================
-    // PRODUCTOS
-    // ==============================
-
-    @FXML
-    private void abrirProductos() throws IOException {
-        Principal.mostrarProductos();
-    }
-
-    // ==============================
-    // CATEGORÍAS DE PRODUCTO
-    // ==============================
-
-    @FXML
-    private void abrirCategoriasProducto() throws IOException {
-        Principal.mostrarCategoriasProducto();
-    }
-
-    // ==============================
     // SALAS Y BUTACAS - US-2.1
     // ==============================
 
     @FXML
     private void abrirSalas() throws IOException {
         Principal.mostrarSalas();
+    }
+
+    // ==============================
+    // VENTA DE BOLETOS - US-2.4
+    // ==============================
+
+    @FXML
+    private void abrirVenta() throws IOException {
+
+        System.out.println("=================================");
+        System.out.println("BOTON VENDER BOLETOS PRESIONADO");
+        System.out.println("=================================");
+
+        Principal.mostrarVenta();
     }
 
     // ==============================
@@ -108,31 +128,14 @@ public class DashboardAdminController {
         Principal.mostrarProgramacion();
     }
 
-    // ==============================
-    // VENTA DE BOLETOS - US-2.4
-    // ==============================
-
     @FXML
-    private void abrirVenta() throws IOException {
-        Principal.mostrarVenta();
+    private void abrirConfiteria() throws IOException {
+        Principal.mostrarConfiteria();
     }
 
-    // ==============================
-    // STOCK CRÍTICO - US-3.3
-    // ==============================
-
     @FXML
-    private void abrirStockCritico() throws IOException {
-        Principal.mostrarStockCritico();
-    }
-
-    // ==============================
-    // VENTAS - US-3.3
-    // ==============================
-
-    @FXML
-    private void abrirVentas() throws IOException {
-        Principal.mostrarVentas();
+    private void abrirReportes() throws IOException {
+        Principal.mostrarReportes();
     }
 
     // ==============================

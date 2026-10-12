@@ -1,0 +1,10 @@
+.root-pane { -fx-background-color: #f4f6fb; -fx-font-family: "Segoe UI"; }
+.header { -fx-background-color: #15243c; -fx-padding: 20; }
+.titulo { -fx-text-fill: white; -fx-font-size: 23px; -fx-font-weight: bold; }
+.subtitulo { -fx-text-fill: #a9bbd4; }
+.contenido { -fx-padding: 20; }
+.panel { -fx-background-color: white; -fx-background-radius: 10; -fx-padding: 15; -fx-border-color: #dfe5ef; -fx-border-radius: 10; }
+.seccion { -fx-text-fill: #15243c; -fx-font-size: 17px; -fx-font-weight: bold; }
+.button { -fx-background-color: #2858df; -fx-text-fill: white; -fx-background-radius: 6; -fx-cursor: hand; }
+.mensaje { -fx-text-fill: #1d4b77; }
+.total { -fx-font-size: 16px; -fx-font-weight: bold; }
