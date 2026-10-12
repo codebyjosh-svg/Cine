@@ -1,0 +1,88 @@
+EVIDENCIA T3.2.12 - MODULO JAVA DE INVENTARIO
+Fecha: 2026-10-08
+
+JDK 21.0.12 / JavaFX 21.0.11 / MySQL 8.0.46 / Connector-J 8.0.33 / Ant 1.10.15.
+Base temporal de pruebas con los scripts existentes, sin modificar archivos SQL.
+Total del módulo: 57 comprobaciones correctas.
+
+[PRUEBA] PruebaInventario
+OK 1 · El catálogo incluye productos activos y excluye inactivos
+OK 2 · Buscar un producto inexistente devuelve vacío
+OK 3 · Una entrada aumenta el stock de 10 a 15
+OK 4 · El historial devuelve producto, usuario, fecha, tipo, cantidad y observación sin espacios externos
+OK 5 · Una salida disminuye el stock de 15 a 11
+OK 6 · El historial conserva ambos operadores y ordena los movimientos recientes primero
+OK 7 · El DAO recibe el rechazo SQL de una salida mayor que el stock
+OK 8 · Una salida insuficiente conserva el stock y no agrega historial
+OK 9 · Una salida exacta deja el stock en cero
+OK 10 · El stock cero impide una nueva salida
+OK 11 · El rechazo no produce stock negativo ni un movimiento adicional
+OK 12 · Cantidad cero rechazada
+OK 13 · Cantidad negativa rechazada
+OK 14 · Observación vacía rechazada
+OK 15 · Observación de más de 200 caracteres rechazada
+OK 16 · Un registro manual solo admite entrada o salida
+OK 17 · ID de producto inválido rechazado
+OK 18 · ID de usuario inválido rechazado
+OK 19 · Las validaciones Java no crean movimientos
+OK 20 · Producto inactivo rechazado por MySQL
+OK 21 · Producto inexistente rechazado por MySQL
+OK 22 · Un taquillero no puede registrar un movimiento manual
+OK 23 · Un cliente no puede registrar un movimiento manual
+OK 24 · Un operador inactivo no puede registrar movimientos
+OK 25 · Desactivar el producto conserva su historial y lo retira del catálogo activo
+OK 26 · Dos salidas simultáneas no pueden consumir las mismas existencias
+OK 27 · La concurrencia deja stock correcto y un solo registro de salida
+OK 28 · Superar el límite entero revierte la operación sin alterar el stock ni el historial
+RESULTADO: 28 comprobaciones de inventario correctas; datos de prueba retirados.
+[PRUEBA] PruebaInventarioFXML
+OK 1 · Inventario bloqueado sin sesión
+OK 2 · Inventario bloqueado para taquillero
+OK 3 · El dashboard de Bodega abre Inventario.fxml
+OK 4 · Todos los botones quedan dentro de la escena
+OK 5 · El formulario excluye productos inactivos
+OK 6 · Registrar exige elegir un producto
+OK 7 · Seleccionar el producto muestra el stock actual
+OK 8 · Registrar entrada aumenta el stock y actualiza la pantalla
+OK 9 · La tabla muestra el usuario de sesión, fecha, tipo y observación del movimiento
+OK 10 · Registrar salida disminuye el stock y conserva el historial
+OK 11 · Cantidad decimal rechazada en el formulario
+OK 12 · Cantidad cero rechazada en el formulario
+OK 13 · Cantidad fuera del rango entero rechazada
+OK 14 · Una observación vacía no permite registrar
+OK 15 · Una observación demasiado larga no permite registrar
+OK 16 · Una salida insuficiente muestra el motivo y no modifica stock ni historial
+OK 17 · Antes de una salida se relee el stock cambiado por otro operador
+OK 18 · Actualizar incorpora al historial los movimientos de otro usuario
+OK 19 · El filtro Salidas muestra únicamente movimientos de salida
+OK 20 · La búsqueda encuentra la observación del movimiento
+OK 21 · Seleccionar una fila muestra su observación completa
+OK 22 · Limpiar prepara un formulario nuevo
+OK 23 · Volver conserva la sesión y regresa a Bodega
+OK 24 · El administrador también puede abrir Inventario
+OK 25 · El cliente no ve el botón y no puede abrir el inventario
+RESULTADO: 25 comprobaciones de interfaz correctas y 4 capturas generadas.
+[PRUEBA] PruebaErrorSQLInventario
+OK · El error de credenciales SQL aparece en la pantalla
+OK · Registrar está deshabilitado cuando no pudieron cargarse los datos
+OK · Actualizar conserva el error visible sin cerrar la pantalla
+OK · Volver funciona después de un error de conexión
+RESULTADO: 4 comprobaciones de error SQL correctas.
+
+ARRANQUE REAL CON ANT Y REGRESION DE LOGIN
+[java] [OK] Ant run inicia Lanzador y abre Login.fxml con Classpath.
+[java] [OK] La pantalla rechaza credenciales incorrectas.
+[java] [OK] JDBC, login y dashboard de admin.
+[java] [OK] Cierre de sesion de admin.
+[java] [OK] JDBC, login y dashboard de taquillero.
+[java] [OK] Cierre de sesion de taquillero.
+[java] [OK] JDBC, login y dashboard de bodega.
+[java] [OK] Cierre de sesion de bodega.
+[java] [OK] JDBC, login y dashboard de cliente.
+[java] [OK] Cierre de sesion de cliente.
+[java] [OK] Comprobacion real de arranque completada.
+BUILD SUCCESSFUL
+[OK] TODAS LAS COMPROBACIONES COMPLETADAS.
+
+Se generaron cuatro capturas en esta carpeta.
+T3.2.1 y T3.2.2 (SQL) siguen pendientes.

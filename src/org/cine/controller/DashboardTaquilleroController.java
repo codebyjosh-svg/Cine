@@ -35,11 +35,17 @@ public class DashboardTaquilleroController {
     // ==============================
 
     @FXML
-    private void abrirConfiteria() throws IOException { Principal.mostrarConfiteria(); }
-
-    @FXML
     private void vender() throws IOException {
         Principal.mostrarVenta();
+    }
+
+    // ==============================
+    // CONFITERÍA
+    // ==============================
+
+    @FXML
+    private void abrirConfiteria() throws IOException {
+        Principal.mostrarConfiteria();
     }
 
     // ==============================

@@ -1,0 +1,20 @@
+OK 1 - Login autentica correctamente después de la actualización SQL
+OK 2 - Dashboard del taquillero permite abrir ventas
+OK 3 - Filtro muestra el producto con stock igual al mínimo
+OK 4 - Stock crítico usa scroll solo dentro de la tabla
+OK 5 - Filtro de agotados se aplica a la tabla
+OK 6 - Agregar sin cliente muestra validación
+OK 7 - Tres clics de 1x conservan una línea de cantidad 3
+OK 8 - La vista actualiza subtotal y total después de cada agregado
+OK 9 - Ventas no desplaza la escena principal
+OK 10 - Edición con stock insuficiente conserva la cantidad del carrito
+OK 11 - La vista rechaza un agregado acumulado superior al stock
+OK 12 - La confirmación abre factura con una sola línea y total correcto
+OK 13 - La factura muestra el nombre real del vendedor
+OK 14 - Factura no desplaza la escena principal
+OK 15 - Volver desde factura regresa al dashboard correcto
+OK 16 - Bodega tiene acceso al listado de stock crítico
+OK 17 - Bodega no puede entrar a ventas
+OK 18 - Cliente no puede entrar a stock crítico
+OK 19 - Administrador tiene los dos accesos integrados
+RESULTADO: 19 comprobaciones FXML correctas y 3 capturas.

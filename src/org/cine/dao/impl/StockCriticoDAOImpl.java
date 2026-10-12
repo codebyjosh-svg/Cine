@@ -1,3 +1,31 @@
 package org.cine.dao.impl;
-import org.cine.dao.StockCriticoDAO;import org.cine.model.StockCritico;import org.cine.util.Conexion;import java.sql.*;import java.util.*;
-public class StockCriticoDAOImpl implements StockCriticoDAO{public List<StockCritico> listar()throws SQLException{List<StockCritico> out=new ArrayList<>();try(Connection c=Conexion.getInstance().getConnection();PreparedStatement s=c.prepareStatement("SELECT id_producto,nombre_producto,nombre_categoria,stock,stock_minimo FROM vw_stock_critico ORDER BY stock,nombre_producto");ResultSet r=s.executeQuery()){while(r.next())out.add(new StockCritico(r.getInt(1),r.getString(2),r.getString(3),r.getInt(4),r.getInt(5)));}return out;}}
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import org.cine.dao.StockCriticoDAO;
+import org.cine.model.StockCritico;
+import org.cine.util.Conexion;
+
+/**
+ * Usa el procedimiento existente y propaga los errores para mostrarlos en la
+ * vista.
+ */
+public final class StockCriticoDAOImpl implements StockCriticoDAO {
+
+    @Override
+    public List<StockCritico> listar() throws SQLException {
+        List<StockCritico> productos = new ArrayList<>();
+        try (Connection cn = Conexion.getInstancia().getConnection(); CallableStatement cs = cn.prepareCall("{call sp_listarstockcritico()}"); ResultSet rs = cs.executeQuery()) {
+            while (rs.next()) {
+                productos.add(new StockCritico(rs.getInt("id_producto"),
+                        rs.getString("nombre_producto"), rs.getString("nombre_categoria"),
+                        rs.getBigDecimal("precio"), rs.getInt("stock"), rs.getInt("stock_minimo")));
+            }
+        }
+        return productos;
+    }
+}

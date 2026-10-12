@@ -1,70 +1,105 @@
 package org.cine.dao.impl;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import org.cine.dao.MovimientoInventarioDAO;
 import org.cine.model.MovimientoInventario;
+import org.cine.model.Producto;
 import org.cine.util.Conexion;
-import java.sql.*;
-import java.util.*;
 
+/** Usa los procedimientos existentes; el registro y el stock son una transacción. */
 public class MovimientoInventarioDAOImpl implements MovimientoInventarioDAO {
+    @Override
+    public List<MovimientoInventario> listarHistorial() throws SQLException {
+        List<MovimientoInventario> movimientos = new ArrayList<>();
+        try (Connection cn = Conexion.getInstancia().conectar();
+                CallableStatement cs = cn.prepareCall("{CALL sp_listarmovimientosinventario()}");
+                ResultSet rs = cs.executeQuery()) {
+            while (rs.next()) {
+                MovimientoInventario movimiento = new MovimientoInventario();
+                movimiento.setIdMovimiento(rs.getInt("id_movimiento"));
+                movimiento.setIdProducto(rs.getInt("id_producto"));
+                movimiento.setNombreProducto(rs.getString("nombre_producto"));
+                movimiento.setIdUsuario(rs.getInt("id_usuario"));
+                movimiento.setUsuario(rs.getString("usuario"));
+                int venta = rs.getInt("id_venta");
+                movimiento.setIdVenta(rs.wasNull() ? null : venta);
+                movimiento.setTipoMovimiento(rs.getString("tipo_movimiento"));
+                movimiento.setCantidad(rs.getInt("cantidad"));
+                movimiento.setFechaMovimiento(rs.getTimestamp("fecha_movimiento").toLocalDateTime());
+                movimiento.setObservacion(rs.getString("observacion"));
+                movimientos.add(movimiento);
+            }
+        }
+        return movimientos;
+    }
 
-    public void registrar(int producto, int usuario, String tipo, int cantidad, String observacion) throws SQLException {
-        if (!tipo.equals("ENTRADA") && !tipo.equals("SALIDA")) {
-            throw new SQLException("Tipo de movimiento inválido.");
+    @Override
+    public List<Producto> listarProductosActivos() throws SQLException {
+        List<Producto> productos = new ArrayList<>();
+        try (Connection cn = Conexion.getInstancia().conectar();
+                CallableStatement cs = cn.prepareCall("{CALL sp_listarproductos()}");
+                ResultSet rs = cs.executeQuery()) {
+            while (rs.next()) {
+                if (rs.getInt("estado") == 1) productos.add(mapearProducto(rs));
+            }
         }
-        if (cantidad <= 0) {
-            throw new SQLException("La cantidad debe ser positiva.");
-        }
-        try (Connection c = Conexion.getInstance().getConnection()) {
-            c.setAutoCommit(false);
-            try {
-                int stock;
-                try (PreparedStatement s = c.prepareStatement("SELECT stock FROM productos WHERE id_producto=? FOR UPDATE")) {
-                    s.setInt(1, producto);
-                    try (ResultSet r = s.executeQuery()) {
-                        if (!r.next()) {
-                            throw new SQLException("Producto no encontrado.");
-                        }
-                        stock = r.getInt(1);
-                    }
-                }
-                if (tipo.equals("SALIDA") && stock < cantidad) {
-                    throw new SQLException("Stock insuficiente.");
-                }
-                try (PreparedStatement s = c.prepareStatement("UPDATE productos SET stock=stock+? WHERE id_producto=?")) {
-                    s.setInt(1, tipo.equals("ENTRADA") ? cantidad : -cantidad);
-                    s.setInt(2, producto);
-                    s.executeUpdate();
-                }
-                try (PreparedStatement s = c.prepareStatement("INSERT INTO movimientos_inventario(id_producto,id_usuario,tipo_movimiento,cantidad,observacion) VALUES(?,?,?,?,?)")) {
-                    s.setInt(1, producto);
-                    s.setInt(2, usuario);
-                    s.setString(3, tipo);
-                    s.setInt(4, cantidad);
-                    s.setString(5, observacion);
-                    s.executeUpdate();
-                }
-                c.commit();
-            } catch (Exception e) {
-                c.rollback();
-                if (e instanceof SQLException sql) {
-                    throw sql;
-                }
-                throw new SQLException(e);
-            } finally {
-                c.setAutoCommit(true);
+        return productos;
+    }
+
+    @Override
+    public Optional<Producto> buscarProducto(int idProducto) throws SQLException {
+        if (idProducto <= 0) throw new IllegalArgumentException("Selecciona un producto válido.");
+        try (Connection cn = Conexion.getInstancia().conectar();
+                CallableStatement cs = cn.prepareCall("{CALL sp_buscarproducto(?)}")) {
+            cs.setInt(1, idProducto);
+            try (ResultSet rs = cs.executeQuery()) {
+                return rs.next() ? Optional.of(mapearProducto(rs)) : Optional.empty();
             }
         }
     }
 
-    public List<MovimientoInventario> listar() throws SQLException {
-        List<MovimientoInventario> out = new ArrayList<>();
-        String sql = "SELECT m.*,p.nombre_producto,CONCAT(u.nombre_usuario,' ',u.apellido_usuario) AS operador FROM movimientos_inventario m JOIN productos p ON p.id_producto=m.id_producto JOIN usuarios u ON u.id_usuario=m.id_usuario ORDER BY m.fecha_movimiento DESC,m.id_movimiento DESC";
-        try (Connection c = Conexion.getInstance().getConnection(); PreparedStatement s = c.prepareStatement(sql); ResultSet r = s.executeQuery()) {
-            while (r.next()) {
-                out.add(new MovimientoInventario(r.getInt("id_movimiento"), r.getInt("id_producto"), r.getInt("id_usuario"), r.getString("nombre_producto"), r.getString("operador"), r.getString("tipo_movimiento"), r.getInt("cantidad"), r.getTimestamp("fecha_movimiento").toLocalDateTime(), r.getString("observacion")));
-            }
+    @Override
+    public void registrar(MovimientoInventario movimiento) throws SQLException {
+        validar(movimiento);
+        try (Connection cn = Conexion.getInstancia().conectar();
+                CallableStatement cs = cn.prepareCall("{CALL sp_registrarmovimientoinventario(?, ?, ?, ?, ?)}")) {
+            cs.setInt(1, movimiento.getIdProducto());
+            cs.setInt(2, movimiento.getIdUsuario());
+            cs.setString(3, movimiento.getTipoMovimiento());
+            cs.setInt(4, movimiento.getCantidad());
+            cs.setString(5, movimiento.getObservacion().strip());
+            cs.execute();
         }
-        return out;
+    }
+
+    private void validar(MovimientoInventario movimiento) {
+        if (movimiento == null || movimiento.getIdProducto() <= 0 || movimiento.getIdUsuario() <= 0) {
+            throw new IllegalArgumentException("El movimiento requiere un producto y un usuario válidos.");
+        }
+        if (!"entrada".equals(movimiento.getTipoMovimiento()) && !"salida".equals(movimiento.getTipoMovimiento())) {
+            throw new IllegalArgumentException("Selecciona Entrada o Salida para el movimiento manual.");
+        }
+        if (movimiento.getCantidad() <= 0) {
+            throw new IllegalArgumentException("La cantidad debe ser un número entero mayor que cero.");
+        }
+        String observacion = movimiento.getObservacion();
+        if (observacion == null || observacion.isBlank()) {
+            throw new IllegalArgumentException("Escribe una observación para el movimiento.");
+        }
+        observacion = observacion.strip();
+        if (observacion.codePointCount(0, observacion.length()) > 200) {
+            throw new IllegalArgumentException("La observación puede tener hasta 200 caracteres.");
+        }
+    }
+
+    private Producto mapearProducto(ResultSet rs) throws SQLException {
+        return new Producto(rs.getInt("id_producto"), rs.getString("nombre_producto"),
+                rs.getInt("stock"), rs.getInt("estado"));
     }
 }

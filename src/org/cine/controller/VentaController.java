@@ -28,6 +28,12 @@ import org.cine.model.Boleto;
 import org.cine.service.SesionContext;
 import org.cine.system.Principal;
 
+/**
+ * Controlador del módulo de venta de boletos.
+ *
+ * Flujo:
+ * Cliente -> Función -> Butacas -> Carrito -> Método de pago -> Confirmación -> Factura
+ */
 public class VentaController {
 
     private final VentaDAO dao = new VentaDAOImpl();
@@ -56,37 +62,49 @@ public class VentaController {
     @FXML
     private Label lblEstado;
 
+    /**
+     * Venta que actualmente se está construyendo.
+     */
     private int ventaId = 0;
 
-    private final Set<Integer> seleccion
-            = new LinkedHashSet<>();
+    /**
+     * Última venta confirmada.
+     * Se utiliza para poder volver a abrir/reimprimir la factura.
+     */
+    private int ultimaVentaConfirmada = 0;
+
+    /**
+     * IDs de las butacas seleccionadas.
+     */
+    private final Set<Integer> seleccion = new LinkedHashSet<>();
 
     // =========================================================
     // INICIALIZACIÓN
     // =========================================================
+
     @FXML
     private void initialize() {
 
         try {
 
-            // Cargar clientes
+            // Cargar clientes activos.
             cbCliente.getItems().setAll(
                     dao.clientes()
             );
 
-            // Cargar funciones
+            // Cargar funciones disponibles.
             cbFuncion.getItems().setAll(
                     dao.funciones()
             );
 
-            // Métodos de pago
+            // Métodos de pago.
             cbMetodoPago.getItems().setAll(
                     "EFECTIVO",
                     "TARJETA",
                     "TRANSFERENCIA"
             );
 
-            // Método de pago predeterminado
+            // Método de pago predeterminado.
             cbMetodoPago.getSelectionModel()
                     .select("EFECTIVO");
 
@@ -95,7 +113,7 @@ public class VentaController {
             error(e);
         }
 
-        // Cuando cambia la función se cargan sus butacas
+        // Cuando cambia la función se vuelven a cargar las butacas.
         cbFuncion.valueProperty()
                 .addListener((observable, anterior, nueva) -> {
 
@@ -108,6 +126,7 @@ public class VentaController {
     // =========================================================
     // CARGAR BUTACAS
     // =========================================================
+
     private void cargarButacas() {
 
         seleccion.clear();
@@ -115,32 +134,32 @@ public class VentaController {
         panelButacas.getChildren().clear();
 
         if (cbFuncion.getValue() == null) {
+            actualizarTotal();
             return;
         }
 
         try {
 
-            List<VentaDAO.Butaca> butacas
-                    = dao.butacas(
+            List<VentaDAO.Butaca> butacas =
+                    dao.butacas(
                             cbFuncion.getValue().id()
                     );
 
             for (VentaDAO.Butaca b : butacas) {
 
-                String texto
-                        = b.nombre()
-                        + (b.disponible()
-                        ? ""
-                        : " ✕");
+                String texto =
+                        b.nombre()
+                        + (b.disponible() ? "" : " ✕");
 
-                ToggleButton boton
-                        = new ToggleButton(texto);
+                ToggleButton boton =
+                        new ToggleButton(texto);
 
                 boton.setPrefSize(
                         85,
                         45
                 );
 
+                // Una butaca ocupada no puede seleccionarse.
                 boton.setDisable(
                         !b.disponible()
                 );
@@ -148,8 +167,8 @@ public class VentaController {
                 boton.selectedProperty()
                         .addListener(
                                 (observable,
-                                        anterior,
-                                        seleccionado) -> {
+                                 anterior,
+                                 seleccionado) -> {
 
                                     if (seleccionado) {
 
@@ -179,6 +198,7 @@ public class VentaController {
     // =========================================================
     // AGREGAR BUTACAS
     // =========================================================
+
     @FXML
     private void agregar() {
 
@@ -211,7 +231,11 @@ public class VentaController {
 
         try {
 
-            // Crear venta abierta si todavía no existe
+            /*
+             * Si todavía no existe una venta abierta,
+             * se crea utilizando el cliente y el usuario
+             * actualmente autenticado.
+             */
             if (ventaId == 0) {
 
                 if (SesionContext.getUsuarioActual() == null) {
@@ -231,7 +255,9 @@ public class VentaController {
                 );
             }
 
-            // Agregar cada butaca
+            /*
+             * Agregar las butacas seleccionadas.
+             */
             for (int idButaca
                     : new ArrayList<>(seleccion)) {
 
@@ -257,6 +283,7 @@ public class VentaController {
                 refrescar();
 
             } catch (SQLException ignored) {
+                // No se modifica el mensaje original.
             }
 
             cargarButacas();
@@ -268,6 +295,7 @@ public class VentaController {
     // =========================================================
     // REFRESCAR CARRITO
     // =========================================================
+
     private void refrescar()
             throws SQLException {
 
@@ -290,10 +318,11 @@ public class VentaController {
     // =========================================================
     // ACTUALIZAR TOTAL
     // =========================================================
+
     private void actualizarTotal() {
 
-        BigDecimal total
-                = BigDecimal.ZERO;
+        BigDecimal total =
+                BigDecimal.ZERO;
 
         for (Boleto boleto
                 : listaBoletos.getItems()) {
@@ -316,11 +345,12 @@ public class VentaController {
     // =========================================================
     // QUITAR BOLETO
     // =========================================================
+
     @FXML
     private void quitar() {
 
-        Boleto boleto
-                = listaBoletos
+        Boleto boleto =
+                listaBoletos
                         .getSelectionModel()
                         .getSelectedItem();
 
@@ -334,6 +364,7 @@ public class VentaController {
         }
 
         if (ventaId == 0) {
+
             return;
         }
 
@@ -357,9 +388,11 @@ public class VentaController {
     // =========================================================
     // CONFIRMAR VENTA
     // =========================================================
+
     @FXML
     private void confirmar() {
 
+        // El cliente es obligatorio.
         if (cbCliente.getValue() == null) {
 
             aviso(
@@ -369,6 +402,7 @@ public class VentaController {
             return;
         }
 
+        // La función es obligatoria.
         if (cbFuncion.getValue() == null) {
 
             aviso(
@@ -378,6 +412,7 @@ public class VentaController {
             return;
         }
 
+        // Debe existir una venta abierta.
         if (ventaId == 0) {
 
             aviso(
@@ -387,6 +422,7 @@ public class VentaController {
             return;
         }
 
+        // No se puede confirmar una venta vacía.
         if (listaBoletos.getItems().isEmpty()) {
 
             aviso(
@@ -396,6 +432,7 @@ public class VentaController {
             return;
         }
 
+        // El método de pago es obligatorio.
         if (cbMetodoPago.getValue() == null
                 || cbMetodoPago.getValue().isBlank()) {
 
@@ -408,14 +445,25 @@ public class VentaController {
 
         try {
 
-            int id = dao.confirmar(
-                    ventaId,
-                    cbMetodoPago.getValue()
-            ).id();
+            int id =
+                    dao.confirmar(
+                            ventaId,
+                            cbMetodoPago.getValue()
+                    ).id();
+
+            /*
+             * Guardamos la última venta confirmada
+             * antes de limpiar ventaId.
+             */
+            ultimaVentaConfirmada = id;
 
             ventaId = 0;
 
             seleccion.clear();
+
+            lblEstado.setText(
+                    "Venta #" + id + " confirmada"
+            );
 
             Principal.mostrarFactura(id);
 
@@ -424,7 +472,7 @@ public class VentaController {
             error(e);
         }
     }
-    
+
     // =========================================================
     // CANCELAR VENTA
     // =========================================================
@@ -467,6 +515,7 @@ public class VentaController {
     // =========================================================
     // VOLVER
     // =========================================================
+
     @FXML
     private void volver()
             throws IOException {
@@ -475,13 +524,14 @@ public class VentaController {
     }
 
     // =========================================================
-    // REIMPRIMIR FACTURA
+    // REIMPRIMIR / VOLVER A VER FACTURA
     // =========================================================
+
     @FXML
     private void reimprimir()
             throws IOException {
 
-        if (ventaId <= 0) {
+        if (ultimaVentaConfirmada <= 0) {
 
             aviso(
                     "No existe una venta confirmada para reimprimir."
@@ -491,13 +541,14 @@ public class VentaController {
         }
 
         Principal.mostrarFactura(
-                ventaId
+                ultimaVentaConfirmada
         );
     }
 
     // =========================================================
     // RECIBIR FUNCIÓN DESDE CARTELERA
     // =========================================================
+
     public void seleccionarFuncion(
             int idFuncion) {
 
@@ -534,26 +585,27 @@ public class VentaController {
     // =========================================================
     // NUEVO CLIENTE
     // =========================================================
+
     @FXML
     private void abrirNuevoCliente() {
 
         try {
 
-            FXMLLoader loader
-                    = new FXMLLoader(
+            FXMLLoader loader =
+                    new FXMLLoader(
                             getClass().getResource(
                                     "/org/cine/view/NuevoCliente.fxml"
                             )
                     );
 
-            Parent root
-                    = loader.load();
+            Parent root =
+                    loader.load();
 
-            NuevoClienteController controller
-                    = loader.getController();
+            NuevoClienteController controller =
+                    loader.getController();
 
-            Stage stage
-                    = new Stage();
+            Stage stage =
+                    new Stage();
 
             stage.initOwner(
                     btnNuevoCliente
@@ -579,9 +631,9 @@ public class VentaController {
 
             stage.showAndWait();
 
-            // Obtener cliente creado
-            VentaDAO.Opcion cliente
-                    = controller.getClienteCreado();
+            // Cliente creado en la ventana secundaria.
+            VentaDAO.Opcion cliente =
+                    controller.getClienteCreado();
 
             if (cliente == null) {
 
@@ -608,8 +660,7 @@ public class VentaController {
                         .add(cliente);
             }
 
-            // Seleccionar automáticamente
-            // el nuevo cliente
+            // Seleccionar automáticamente el nuevo cliente.
             cbCliente.setValue(
                     cliente
             );
@@ -623,10 +674,12 @@ public class VentaController {
     // =========================================================
     // MENSAJE DE ADVERTENCIA
     // =========================================================
-    private void aviso(String mensaje) {
 
-        Alert alerta
-                = new Alert(
+    private void aviso(
+            String mensaje) {
+
+        Alert alerta =
+                new Alert(
                         Alert.AlertType.WARNING
                 );
 
@@ -648,20 +701,22 @@ public class VentaController {
     // =========================================================
     // MENSAJE DE ERROR
     // =========================================================
-    private void error(Exception e) {
 
-        String mensaje
-                = e.getMessage();
+    private void error(
+            Exception e) {
+
+        String mensaje =
+                e.getMessage();
 
         if (mensaje == null
                 || mensaje.isBlank()) {
 
-            mensaje
-                    = "Ocurrió un error inesperado.";
+            mensaje =
+                    "Ocurrió un error inesperado.";
         }
 
-        Alert alerta
-                = new Alert(
+        Alert alerta =
+                new Alert(
                         Alert.AlertType.ERROR
                 );
 

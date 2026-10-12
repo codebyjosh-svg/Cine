@@ -178,6 +178,10 @@ public class Principal extends Application {
     // =========================================================
     // VENTA DE BOLETOS - US-2.4
     // =========================================================
+    public static void mostrarVentas() throws IOException {
+        mostrarVenta();
+    }
+
     public static void mostrarVenta() throws IOException {
 
         String rol = SesionContext.getRolActual();

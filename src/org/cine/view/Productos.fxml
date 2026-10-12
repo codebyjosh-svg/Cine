@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.cine.controller.ProductoController"
+            stylesheets="@style/generos.css"
+            styleClass="generos-root"
+            prefWidth="1150.0"
+            prefHeight="720.0"
+            minWidth="950.0"
+            minHeight="650.0">
+
+    <top>
+        <HBox alignment="CENTER_LEFT"
+              spacing="15.0"
+              prefHeight="64.0"
+              styleClass="top-bar">
+            <padding>
+                <Insets top="10.0" right="22.0" bottom="10.0" left="22.0"/>
+            </padding>
+
+            <VBox spacing="1.0">
+                <Label text="CINE" styleClass="brand-label"/>
+                <Label text="Sistema de Gestión" styleClass="brand-subtitle"/>
+            </VBox>
+
+            <Label text="Gestión de productos de dulcería"
+                   styleClass="top-section-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="← Regresar al Dashboard"
+                    styleClass="back-button"
+                    onAction="#regresarDashboard"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="12.0"
+              fillWidth="true"
+              styleClass="content-container">
+
+            <VBox spacing="3.0" styleClass="page-heading">
+                <Label text="Productos de dulcería"
+                       styleClass="page-title"/>
+                <Label text="Administra productos, precios y niveles mínimos de inventario."
+                       styleClass="page-subtitle"/>
+            </VBox>
+
+            <VBox spacing="10.0"
+                  styleClass="card"
+                  minHeight="250.0"
+                  maxHeight="270.0">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="2.0">
+                        <Label text="Información del producto"
+                               styleClass="section-title"/>
+                        <Label text="Completa los datos del producto y su categoría."
+                               styleClass="section-subtitle"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <HBox alignment="CENTER_RIGHT" spacing="7.0">
+                        <Label text="Estado:" styleClass="state-caption"/>
+                        <Label fx:id="lblEstadoProducto"
+                               text="Nuevo - se guardará como Activo"
+                               styleClass="status-badge"/>
+                    </HBox>
+                </HBox>
+
+                <Separator/>
+
+                <GridPane hgap="14.0" vgap="8.0" VBox.vgrow="ALWAYS">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="34.0"/>
+                        <ColumnConstraints percentWidth="33.0"/>
+                        <ColumnConstraints percentWidth="33.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="54.0"/>
+                        <RowConstraints minHeight="76.0"/>
+                    </rowConstraints>
+
+                    <VBox spacing="4.0"
+                          GridPane.columnIndex="0"
+                          GridPane.rowIndex="0">
+                        <Label text="CATEGORÍA *" styleClass="field-label"/>
+                        <ComboBox fx:id="cboCategoriaProducto"
+                                  promptText="Selecciona una categoría"
+                                  maxWidth="Infinity"
+                                  styleClass="form-field"/>
+                    </VBox>
+
+                    <VBox spacing="4.0"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="0">
+                        <Label text="NOMBRE *" styleClass="field-label"/>
+                        <TextField fx:id="txtNombreProducto"
+                                   promptText="Nombre del producto"
+                                   styleClass="form-field"/>
+                    </VBox>
+
+                    <VBox spacing="4.0"
+                          GridPane.columnIndex="2"
+                          GridPane.rowIndex="0">
+                        <Label text="PRECIO *" styleClass="field-label"/>
+                        <TextField fx:id="txtPrecioProducto"
+                                   promptText="0.00"
+                                   styleClass="form-field"/>
+                    </VBox>
+
+                    <VBox spacing="4.0"
+                          GridPane.columnIndex="0"
+                          GridPane.rowIndex="1">
+                        <Label text="STOCK INICIAL" styleClass="field-label"/>
+                        <TextField fx:id="txtStockProducto"
+                                   promptText="Cantidad inicial (0 o más)"
+                                   styleClass="form-field"/>
+                    </VBox>
+
+                    <VBox spacing="4.0"
+                          GridPane.columnIndex="1"
+                          GridPane.rowIndex="1">
+                        <Label text="STOCK MÍNIMO *" styleClass="field-label"/>
+                        <TextField fx:id="txtStockMinimoProducto"
+                                   promptText="Ejemplo: 5"
+                                   styleClass="form-field"/>
+                    </VBox>
+
+                    <VBox spacing="4.0"
+                          GridPane.columnIndex="2"
+                          GridPane.rowIndex="1">
+                        <Label text="DESCRIPCIÓN" styleClass="field-label"/>
+                        <TextArea fx:id="txtDescripcionProducto"
+                                  promptText="Descripción opcional"
+                                  wrapText="true"
+                                  prefHeight="55.0"
+                                  maxHeight="55.0"
+                                  styleClass="form-textarea"/>
+                    </VBox>
+                </GridPane>
+
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <Button fx:id="btnGuardarProducto"
+                            text="▣  Guardar"
+                            onAction="#guardarProducto"
+                            styleClass="button-primary"/>
+                    <Button fx:id="btnEditarProducto"
+                            text="✎  Editar"
+                            onAction="#editarProducto"
+                            styleClass="button-edit"/>
+                    <Button fx:id="btnEliminarProducto"
+                            text="▣  Eliminar"
+                            onAction="#eliminarProducto"
+                            styleClass="button-danger"/>
+                    <Button fx:id="btnActivarProducto"
+                            text="●  Activar"
+                            onAction="#activarProducto"
+                            styleClass="button-success"/>
+                    <Button fx:id="btnDesactivarProducto"
+                            text="●  Desactivar"
+                            onAction="#desactivarProducto"
+                            styleClass="button-warning"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnLimpiarProducto"
+                            text="↻  Limpiar"
+                            onAction="#limpiarFormulario"
+                            styleClass="button-secondary"/>
+                </HBox>
+            </VBox>
+
+            <VBox spacing="9.0"
+                  styleClass="card table-card"
+                  VBox.vgrow="ALWAYS">
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="2.0">
+                        <Label text="Productos registrados"
+                               styleClass="section-title"/>
+                        <Label text="Selecciona un producto para consultar o editar."
+                               styleClass="section-subtitle"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnActualizarProductos"
+                            text="↻  Actualizar"
+                            onAction="#cargarProductos"
+                            styleClass="button-secondary"/>
+                </HBox>
+
+                <Separator/>
+
+                <TableView fx:id="tbProductos"
+                           onMouseClicked="#seleccionarProducto"
+                           styleClass="generos-table"
+                           VBox.vgrow="ALWAYS"
+                           minHeight="220.0">
+                    <columns>
+                        <TableColumn fx:id="colIdProducto"
+                                     text="ID"
+                                     prefWidth="55.0"
+                                     minWidth="45.0"/>
+                        <TableColumn fx:id="colNombreCategoria"
+                                     text="CATEGORÍA"
+                                     prefWidth="150.0"
+                                     minWidth="110.0"/>
+                        <TableColumn fx:id="colNombreProducto"
+                                     text="PRODUCTO"
+                                     prefWidth="190.0"
+                                     minWidth="140.0"/>
+                        <TableColumn fx:id="colPrecioProducto"
+                                     text="PRECIO"
+                                     prefWidth="90.0"
+                                     minWidth="75.0"/>
+                        <TableColumn fx:id="colStockProducto"
+                                     text="STOCK"
+                                     prefWidth="75.0"
+                                     minWidth="60.0"/>
+                        <TableColumn fx:id="colStockMinimoProducto"
+                                     text="MÍNIMO"
+                                     prefWidth="80.0"
+                                     minWidth="65.0"/>
+                        <TableColumn fx:id="colEstadoProducto"
+                                     text="ESTADO"
+                                     prefWidth="90.0"
+                                     minWidth="75.0"/>
+                    </columns>
+                    <placeholder>
+                        <Label text="No hay productos registrados."
+                               styleClass="empty-table-label"/>
+                    </placeholder>
+                </TableView>
+
+                <HBox alignment="CENTER_LEFT">
+                    <Label text="Los productos nuevos se guardan activos."
+                           styleClass="table-help-label"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="El stock se actualizará desde el módulo de inventario."
+                           styleClass="table-help-label"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </center>
+</BorderPane>
