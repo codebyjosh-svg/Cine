@@ -219,7 +219,14 @@ public class ConfiteriaController {
     @FXML private void buscarFacturas(){ FacturasConfiteria.buscarFacturas(); }
     @FXML private void abrirCategorias() throws IOException {Principal.mostrarCategoriasProducto();}
     @FXML private void abrirInventario() throws IOException {Principal.mostrarInventario();}
-    @FXML private void abrirStockCritico() throws IOException {Principal.mostrarStockCritico();}
+    @FXML
+    private void abrirStockCritico() throws IOException {
+        try {
+            Principal.mostrarStockCritico();
+        } catch (IllegalStateException ex) {
+            mensaje.setText(ex.getMessage());
+        }
+    }
     @FXML private void volver() throws IOException {Principal.mostrarDashboardSegunRol();}
     private void error(Exception e){mensaje.setText("Error: "+e.getMessage());e.printStackTrace();}
 }

@@ -387,7 +387,7 @@ public class Principal extends Application {
     // ==========================================
     public static void mostrarStockCritico() throws IOException {
 
-        verificarRoles("admin", "bodega");
+        verificarRoles("admin", "bodega", "taquillero");
 
         cambiarEscena(
                 "/org/cine/view/StockCritico.fxml",
