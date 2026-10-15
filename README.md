@@ -37,3 +37,5 @@ Rama de origen de la historia: `feat/US-3.2_Movimientos_inventario_diego`.
 En el README original de una de las ramas se indicaba que la configuración de NetBeans se explicaba en `LEEME_JAVAFX_CORREGIDO.txt`, que las bibliotecas estaban en `lib/`, y que se utilizaba `org.cine.system.Lanzador` como clase principal. Verifica estas indicaciones con la versión fusionada antes de seguirlas.
 
 El módulo de programación se documentó bajo **Administrador → Funciones** y `TAREAS_US_2_2_JAVA.md`.
+#Link de los vídeos
+https://cetkinal-my.sharepoint.com/my?id=%2Fpersonal%2Fepinzon%2D2026037%5Fkinal%5Fedu%5Fgt%2FDocuments%2FVideos%20de%20el%20grupo&viewid=987de1e2%2D7888%2D4266%2D8362%2D02831c9530f0
